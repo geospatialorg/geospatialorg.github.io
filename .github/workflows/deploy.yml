@@ -26,3 +26,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
           user_name: github-actions[bot]
+          user_email: github-actions@geo-spatial.org
