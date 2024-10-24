@@ -20,7 +20,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "facebook", // Usually your GitHub org/user name.
+  organizationName: "geo-spatial.org", // Usually your GitHub org/user name.
   projectName: "docusaurus", // Usually your repo name.
 
   onBrokenLinks: "throw",
@@ -86,7 +86,7 @@ const config = {
           },
           { to: "/blog", label: "Blog", position: "left" },
           {
-            href: "https://github.com/facebook/docusaurus",
+            href: "https://github.com/geospatialorg/geospatialorg.github.io",
             label: "GitHub",
             position: "right",
           },
@@ -105,37 +105,49 @@ const config = {
             ],
           },
           {
-            title: "Community",
+            title: "Comunitatea",
             items: [
               {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+                label: "Lista de discuții",
+                href: "https://groups.io/g/geo-spatial",
               },
               {
-                label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
+                label: "Canal Slack",
+                href: "https://geospatialorg-1.slack.com/join/shared_invite/zt-cle5seo4-u9Bbr_mSV8R_BiROSGWr2A",
               },
               {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
+                label: "YouTube",
+                href: "https://www.facebook.com/geospatialorg",
+              },
+              {
+                label: "Facebook",
+                href: "https://www.facebook.com/geospatialorg",
               },
             ],
           },
           {
-            title: "More",
+            title: "Proiect",
             items: [
               {
-                label: "Blog",
-                to: "/blog",
+                label: "Despre",
+                to: "despre",
               },
               {
-                label: "GitHub",
-                href: "https://github.com/facebook/docusaurus",
+                label: "Situl vechi",
+                href: "https://geo-spatial.org/vechi/",
+              },
+              {
+                label: "Susține (3.5%)",
+                href: "redirectionare-impozit",
+              },
+              {
+                label: "Privacy",
+                href: "privacy",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © 2006 - 2024 geo-spatial.org and the authors. CC BY-SA 4.0`,
       },
       prism: {
         theme: prismThemes.github,
