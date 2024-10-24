@@ -72,10 +72,10 @@ const config = {
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
-        title: "My Site",
+        title: "geo-spatial.org",
         logo: {
-          alt: "My Site Logo",
-          src: "img/logo.svg",
+          alt: "Logo geo-spatial.org",
+          src: "img/logo-geo-spatialorg.svg",
         },
         items: [
           {
