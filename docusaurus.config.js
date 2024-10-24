@@ -130,19 +130,19 @@ const config = {
             items: [
               {
                 label: "Despre",
-                to: "despre",
+                to: "/despre",
               },
               {
                 label: "Situl vechi",
                 href: "https://geo-spatial.org/vechi/",
               },
               {
-                label: "Susține (3.5%)",
-                href: "redirectionare-impozit",
+                label: "Redirecționare 3.5%",
+                href: "/redirectionare-impozit",
               },
               {
                 label: "Privacy",
-                href: "privacy",
+                href: "/privacy",
               },
             ],
           },
