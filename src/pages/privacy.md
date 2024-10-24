@@ -25,6 +25,6 @@ Puteți alege să limitați informațiile personale pe care ni le furnizați pri
 
 Putem actualiza această notă de confidențialitate din când în când pentru a reflecta modificări în practicile noastre sau pentru a respecta legi sau reglementări noi. Vom posta orice actualizări pe pagina noastră sau pe conturile noastre de social media și vă vom notifica cu privire la orice modificări semnificative.
 
-## Contactați-ne
+## Contactat
 
 Pentru orice aspect legat de privacy ne puteți contacta la [contact@geo-spatial.org](mailto:geo-spatial.org)
