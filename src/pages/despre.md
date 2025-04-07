@@ -28,7 +28,7 @@ geo-spatial.org își propune să devină un punct de referință în peisajul r
 * Participarea în calitate de prezentator la evenimentele noastre;
 * orice alte propuneri sau sugestii.
 
-Vă asigurăm că ne vom onora sloganul și nu vom permite transformarea acestui sit într-un loc de reglare a conturilor sau de stabilire a ierarhiilor. Howgh!
+Vă asigurăm că ne vom onora sloganul și nu vom permite transformarea acestui sit într-un loc de reglare a conturilor sau de stabilire a ierarhiilor. *Howgh!*
 
 ## Board-ul geo-spatial.org
 
