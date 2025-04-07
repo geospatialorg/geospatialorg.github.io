@@ -1,12 +1,12 @@
-yangshun:
-  name: Yangshun Tay
-  title: Front End Engineer @ Facebook
-  url: https://github.com/yangshun
-  image_url: https://github.com/yangshun.png
+vcraciunescu:
+  name: Vasile Crăciunescu
+  title: Cercetător științific | Meteo România
+  url: https://www.linkedin.com/in/vasilecraciunescu/
+  image_url: https://geo-spatial.org/autori/vasile_craciunescu.jpg
   page: true
   socials:
-    x: yangshunz
-    github: yangshun
+    x: vcraciunescu
+    github: vasile33
 
 slorber:
   name: Sébastien Lorber
@@ -15,7 +15,7 @@ slorber:
   image_url: https://github.com/slorber.png
   page:
     # customize the url of the author page at /blog/authors/<permalink>
-    permalink: '/all-sebastien-lorber-articles'
+    permalink: "/all-sebastien-lorber-articles"
   socials:
     x: sebastienlorber
     linkedin: sebastienlorber

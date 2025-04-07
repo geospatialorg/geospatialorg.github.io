@@ -78,13 +78,14 @@ const config = {
           src: "img/logo-geo-spatialorg.svg",
         },
         items: [
-          {
-            type: "docSidebar",
-            sidebarId: "tutorialSidebar",
-            position: "left",
-            label: "Tutoriale",
-          },
-          { to: "/blog", label: "Blog", position: "left" },
+          //  {
+          //    type: "docSidebar",
+          //    sidebarId: "tutorialSidebar",
+          //    position: "left",
+          //    label: "Tutoriale",
+          //  },
+          { to: "/blog", label: "Articole", position: "left" },
+          //{ to: "/tutoriale", label: "Tutoriale", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",
             label: "GitHub",
