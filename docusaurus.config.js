@@ -14,7 +14,7 @@ const config = {
 
   // Set the production url of your site here
   //url: "https://geospatialorg.github.io",
-  url: "https://geo-spatial.org/",
+  url: "https://geo-spatial.org/nou",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/nou/",
@@ -149,7 +149,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © 2006 - 2024 geo-spatial.org and the authors. CC BY-SA 4.0`,
+        copyright: `Copyright © 2006 - 2025 geo-spatial.org and the authors. CC BY-SA 4.0`,
       },
       prism: {
         theme: prismThemes.github,
