@@ -19,7 +19,7 @@ const FeatureList = [
   },
   {
     title: "Servicii",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: require("@site/static/img/servicii.svg").default,
     description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
   },
   {
@@ -29,7 +29,12 @@ const FeatureList = [
   },
   {
     title: "Noutăți",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: require("@site/static/img/news5.svg").default,
+    description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
+  },
+  {
+    title: "Situl vechi",
+    Svg: require("@site/static/img/siteul-vechi.svg").default,
     description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
   },
 ];
