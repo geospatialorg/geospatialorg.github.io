@@ -67,6 +67,16 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      "@docusaurus/plugin-google-gtag",
+      {
+        trackingID: "G-68DEKWGBTM",
+        anonymizeIP: true,
+      },
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -85,7 +95,9 @@ const config = {
           //    position: "left",
           //    label: "Tutoriale",
           //  },
-          { to: "/blog", label: "Articole", position: "left" },
+          { to: "/blog/tags/articole", label: "Articole", position: "left" },
+          { to: "/blog/tags/tutoriale", label: "Tutoriale", position: "left" },
+          { to: "/blog/tags/evenimente", label: "Evenimente", position: "left" },
           //{ to: "/tutoriale", label: "Tutoriale", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",
@@ -149,7 +161,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © 2006 - 2025 geo-spatial.org and the authors. CC BY-SA 4.0`,
+        copyright: `Copyright © 2006 - 2025 geo-spatial.org și autorii. CC BY-SA 4.0`,
       },
       prism: {
         theme: prismThemes.github,

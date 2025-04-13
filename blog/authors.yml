@@ -7,17 +7,11 @@ vcraciunescu:
   socials:
     x: vcraciunescu
     github: vasile33
+    linkedin: vasilecraciunescu
+    researchgate: https://www.researchgate.net/profile/Vasile-Craciunescu
 
-slorber:
-  name: Sébastien Lorber
-  title: Docusaurus maintainer
-  url: https://sebastienlorber.com
-  image_url: https://github.com/slorber.png
-  page:
-    # customize the url of the author page at /blog/authors/<permalink>
-    permalink: "/all-sebastien-lorber-articles"
-  socials:
-    x: sebastienlorber
-    linkedin: sebastienlorber
-    github: slorber
-    newsletter: https://thisweekinreact.com
+geo-spatial.org:
+  name: Echipa geo-spatial.org
+  url: https://www.linkedin.com/groups/4221861/
+  image_url: https://geo-spatial.org/assets/logo-glob-blue.png
+  page: true

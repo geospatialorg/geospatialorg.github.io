@@ -5,37 +5,48 @@ import styles from "./styles.module.css";
 const FeatureList = [
   {
     title: "Cunoștințe",
-    Svg: require("@site/static/img/cunostinte2.svg").default,
-    description: <>Docusaurus was designed from the ground up to be easily installed and used to get your website up and running quickly.</>,
+    Svg: require("@site/static/img/cunostinte.svg").default,
+    description: (
+      <>
+        <a href="blog/tags/articole">Articole</a> și <a href="blog/tags/tutoriale">tutoriale</a>, publicate cu generozitate de membrii comunității, ce explică concepte
+        sau tehnici specifice lumii geospațiale.{" "}
+      </>
+    ),
   },
   {
     title: "Date",
     Svg: require("@site/static/img/date.svg").default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and move your docs into the <code>docs</code> directory.
+        Seturi de date atent "periate" și optimizate, publicate în formate standardizate, sub licențe deschise. Detalii în secțiunile Download și{" "}
+        <a href="https://services.geo-spatial.org/geonetwork/">Catalog</a>.
       </>
     ),
   },
   {
     title: "Servicii",
     Svg: require("@site/static/img/servicii.svg").default,
-    description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
+    description: <>Servicii informatice găzduite de platforma geo-spatial.org ce facilitează accesul la date și informații din sfera geospațială. </>,
   },
   {
     title: "Evenimente",
     Svg: require("@site/static/img/evenimente.svg").default,
-    description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
+    description: <>Evenimente fizice sau hibride organizate periodic de comunitatea geo-spatial.org sau unele la care comunitatea contribuie prin membrii ei.</>,
   },
   {
     title: "Noutăți",
-    Svg: require("@site/static/img/news5.svg").default,
-    description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
+    Svg: require("@site/static/img/news.svg").default,
+    description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
   },
   {
     title: "Situl vechi",
     Svg: require("@site/static/img/siteul-vechi.svg").default,
-    description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
+    description: (
+      <>
+        Prima versiunea a situl web geo-spatial.org, cea care ne-a slujit cu credință vreme de 18 ani, este încă{" "}
+        <a href="https://www.geo-spatial.org/vechi">disponibilă online</a>.
+      </>
+    ),
   },
 ];
 
