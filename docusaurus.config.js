@@ -44,7 +44,7 @@ const config = {
           sidebarPath: "./sidebars.js",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          //editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
         blog: {
           showReadingTime: true,
@@ -98,6 +98,12 @@ const config = {
           { to: "/blog/tags/articole", label: "Articole", position: "left" },
           { to: "/blog/tags/tutoriale", label: "Tutoriale", position: "left" },
           { to: "/blog/tags/evenimente", label: "Evenimente", position: "left" },
+          {
+            type: "docSidebar",
+            sidebarId: "dateSidebar",
+            position: "left",
+            label: "Date",
+          },
           //{ to: "/tutoriale", label: "Tutoriale", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",

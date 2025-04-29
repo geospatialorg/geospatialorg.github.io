@@ -24,6 +24,16 @@ const FeatureList = [
     ),
   },
   {
+    title: "Hărți interactive",
+    Svg: require("@site/static/img/harti_interactive.svg").default,
+    description: (
+      <>
+        Seturi de date atent "periate" și optimizate, publicate în formate standardizate, sub licențe deschise. Detalii în secțiunile Download și{" "}
+        <a href="https://services.geo-spatial.org/geonetwork/">Catalog</a>.
+      </>
+    ),
+  },
+  {
     title: "Servicii",
     Svg: require("@site/static/img/servicii.svg").default,
     description: <>Servicii informatice găzduite de platforma geo-spatial.org ce facilitează accesul la date și informații din sfera geospațială. </>,
@@ -36,6 +46,16 @@ const FeatureList = [
   {
     title: "Noutăți",
     Svg: require("@site/static/img/news.svg").default,
+    description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
+  },
+  {
+    title: "Proiecte",
+    Svg: require("@site/static/img/proiecte2.svg").default,
+    description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
+  },
+  {
+    title: "Acces liber",
+    Svg: require("@site/static/img/acces_deschis.svg").default,
     description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
   },
   {
