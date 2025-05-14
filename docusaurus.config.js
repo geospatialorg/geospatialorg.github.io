@@ -75,6 +75,15 @@ const config = {
         anonymizeIP: true,
       },
     ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "ghiduri",
+        path: "ghiduri",
+        routeBasePath: "ghiduri",
+        sidebarPath: require.resolve("./sidebarsGhiduri.js"),
+      },
+    ],
   ],
 
   themeConfig:
@@ -98,13 +107,6 @@ const config = {
           { to: "/blog/tags/articole", label: "Articole", position: "left" },
           { to: "/blog/tags/tutoriale", label: "Tutoriale", position: "left" },
           { to: "/blog/tags/evenimente", label: "Evenimente", position: "left" },
-          {
-            type: "docSidebar",
-            sidebarId: "dateSidebar",
-            position: "left",
-            label: "Date",
-          },
-          //{ to: "/tutoriale", label: "Tutoriale", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",
             label: "GitHub",
@@ -153,10 +155,6 @@ const config = {
                 to: "/despre",
               },
               {
-                label: "Situl vechi",
-                href: "https://geo-spatial.org/vechi/",
-              },
-              {
                 label: "Redirecționare 3.5%",
                 href: "/redirectionare-impozit",
               },
@@ -172,6 +170,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+        additionalLanguages: ["bash"],
       },
     }),
 };

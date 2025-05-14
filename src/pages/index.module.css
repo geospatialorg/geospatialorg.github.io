@@ -25,5 +25,11 @@
 /*Custom geo-spatial.org */
 .despreGeospatial {
     font-style: italic;
-    text-align: left;
+    text-align: center;
+}
+
+.markerDespreGeospatial {
+    background: url(//geo-spatial.org/assets/pen-brushes.svg);
+    margin: -2px -6px;
+    padding: 2px 6px;
 }

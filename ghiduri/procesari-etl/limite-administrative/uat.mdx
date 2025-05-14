@@ -1,0 +1,182 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# UAT, România (poligon)
+
+## Cod set de date
+
+**`ro_admin_lau_polygon`**
+
+## Abordare practică
+
+Limitele unităților administrativ teritoriale (UAT) din România, format vectorial/poligon, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de îmbunătățire folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina GitHub a geo-spatial.org.
+
+## Prelucrarea datelor
+
+### Definirea corectă a proiecției
+
+Datele au venit cu o definiție nestandardizată a proiecției:
+
+>PROJCRS["Romania_double_stereo",BASEGEOGCRS["Pulkovo 1942",DATUM["Pulkovo 1942",ELLIPSOID["Krassowsky 1940",6378245,298.3,LENGTHUNIT["metre",1]],ID["EPSG",6284]],PRIMEM["Greenwich",0,ANGLEUNIT["Degree",0.0174532925199433]]],CONVERSION["unnamed",METHOD["Oblique Stereographic",ID["EPSG",9809]],PARAMETER["Latitude of natural origin",46,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",25,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.99975,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",500000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]
+
+Aceasta a fost înlocuită cu [EPSG:3844](https://epsg.io/3844).
+
+### Eliminarea câmpurilor cu informație redundantă
+
+O serie din câmpuri au fost considerate neimportante pentru utilizatorul obișnuit: `IFCID`, `localId`, `namespace`, `country`, `versionId`, `resOfOut`, `endVersion`, `Shape_Leng`, `ShapeArea`. Aceste câmpuri, cum ar fi `namespace`, pot avea importanța lor în demersuri precum Directiva INSPIRE dar, din punct de vedere practic, când nu sunt exploatate într-un context de interoperabilitate cu date la nivel european, dar care, altfel, doar încarcă inutil setul de date (au aceeași valoare pentru toate entitățile din setul de date).
+
+### Adăugarea de câmpuri noi
+
+Din nomenclatorul [SIRUTA](http://80.96.186.4:81/senin/classifications.htm), publicat de [Institutul Național de Statistică](https://insse.ro), au fost adăugate o serie de câmpuri suplimentare:
+
+* `countyId` - codul numeric al județului;
+* `countyCode` - codul SIRUTA al județului;
+* `county` - numele județului;
+* `countyMn` - abrevierea județului;
+* `regionId` - codul numeric a regiunii de dezvoltare;
+* `regionCode` - codul SIRUTA a regiunii de dezvoltare;
+* `region` - numele regiunii de dezvoltare.
+
+### Formatarea denumirii UAT-urilor și corectarea diacriticelor
+
+Atât în fișierul Shapefile publicat de ANCPI, cât și în nomenclatorul SIRUTA, denumirile UAT-urilor au două probleme importante:
+
+* Sunt scrise cu majuscule
+* O parte din diacritice sunt greșite (`ş` în loc de `ș`; `ţ` în loc de `ț`; `ã` în loc de `ă`').
+
+Ambele au fost corectate.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/limite-administrative/corectare-denumiri-uat.jpg')} alt="Exemplu: denumirea de intrare a UAT-urilor (stânga) și rezultatul final (dreapta)" />
+  <figcaption><em>Exemplu: denumirea de intrare a UAT-urilor (stânga) și rezultatul final (dreapta).</em></figcaption>
+</figure>
+
+### Conversia în formate de fișier populare
+
+Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org pentru distribuirea de date vectoriale: `GeoPackage`, `Shapefile`, `Geoparquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`. Detalii despre motivația alegerii acestor formate și beneficiile fiecăruia sunt prezentate în ghidul cu privire la date. De asemenea, pentru nevoi interne, datele au fost încărcate în baza de date PostgreSQL/PostGIS.
+
+### Publicare datelor
+
+Datele au fost puse la dispoziție pentru download prin protocolul HTTP. De asemenea, au fost expune prin intermediul serviciilor standardizate OGC. Stratul poate fi găsit sub numele `ro_admin_lau_polygon` în documentele getCapabilities pentru WMS și WFS.
+
+## Script ETL
+
+```bash title="procesare_limite_uat.sh"
+#!/usr/bin/zsh
+
+# Activarea profilului Anaconda cu utilitare instalate
+source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
+conda activate geo
+
+insDataPath="/data/ins/siruta"
+ancpiDataPath="/data/ancpi/limite_administrative"
+lauDataPath="/data/output/administrative_boundaries/lau"
+tmpDataPath="/data/tmp"
+
+##############################################################################################################
+#1. 🛠 UAT poligon
+##############################################################################################################
+
+echo "
+🛠 Procesare UAT poligon
+ "
+
+echo "💾 Încărcare date în SQLite"
+
+#💾 încărcare SHP ANCPI în SQLite
+ogr2ogr  -of "SQLite" -a_srs "EPSG:3844" -lco LAUNDER=NO ${tmpDataPath}/uat.db ${ancpiDataPath}/Unitate_administrativa_UAT.shp
+
+#💾 încărcare tabel regiuni de dezvoltare în SQLite
+csvsql --db sqlite:///${tmpDataPath}/uat.db --insert ${insDataPath}/siruta_zone.csv
+
+#💾 încărcare tabel județe în SQLite
+csvsql --db sqlite:///${tmpDataPath}/uat.db --insert ${insDataPath}/siruta_judete.csv
+
+#💾 conversie MDB în CSV
+mdb-export ${insDataPath}/siruta.mdb siruta_rez > ${tmpDataPath}/siruta.csv
+
+#💾 formatare CSV: se elimină câmpurile nerelevante (FSJ, FS2, FS3, fictiv); se formatează câmpurile de tip text ca "lowercase"; se convertesc câmpurile SIRUTA, CODP și SIRSUP din notarea științifică în format integer
+awk -F, 'BEGIN{printf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n","siruta","denloc","codp","jud","sirsup","tip","niv","med","regiune","fsl", "rang")} NR>1{printf("%.0f,%s,%.0f,%d,%.0f,%d,%d,%s,%d,%s,%s\n",$1,tolower($2),$3,$4,$5,$6,$7,$8,$9,$13,$14)}' ${tmpDataPath}/siruta.csv > ${tmpDataPath}/siruta_corectat.csv
+
+#💾 înlocuire diacritice incorecte ("ș" și "ț" din sedilă în virgulă; se corectează "ă")
+sed -i -e 's/ş/ș/g' -e 's/ţ/ț/g' -e 's/ã/ă/g' ${tmpDataPath}/siruta_corectat.csv
+
+#💾 conversie cîmpuri de tip text din "lowercase" în "titlecase" - este exceptat primul rînd, cel cu numele de coloane
+sed -i '2,$s/.*/\L&/; 2,$s/[a-z]*/\u&/g' ${tmpDataPath}/siruta_corectat.csv
+
+#💾 înlocuire prepoziții folosite în numele de localități din "titlecase" înapoi în "lowercase"
+sed -i -e 's/ De / de /g' -e 's/ Din / din /g' -e 's/ La / la /g' -e 's/ Pe / pe /g' -e 's/ Cu / cu /g' -e 's/ Lui / lui /g' -e 's/ Cel / cel /g' -e 's/ Sub / sub /g' -e 's/ In / în /g' -e 's/ ii/ II/g' -e 's/Municipiul //g' -e 's/Oraș //g' ${tmpDataPath}/siruta_corectat.csv
+
+#💾 încărcare tabel SIRUTA în SQLITE
+csvsql --db sqlite:///${tmpDataPath}/uat.db --insert ${tmpDataPath}/siruta_corectat.csv
+
+ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ro_admin_lau_polygon -sql "SELECT CAST(a.natCode AS INTEGER) AS natCode, b.denloc AS name, a.natLevName AS natLevName, CAST(c.jud AS INTEGER) AS countyId, CAST(c.siruta AS INTEGER) AS countyCode, c.denj AS county, c.mnemonic AS countyMn, CAST(d.zona AS INTEGER) AS regionId, CAST(d.siruta AS INTEGER) AS regionCode, d.denzona AS region, a.beginvers AS version, a.GEOMETRY FROM Unitate_administrativa_UAT AS a LEFT JOIN siruta_corectat AS b ON (a.natcode = b.siruta) LEFT JOIN siruta_judete AS c ON (c.jud=b.jud) LEFT JOIN siruta_zone AS d ON (c.zona=d.zona)" ${tmpDataPath}/uat.db ${tmpDataPath}/uat.db
+
+#💾 creare versiune GeoPackage
+echo "💾 creare versiune GeoPackage"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.gpkg ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.gpkg
+fi
+ogr2ogr -of GPKG -lco FID=id -a_srs EPSG:3844 -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT GEOMETRY AS geometry, * FROM ro_admin_lau_polygon" ${lauDataPath}/ro_admin_lau_polygon.gpkg ${tmpDataPath}/uat.db
+
+#💾 creare fișiere Esri Shapefile
+echo "💾 creare fișiere Esri Shapefile"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.zip ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.zip
+fi
+ogr2ogr -lco ENCODING=UTF-8 -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lauDataPath}/ro_admin_lau_polygon.shp ${lauDataPath}/ro_admin_lau_polygon.gpkg
+
+#📦 arhivare fișiere shp
+echo "📦 arhivare fișiere shp"
+zip -j ${lauDataPath}/ro_admin_lau_polygon.zip ${lauDataPath}/ro_admin_lau_polygon.dbf ${lauDataPath}/ro_admin_lau_polygon.shp ${lauDataPath}/ro_admin_lau_polygon.prj ${lauDataPath}/ro_admin_lau_polygon.shx ${lauDataPath}/ro_admin_lau_polygon.cpg
+
+#💾 creare versiune FlatGeobuf
+echo "💾 creare versiune FlatGeobuf"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.fgb ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.fgb
+fi
+ogr2ogr -of FlatGeobuf -nlt MULTIPOLYGON -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lauDataPath}/ro_admin_lau_polygon.fgb ${lauDataPath}/ro_admin_lau_polygon.gpkg
+
+#💾 creare versiune GeoParquet
+echo "💾 creare versiune GeoParquet"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.parquet ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.parquet
+fi
+ogr2ogr -of Parquet -nlt MULTIPOLYGON -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lauDataPath}/ro_admin_lau_polygon.parquet ${lauDataPath}/ro_admin_lau_polygon.gpkg
+
+#💾 creare versiune GeoJSON
+echo "💾 creare versiune GeoJSON"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.geojson ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.geojson
+fi
+ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lauDataPath}/ro_admin_lau_polygon.geojson ${lauDataPath}/ro_admin_lau_polygon.gpkg
+
+#💾 creare versiune KML
+echo "💾 creare versiune KML"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.kml ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.kml
+fi
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${lauDataPath}/ro_admin_lau_polygon.kml ${lauDataPath}/ro_admin_lau_polygon.gpkg
+
+#💾 creare versiune TopoJSON
+echo "💾 creare versiune TopoJSON"
+if [ -f ${lauDataPath}/ro_admin_lau_polygon.topojson ]; then
+    rm ${lauDataPath}/ro_admin_lau_polygon.topojson
+fi
+mapshaper -i ${lauDataPath}/ro_admin_lau_polygon.geojson -o format=topojson ${lauDataPath}/ro_admin_lau_polygon.topojson
+
+#💾 actualizarea setului de date în baza de date PostGIS
+echo "💾 actualizarea setului de date în baza de date PostGIS"
+ogr2ogr -of "PostgreSQL" PG:"host=localhost port=5432 user=user dbname=geospatial password=password" -lco schema=romania -lco GEOMETRY_NAME=geom -lco overwrite=yes  -lco LAUNDER=NO -nlt MULTIPOLYGON ${lauDataPath}/ro_admin_lau_polygon.gpkg ro_admin_lau_polygon -skipfailures -overwrite
+psql -h localhost -p 5432 -U user -d geospatial -c "
+CREATE INDEX ro_admin_lau_polygon_geom_idx ON romania.ro_admin_lau_polygon USING GIST (geom);
+CLUSTER romania.ro_admin_lau_polygon USING ro_admin_lau_polygon_geom_idx;"
+
+#💾 actualizarea metadatelor din serviciile de date
+echo "💾 actualizarea metadatelor din serviciile de date"
+curl -u user:password -XPUT -H "Content-type: text/xml" -d "<featureType><abstract>Limitele unităților administrativ teritoriale din România (poligon). Actualizare 05.05.2025. Sursa ANCPI.</abstract><enabled>true</enabled></featureType>" http://localhost:8080/geoserver/rest/workspaces/geospatial/datastores/romania/featuretypes/ro_admin_lau_polygon
+
+#🗑️ Ștergere fișiere intermediare
+echo "🗑️ Ștergere fișiere Shapefile"
+rm ${lauDataPath}/ro_admin_lau_polygon.dbf ${lauDataPath}/ro_admin_lau_polygon.shp ${lauDataPath}/ro_admin_lau_polygon.prj ${lauDataPath}/ro_admin_lau_polygon.shx ${lauDataPath}/ro_admin_lau_polygon.cpg
+}
+```

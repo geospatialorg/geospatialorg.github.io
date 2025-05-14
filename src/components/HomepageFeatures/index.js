@@ -26,12 +26,7 @@ const FeatureList = [
   {
     title: "Hărți interactive",
     Svg: require("@site/static/img/harti_interactive.svg").default,
-    description: (
-      <>
-        Seturi de date atent "periate" și optimizate, publicate în formate standardizate, sub licențe deschise. Detalii în secțiunile Download și{" "}
-        <a href="https://services.geo-spatial.org/geonetwork/">Catalog</a>.
-      </>
-    ),
+    description: <>O modalitate simplă și intuitivă de a explora datele publicate de geo-spatial.org prin intermediul unor hărți și dashboard-uri interactive.</>,
   },
   {
     title: "Servicii",

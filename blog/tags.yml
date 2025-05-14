@@ -14,3 +14,7 @@ evenimente:
   label: Evenimente
   permalink: /evenimente
   description: Evenimente fizice sau hibride organizate periodic de comunitatea geo-spatial.org sau unele la care comunitatea contribuie prin membrii ei
+voluntari-geospatialorg:
+  label: Voluntari geo-spatial.org
+  permalink: /voluntari
+  description: Materiale dedicate colaboratorilor și voluntarilor geo-spatial.org

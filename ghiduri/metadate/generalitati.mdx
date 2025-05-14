@@ -1,0 +1,48 @@
+# Generalități
+
+Acest material tehnic, dedicat voluntarilor și colaboratorilor geo-spatial.org, explică cum pot fi descrise seturi de date noi pe geo-spatial.org prin intermediul metadadatelor standardizate (conforme cu standardele [ISO 19115](https://www.iso.org/standard/53798.html) și [ISO 19139](https://www.iso.org/standard/67253.html)) folosind aplicația open-source [GeoNetwork](https://geonetwork-opensource.org).
+
+:::info
+
+Cei ce sunt interesați să sprijine eforturile geo-spatial.org în documentarea seturilor de date publicate sunt invitați să consulte secțiunea Voluntari din secțiunea Despre.
+
+:::
+
+## Standardul ISO 19115 / 19139
+
+**ISO 19115** este standardul internațional pentru descrierea metadatelor aferente seturilor de date geospațiale. Acesta definește ce informații trebuie incluse pentru ca utilizatorii să înțeleagă, să găsească, să acceseze și să utilizeze corect un set de date spațiale.
+
+**ISO 19139** este implementarea tehnică (XML) a standardului ISO 19115 și este utilizată în aplicații precum **GeoNetwork**, în infrastructuri precum **INSPIRE**, **Copernicus** și în geoportaluri naționale.
+
+Câteva dintre cele mai importante câmpuri din metadatele ISO 19115 sunt:
+
+- **Titlu (`Title`)** – Numele setului de date;
+- **Rezumat (`Abstract`)** – Descrierea conținutului, scopului și acoperirii datelor;
+- **Responsabil (`Point of contact`)** – Cine a produs sau publicat datele;
+- **Extindere geografică (`Geographic extent`)** – Zona acoperită de date;
+- **Referință temporală (`Temporal extent`)** – Perioada la care se referă datele;
+- **Tipul de date (`Resource type`)** – Vector, raster, tabelar etc.;
+- **Formatul fișierului (`Distribution format`)** – Ex: GeoPackage, GeoTIFF;
+- **Proiecția (`Reference system`)** – Sistemul de coordonate folosit (ex: EPSG:3844);
+- **Originea datelor (`Lineage`)** – Cum au fost create și procesate datele;
+- **Drepturi de utilizare (`Use constraints`)** – Licență, restricții, etc.
+
+geo-spatial.org folosește acest standard pentru că:
+
+- Este **acceptat internațional**;
+- Permite **interoperabilitate** între portaluri, aplicații și organizații;
+- Este cerut de **INSPIRE** și alte directive europene;
+- Ajută la **căutarea și găsirea rapidă** a seturilor de date relevante;
+- Asigură mecanisme de **transparență și reutilizare** a datelor în comunitate.
+
+## GeoNetwork
+
+GeoNetwork este o aplicație open source dezvoltată special pentru a facilita **gestionarea, descrierea și publicarea metadatelor geospațiale**. Platforma este folosită de autorități publice, organizații internaționale, inițiative comunitare și proiecte open data pentru a construi **cataloage de date spațiale** care respectă standarde internaționale precum **ISO 19115 / ISO 19139** și **INSPIRE**.
+
+GeoNetwork oferă un mediu web intuitiv, unde utilizatorii pot:
+- Crea și edita metadate standardizate pentru seturi de date, servicii web și aplicații spațiale;
+- Căuta, filtra și descoperi resurse geospațiale pe baza titlului, temei, descrierii, locației sau autorului;
+- Previzualizare și descărcarea datelor publicate prin servicii direct din fișa de metadate;
+- Integra catalogul într-un geoportal mai larg sau într-o infrastructură națională/internațională de date spațiale.
+
+În contextul geo-spatial.org, GeoNetwork joacă rolul de catalog central: aici descriem fiecare set de date publicat, îi oferim un context (cine l-a creat, ce acoperire geografică are, în ce format este disponibil, care sunt drepturile de utilizare, etc.) și îl conectăm cu alte surse sau aplicații.

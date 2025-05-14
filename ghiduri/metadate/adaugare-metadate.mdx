@@ -1,0 +1,52 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Adăugarea unui nou set de metadate în GeoNetwork
+
+Publicarea unui nou set de date în catalog începe cu descrierea sa printr-un fișier de metadate conforme cu standardul ISO 19115 / 19139. GeoNetwork ne oferă o interfață web intuitivă pentru acest proces.
+
+## Autentificarea în GeoNetwork
+
+Accesați [interfața web a catalogului GeoNetwork](https://services.geo-spatial.org/geonetwork) și autentificați-vă cu contul dumneavoastră folosind butonul din dreapta-sus. Dacă nu aveți cont, consultați secțiunea Despre.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-autentificare.jpg')} alt="Autentificarea în GeoNetwork" />
+  <figcaption><em>Autentificarea în GeoNetwork.</em></figcaption>
+</figure>
+
+## Crearea un nou fișier de metadate
+
+Crearea unei noi intrări în catalog se face accesând meniul `Contribute/Add new record`.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-add-new-record.jpg')} alt="Crearea un nou fișier de metadate" />
+  <figcaption><em>Crearea un nou fișier de metadate.</em></figcaption>
+</figure>
+
+În fereastra următoare, se vor alege:
+* Tipul de resursă pentru care se vor adăuga metadate (cel mai probabil, `Dataset`) din secțiunea `Create a Dataset`;
+* Șablonul corespunzător tipului de date pentru care se vor adăuga metadatele (`Template for Vector data in ISO19139 (preferred!)` pentru date vectoriale sau `Template for Raster data in ISO19139` pentru date raster) din secțiunea `From`;
+* Grupul căruia îi va aparține fișierul de metadate.
+
+:::info
+
+În GeoNetwork, **grupurile** sunt mecanisme de organizare a utilizatorilor și metadatelor, care permit gestionarea colaborativă a conținutului în cadrul unei comunități. În cazul catalogului geo-spatial.org, fiecare grup reprezintă o temă (ex. „Limite administrative”). Atunci când creați sau editați un set de metadate, trebuie să alegeți grupul relevant.
+
+:::
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-create-record.jpg')} alt="Selectarea opțiunilor pentru noul fișier de metadate" />
+  <figcaption><em>Selectarea opțiunilor pentru noul fișier de metadate.</em></figcaption>
+</figure>
+
+După apăsarea butonului `Create` se va deschide interfața grafică cu formularul ce ne permite completarea fișierului de metadate.
+
+<figure style={{ textAlign: "center" }}>
+    <a
+      href={useBaseUrl('/img/ghiduri/metadate/geonetwork-new-record-interface.jpg')}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+        <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-new-record-interface.jpg')} alt="Interfața grafică de completare a fișierului de metadate" />
+    </a>
+  <figcaption><em>Interfața grafică de completare a fișierului de metadate.</em></figcaption>
+</figure>

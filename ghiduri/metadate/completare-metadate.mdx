@@ -1,0 +1,482 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Completarea fișierului de metadate
+
+## Secțiunea Identification info
+
+Secțiunea `Identification info` conține informațiile esențiale care permit utilizatorilor să înțeleagă ce reprezintă setul de date, cine l-a produs, ce acoperire are și în ce scop poate fi utilizat.
+
+### Câmpul Title
+
+În câmpul `Title`, evident, se va introduce numele setului de date. Trebuie formulat clar și concis deoarece este principalul element de identificare a setului de date și apare frecvent în listele de căutare și interfețele publice. Există mai multe convenții despre cum ar trebui acesta scris. geo-spatial.org propune următorul șablon:
+
+`[temă] - [strat], [nivel administrativ sau geografic] (tip geometrie)`
+
+Astfel, pentru stratul cu limitele administrative la nivel de județ folosim următorul titlu:
+
+`Limite administrative - județe, România (poligon)`
+
+### Câmpul Date
+
+În acest câmp, se vor introduce una sau mai multe date relevante pentru setul de date. GeoNetwork permite alegerea tipului de dată (creare, publicare, revizuire) pentru fiecare înregistrare. Este recomandat să se scpecifice cel puțin data publicării, iar dacă datele sunt actualizate periodic, să includă și data ultimei revizuiri. Aceste informații îi ajută pe ceilalți membri ai comunității să evalueze actualitatea și relevanța setului de date.
+
+Acum, geo-spatial.org publică în general date colectate din surse publice de informații, date pe care le îmbunătățește prin: curățare, omogenizare, corectare, reproiectare, conversie în formate populare de fișier, etc. Dat fiind acest aspect, cele trei tipuri de date se vor utiliza în astfel:
+
+- Data de creare (Creation) - data la care a fost generată versiunea îmbunătățită a setului de date.
+- Data publicării (Publication) - data la care a fost publicat setul de date pe platforma geo-spatial.org (aceasta este utilă mai ales dacă există o întârziere între procesare și publicare);
+- Data revizuirii sau actualizării (Revision) - opțională, se indică atunci când setul de date este actualizat ulterior (ex: periodic sau ocazional - cum este cazul limitelor administrative preluate de la [ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2)).
+
+:::danger[Atenție!]
+
+Aceste date nu trebuiesc confundate cu data sursei originale (ex: „05.05.2025” de pe portalul ANCPI). Aceste date pot fi menționate în câmpul `Lineage` sau în `Abstract`, nu în `Date`.
+
+:::
+
+Data se va introduce în formatul `zi.lună.an` (dd.mm.yyyy).
+
+:::info
+
+Pentru marea majoritate a datelor din catalogul geo-spatial.org, câmpul oră nu are relevanță și se va lăsa cu valorile implicite.
+
+:::
+
+### Câmpul Edition (opțional)
+
+Permite indicarea versiunii sau ediției setului de date publicat. Acest câmp este util mai ales atunci când există mai multe variante ale aceluiași set de date, apărute în momente diferite sau rezultate în urma unor procese succesive de actualizare, curățare sau îmbunătățire.
+
+Dacă se publică pentru prima dată un set de date prelucrat, se pot introduce valori precum:
+
+- `Versiunea 1.0`
+- `Ediția 2025`
+- `Prima versiune curățată`
+
+Dacă se publică o revizie sau o îmbunătățire, se pot folosi etichete consecvente precum:
+
+- `Versiunea 1.1`
+- `Actualizare aprilie 2025`
+- `Revizia 2 – cu geometrie validată`
+
+### Câmpul Abstract
+
+Este unul dintre cele mai importante din fișa de metadate, deoarece le oferă utilizatorilor o descriere detaliată a conținutului și scopului setului de date. Aici se explica, într-un limbaj clar, **ce reprezintă datele**, **cum au fost obținute**, **ce acoperire geografică și tematică au**, precum și **în ce contexte pot fi utilizate**.
+
+Abstractul va include următoarele informații:
+
+- Tema generală a setului de date (ex: limite administrative, rețea de drumuri, populație);
+- Scopul sau utilitatea datelor;
+- Originea datelor (inclusiv dacă sunt preluate și procesate din surse deschise);
+- Informații despre acoperirea temporală și geografică;
+- Descriere succintă a conținutului (ce atribute conține, ce unități de analiză).
+
+Mai jos se găsește un exemplu de abstract imaginat pentru limitele județelor din România:
+
+> Acest set de date conține limitele administrative oficiale ale județelor din România, într-un format vectorial de tip poligon, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară. Atributele includ codul județean, codul SIRUTA, denumirea oficială, acronimul județului, codul regiunii de dezvoltare din care face parte, numele regiunii de dezvoltare și versiunea setului de date. Setul de date este destinat utilizării în proiecte de cartografiere, GIS, analiză spațială, etc. Versiunea curentă reflectă organizarea administrativ-teritorială valabilă în România anulului 2025.
+
+### Câmpul Purpose
+
+Este folosit pentru a descrie motivul pentru care a fost creat sau publicat setul de date. Acesta îi ajută pe utilizatori să înțeleagă scopul inițial al setului de date și intenția comunității geo-spatial.org de a-l pune la dispoziție. Astfel, acest câmp poate fi folosit pentru a menționa:
+
+- De ce au fost prelucrate datele respective (ex: pentru a îmbunătăți calitatea, pentru a le adapta la formate deschise, pentru a corecta erori, etc.);
+- La ce pot fi folosite datele (ex: sprijinirea analizei teritoriale, dezvoltarea de aplicații, educație, etc.);
+- Cui se adresează (ex: cartografi, specialiști GIS, cetățeni, administrații locale, dezvoltatori, etc.).
+
+:::info
+
+Informațiile din acest câmp nu trebuie să le duplice pe cele din câmpul `Abstract`.
+
+:::
+
+### Câmpul Status
+
+Indică stadiul de dezvoltare sau nivelul de actualizare al setului de date publicat.
+
+Opțiunile sunt:
+
+- `Completed` – Setul de date este finalizat și disponibil pentru utilizare.
+- `Ongoing` – Setul de date este în curs de dezvoltare sau actualizare continuă.
+- `Planned` – Setul de date urmează să fie creat sau publicat.
+- `Under development` – Datele sunt într-o fază de lucru și pot suferi modificări.
+- `Obsolete` – Setul de date nu mai este menținut sau utilizat activ.
+- `Historical archive` – Setul de date este păstrat doar în scop de arhivă și reflectă o stare din trecut, fără actualizări viitoare.
+- `Required` – Setul de date este obligatoriu pentru respectarea unor reglementări sau proceduri oficiale (nu este cazul pentru geo-spatial.org).
+
+În majoritatea cazurilor, pentru datele îmbunătățite și publicate pe platforma geo-spatial.org, se va selecta `Completed`. Pentru seturile de date pentru care știm că urmează să publice actualizări periodice sau revizii, poate utiliza stadiul `Ongoing`.
+
+### Câmpul Point of contact
+
+Definește persoana sau organizația responsabilă pentru crearea, publicarea sau administrarea setului de date. Completarea corectă a acestui câmp le permite utilizatorilor să afle cine poate oferi informații suplimentare despre date sau cine gestionează actualizările.
+
+Pentru aceasta, în formular se completează:
+
+- Numele organizației;
+- Numele persoanei de contact (opțional);
+- Date de contact (adresă de e-mail, site web, eventual număr de telefon).
+- Rolul pe care aceasta îl are în relație cu setul de date;
+
+Opțiunea Rol este foarte importantă și numărul mare de posibile valori poate produce confuzie. Acestea sunt:
+
+- `Originator` – Organizația sau persoana care a produs sau colectat inițial datele.
+- `Publisher` – Organizația sau persoana care a publicat datele și le-a pus la dispoziția publicului.
+- `Owner` – Entitatea care deține drepturile de proprietate asupra setului de date.
+- `Point of contact` – Entitatea desemnată să răspundă la întrebări, să gestioneze solicitările și să ofere suport suplimentar referitor la date.
+- `Processor` – Organizația sau persoana care a procesat, curățat, validat sau transformat datele față de sursa lor originală.
+- `Distributor` – Entitatea responsabilă de distribuirea efectivă a datasetului către utilizatori (prin platforme online sau alte canale).
+- `Custodian` – Organizația responsabilă cu păstrarea, întreținerea și actualizarea datasetului pe termen lung.
+- `User` – Entitatea care utilizează setul de date pentru diverse scopuri (ex: analize, dezvoltare de aplicații, cercetare).
+- `Author` – Persoana sau grupul care a elaborat conținutul conceptual sau tematic al setului de date.
+- `Principal investigator` – Persoana care a condus și coordonat colectarea sau dezvoltarea datelor, de obicei în cadrul unui proiect de cercetare sau program tematic.
+- `Resource provider` – Organizația sau persoana care a furnizat resursele necesare pentru colectarea, procesarea sau publicarea datelor (ex: finanțare, infrastructură tehnică).
+
+:::info
+
+Unui set de date i se poate atribui unul sau mai multe roluri, în funcție de instituțiile/persoanele cu roluri în crearea, administrare și distribuirea datelor.
+
+:::
+
+Acum, acestea sunt toate opțiunile posibili. Evident, în cazul, geo-spatial.org, se folosește doar un subset din aceste roluri. Rolul absolut obligatoriu este cel de `Point of contact`. Acolo se va indica geo-spatial drept instituție responsabilă cu publicare precum și persoana din cadrul geo-spatial.org responsabilă cu publicarea datelor, indiferent de proveniența lor.
+
+După cum precizam anterior în acest ghid, multe din datele publicate pe geo-spatial.org sunt preluat din surse deschise și îmbunătățite. Să luăm, din nou, drept exemplu setul de date cu limitele administrative de județ din România. Pentru acest strat, rolurile ar putea arăta după cum urmează:
+
+- Point of contact → geo-spatial.org (instituția ce poate oferi informații despre datele publicate)
+- Originator → ANCPI (au produs datele originale)
+- Publisher → geo-spatial.org (au publicat versiunea îmbunătățită)
+- Processor → geo-spatial.org (au curățat, validat, îmbunătățit datele)
+- Distributor → geo-spatial.org (distribuie datele prin catalog)
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-example-point-of-contact-judete.jpg')} alt="Selectarea opțiunilor pentru noul fișier de metadate" />
+  <figcaption><em>Exemplu: completarea rolurilor pentru limitele administrative ale județelor.</em></figcaption>
+</figure>
+
+:::tip[Sfat util]
+
+Pentru a ușura munca de completare a acestei secțiuni, GeoNetwork oferă posibilitatea definirii unui registru de organizații/contacte. Catalogul geo-spatial.org are deja o serie de organizații definite. Accestea pot fi accesate folosind `Add contact`. Organizații noi se pot adăuga folosind meniul `Contribute/Manage directory`.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-directory.jpg')} alt="Selectarea opțiunilor pentru noul fișier de metadate" />
+  <figcaption><em>Exemplu: registrul de organizații/contacte geo-spatial.org.</em></figcaption>
+</figure>
+
+:::
+
+### Câmpul Maintenance and update frequency
+
+Indică cât de des este întreținut sau actualizat setul de date publicat. Câmpul are predefinite o plajă largă de valori dar, pentru majoritatea datelor de pe geo-spatial.org, relevante sunt:
+
+- `As needed` – dacă datele sunt actualizate ocazional, în funcție de apariția unor noi versiuni ale sursei;
+- `Not planned` – dacă setul de date este publicat ca arhivă statică și nu este preconizată nicio actualizare (cum este cazul hărților istorice din cadrul proiectului eHarta).
+
+### Câmpul Contact
+
+Conform definiției, conține informațiile de bază care permit utilizatorilor să ia legătura cu persoana sau organizația asociată setului de date. Acest câmp completează rolurile definite la `Point of contact`, `Originator`, `Publisher` etc., furnizând detaliile necesare pentru comunicare. Deși, la prima vedere, acest câmp este similar cu rolul `Point of contact`, în standard există o diferență subtilă între cele două. Însă, deoarece din punct de vedere tehnic, GeoNetwork oferă posibilitatea introducerii datelor de contact pentru oricare din rolurile de la `Point of contact`, în câmpul `Contact` se va introduce exact aceeași informație ca la câmpul `Point of contact`, rolul `Point of contact`.
+
+### Câmpurile Keyword/Type
+
+Câmpul `Keyword` este utilizat pentru a asocia setul de date cu una sau mai multe cuvinte-cheie sau expresii relevante (care descriu tematica, conținutul sau domeniul setului de date). Cuvintele-cheie sunt importante pentru că facilitează căutarea și descoperirea seturilor de date în catalog și în aplicațiile care consumă metadatele.
+
+Pentru fiecare cuvânt cheie se poate alege și tipul acestuia (categoria tematică sau contextul în care se încadrează respectivul cuvânt cheie). GeoNetwork oferă mai multe tipuri de cuvinte cheie predefinite:
+
+- `Theme` – Cuvinte-cheie tematice (ex: limite administrative, ocuparea terenurilor, transport).
+- `Place` – Cuvinte-cheie geografice (ex: România, județul Cluj, Europa Centrală).
+- `Stratum` – Cuvinte-cheie referitoare la straturi sau niveluri verticale (ex: atmosferă, subsol, biosferă).
+- `Temporal` – Cuvinte-cheie care indică perioade de timp sau epoci (ex: 2024, secolul XXI, perioada istorică comunistă).
+- `Discipline` – Cuvinte-cheie asociate cu discipline științifice sau domenii academice (ex: geografie, geologie, urbanism).
+
+Dacă luăm exemplul stratului cu limitele administrative ale județelor din România, format vector de tip poligon, o serie de cuvinte cheie potrivite (și asocierea cu tipul) ar fi:
+
+| Keyword              | Type  |
+|----------------------|-------|
+| limite administrative | Theme |
+| județe                | Theme |
+| România               | Place |
+| vector                | Theme |
+| poligon               | Theme |
+
+:::danger[Atenție]
+
+Datorită unui bug în versiunea curentă de GeoNetwork, în interfața grafică implicită, nu se poate aloca mai mult de un tip pentru cuvintele cheie. Pentru a depăși acest impediment, din colțul din dreapta sus (iconița în formă de ochi), se va va comuta din modul de afișare `Simple` în `Full`.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-metadata-full.jpg')} alt="Meniul de comuntare a modului de afișare a metadatelor" />
+  <figcaption><em>Meniul de comuntare a modului de afișare a metadatelor.</em></figcaption>
+</figure>
+
+Din interfața extinsă, la apăsarea butonului `Add new keyword` va apărea un câmp nou pentru keyword, însoțit de un câmp pentru tipul acestuia.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-metadata-full-keywords.jpg')} alt="Adăugarea unui cuvânt cheie și a unui tip nou în modul Full" />
+  <figcaption><em>Exemplu: Adăugarea unui cuvânt cheie și a unui tip nou în modul Full.</em></figcaption>
+</figure>
+
+:::
+
+### Subsecțiunea Resource constraints
+
+Este utilizată pentru a specifica limitările legale, administrative sau de altă natură care afectează accesul și utilizarea setului de date publicat.
+
+### Câmpul Access constraints
+
+Definește limitările privind accesul la setul de date. De regulă, aici să precizeze dacă există restricții legale sau administrative care împiedică accesul liber la date sau dacă datele sunt disponibile publicului fără restricții. ISO 19115/19139 definește o listă de valori posibile pentru acest câmp: `Copyright`, `Intellectual property rights`, `License`, `Other restrictions`, `Patent`, `Pending patent`, `Restricted` și `Trademark`. În contextul geo-spatial.org, singura valoare posibilă este **`License`**.
+
+### Câmpul Use constraints
+
+Definește limitările privind modul de utilizare a setului de date. Acesta informează utilizatorii despre eventuale condiții legate de reutilizarea, redistribuirea sau modificarea datelor. Valorile predefinite sunt identice ca la câmpul `Access constraints` iar singura valoare posibilă în contextul geo-spatial.org este tot **`License`**.
+
+### Câmpul Other constraints
+
+Permite introducerea unor specificații suplimentare privind accesul sau utilizarea setului de date. Este un câmp important pentru geo-spatial.org pentru că aice se va:
+
+- Menționa licența aplicabilă (ex: în marea majoritate a cazurilor `Creative Commons Attribution 4.0 International (CC BY 4.0)`).
+- Precizări privind citarea sursei.
+- Condiții speciale pentru redistribuire sau modificare.
+
+### Câmpul Spatial representation type
+
+Descrie modul în care informația spațială este reprezentată în setul de date. Valorile predefinite sunt:
+
+- `Vector` – Datele sunt reprezentate ca puncte, linii sau poligoane discrete (ex: limite administrative, drumuri, localități).
+- `Grid` – Datele sunt organizate într-o grilă regulată de celule (ex: imagini satelitare, modele numerice altimetrice de teren, hărți de temperatură).
+- `Text, table` – Informația spațială este prezentată sub formă de tabele cu coordonate (ex: baze de date cu localizări).
+- `TIN (Triangulated Irregular Network)` – Datele sunt reprezentate ca o rețea de triunghiuri neregulate, de obicei folosită pentru modele numerice altimetrice de teren.
+- `Stereo model` – Datele constau în imagini stereoscopice folosite pentru reconstrucția tridimensională.
+- `Video` – Informația spațială este derivată din secvențe video.
+
+:::info
+
+Marea majoritate a datelor geo-spatial.org vor fi `Vector` sau `Grid` (raster).
+
+:::
+
+### Subsecțiunea Spatial resolution și câmpul Denominator
+
+Secțiunea `Spatial resolution` descrie nivelul de detaliu spațial al datelor publicate. Această informație îi ajută pe utilizatori să înțeleagă cât de detaliat este setul de date și să evalueze dacă rezoluția corespunde nevoilor lor de analiză sau cartografiere.
+
+Rezoluția spațială poate fi exprimată prin:
+
+- Distanța pe teren reprezentată de fiecare pixel sau unitate (în cazul datelor raster).
+- Denominator (scara corespunzătoare), în cazul datelor vectoriale sau cartografice.
+
+:::warning[Atenție!]
+
+Stabilirea unei scări corecte pentru un set de date vectorial nu este ușoară atunci când nu se cunosc prea multe detalii despre modul în care a fost construit setul de date. O scară aproximativă este perfect acceptabilă.
+
+:::
+
+### Câmpul Language
+
+Indică limba principală în care sunt furnizate informațiile descriptive ale setului de date, adică limbajul folosit pentru denumirile câmpurilor, valorile atributelor și metadatele asociate. Aplicația așteaptă un cod de limbă conform standardului [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php). Pentru limba română se va completa câmpul cu valoarea **`ron`**.
+
+### Câmpul Character set
+
+Indică setul de caractere utilizat pentru codificarea textelor din setul de date și din metadatele asociate. Alegerea corectă a acestui câmp este importantă pentru a asigura afișarea și interpretarea corectă a caracterelor speciale, diacriticelor și a altor simboluri lingvistice.
+
+Cele mai frecvente valori pentru Character set sunt:
+
+- `utf8` – Unicode (UTF-8), codificare universală care suportă toate caracterele din limba română și din alte limbi internaționale.
+- `latin1` – ISO-8859-1 (Latin-1), utilizat mai vechi pentru limbi europene occidentale, fără suport complet pentru diacritice românești.
+- `latin2` – ISO-8859-2 (Latin-2), utilizat în Europa Centrală și de Est, inclusiv pentru limba română, dar mai puțin întâlnit în practică modernă.
+- `ucs2` – Unicode UCS-2, format de codificare mai vechi pentru Unicode.
+
+### Subsecțiunile Extent/Temporal extent și Extent/Geographic bounding box
+
+Subsecțiunea `Extent` descrie acoperirea spațială și temporală a setului de date. Completarea corectă a acestei secțiuni îi ajută pe utilizatori să înțeleagă unde și când sunt valabile datele, facilitând filtrarea și selecția resurselor relevante în funcție de interesul lor geografic sau temporal.
+
+Subsecțiunea `Temporal extent` definește intervalul de timp la care se referă datele, adică perioada în care datele sunt valabile, colectate sau reprezentative.
+
+Se completează următoarele câmpuri:
+
+- `Begin date` – Data de început a intervalului de valabilitate a datelor.
+  Exemple:
+  - Data la care s-a început colectarea datelor.
+  - Anul de referință pentru datele statistice sau administrative.
+- `End date` – Data de sfârșit a intervalului de valabilitate a datelor.
+  Exemple:
+  - Data la care s-a încheiat colectarea datelor.
+  - Dacă datele sunt valabile doar pentru un moment specific (ex: o hartă a populației la 1 ianuarie 2024), **Begin date** și **End date** vor avea aceeași valoare.
+
+:::info[Recomandare]
+
+Dacă setul de date este încă actualizat sau valabil în prezent, se poate lăsa `End date` necompletat sau poate introduce o dată aproximativă pentru ultima actualizare.
+
+:::
+
+Subsecțiunea `Geographic bounding box` definește zona geografică acoperită de setul de date printr-un dreptunghi delimitat de coordonate geografice.
+
+Se completează următoarele câmpuri:
+
+- `West bound longitude (W)` – Longitudinea minimă (cea mai vestică limită a setului de date), în grade zecimale.
+- `East bound longitude (E)` – Longitudinea maximă (cea mai estică limită a setului de date), în grade zecimale.
+- `North bound latitude (N)` – Latitudinea maximă (cea mai nordică limită a setului de date), în grade zecimale.
+- `South bound latitude (S)` – Latitudinea minimă (cea mai sudică limită a setului de date), în grade zecimale.
+
+:::warning[Atenție!]
+
+Valorile trebuie să fie exprimate în **grade zecimale**, conform sistemului de coordonate geografice WGS 84 (EPSG:4326). Alternativ, se pot obține coordonatele prin selecție în harta interactivă.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-geographic-bounding-box.jpg')} alt="Selectarea extinderii setului de date în harta interactivă" />
+  <figcaption><em>Selectarea extinderii setului de date în harta interactivă.</em></figcaption>
+</figure>
+
+:::
+
+Câmpul `Supplemental Information` din secțiunea `Extent` poati fi utilizat pentru a furniza detalii suplimentare despre extinderea spațială sau temporală a setului de date, care nu pot fi exprimate ușor doar prin coordonate sau prin intervale de timp.
+
+Acest câmp permite adăugarea de explicații contextuale sau informații specifice, cum ar fi:
+
+- Descrieri textuale ale zonei acoperite (ex: „Datele acoperă toate cele 41 de județe ale României și municipiul București.”)
+- Informații despre modificările extinderii în timp (ex: „Înainte de 2020, datele nu includ județul Ilfov ca unitate separată.”)
+- Clarificări privind rezoluția spațială în funcție de regiune
+- Excluderi sau excepții (ex: „Insulele de pe Dunăre nu sunt incluse în setul de date.”)
+
+## Secțiunea Reference System Information
+
+Secțiunea `Reference System Information` este utilizată pentru a specifica sistemul de coordonate folosit pentru reprezentarea datelor spațiale.
+
+Sistemul de referință spațială poate include:
+
+- `Sisteme geografice` (ex: WGS 84)
+- `Sisteme proiectate` (ex: Stereo 70, ETRS89-LAEA)
+
+### Câmpul Unique resource identifier
+
+Informația cu privire la sistemul de coordonate ale setului de date va fi introdusă în câmpul `Unique resource identifier` prin [coduri EPSG standardizate](https://epsg.io), care identifică univoc sistemul de referință. De exemplu:
+
+- `EPSG:4326` – WGS 84 (sistem geografic utilizat la nivel global, în grade zecimale)
+- `EPSG:3844` – Stereografic 1970 (Stereo 70 – sistemul oficial de proiecție al României)
+- `EPSG:3035` – ETRS89 / LAEA Europe (folosit pentru date armonizate INSPIRE)
+
+## Secțiunea Spatial Representation Info
+
+:::warning[Atenție!]
+
+Această secțiune apare doar dacă în GeoNetwork s-a selectat template-ul `Template for Raster data in ISO19139`, așadar, se va completa doar pentru datele de tip raster.
+
+:::
+
+Descrie modul în care informația spațială este organizată într-un set de date raster sau gridat.
+
+### Câmpul Number of dimensions
+
+Indică câte dimensiuni are structura setului de date. Majoritatea datelor raster clasice (ex: imagini satelitare, modele numerice altimetrice teren, etc.) au trei dimensiuni (X, Y, Z). Totuși, există și seturi de date raster mai complexe, ce au mai multe dimensiuni (ex: date multi-temporale).
+
+### Subsecțiunea Axis Dimension Properties și câmpurile Dimension name, Dimension size și Resolution (Measure)
+
+Pentru fiecare din dimensiunile specificate în câmpul `Number of dimensions`, se vor complete trei alte câmpuri: `Dimension name`, `Dimension size` și `Resolution (Measure)`.
+
+Câmpul `Dimension name` definește identificatorul fiecărei dimensiuni și are valori predefinite în GeoNetwork:
+
+- `Row` – reprezintă rândurile unui grid sau ale unei imagini. Folosit în aproape toate seturile de date raster.
+- `Column` – reprezintă coloanele unui grid sau ale unei imagini. Complementar cu Row.
+- `Vertical` – reprezintă o dimensiune pe verticală (ex: altitudine, adâncime, nivel stratificat).
+- `Line` – similar cu Row, folosit mai ales în scanările liniare.
+- `Cross track` – folosit pentru date satelitare colectate transversal față de traiectoria de deplasare (ex: MODIS, Sentinel-3).
+- `Track` – reprezintă dimensiunea de-a lungul traiectoriei satelitului sau senzorului.
+- `Sample` – folosit pentru seturi de date scanate sau secvențiale, unde fiecare „eșantion” (sample) este o măsurare individuală.
+- `Time` – reprezintă o dimensiune temporală (ex: serii de imagini înregistrate la momente succesive).
+
+Cum ziceam, pentru marea majoritate a datelor publicate pe geo-spatial.org se vor folosi exclusiv dimensiunile `Row`, `Column` și `Vertical`.
+
+Câmpul `Dimension size` indică numărul total de unități (rânduri, coloane, niveluri verticale etc.) pe acea dimensiune.
+
+### Câmpul Cell geometry
+
+Descrie forma elementară (celulă) din structura rasterizată sau gridată a setului de date. Valorile posibile sunt:
+
+- `Point` – Fiecare celulă reprezintă un punct de măsurare localizat (ex: observații punctuale).
+- `Area` – Fiecare celulă acoperă o suprafață reală pe teren (ex: pixeli de imagine satelitară, grid DEM).
+
+## Secțiunea Distribution Information
+
+Descrie modul în care setul de date poate fi accesat, descărcat sau obținut. Această secțiune oferă informații despre formatele disponibile, punctele de acces online și condițiile de distribuire a datelor.
+
+### Câmpul Distribution format
+
+Specifică formatul tehnic în care datele sunt disponibile pentru descărcare sau utilizare. Pentru completare se va apăsa butonul **`+`**. Vor apărea două câmpuri de tip text, fără ghidaj asupra conținutului așteptat de GeoNetwork. Se vor completa după cum urmează:
+
+1. `Format name` – denumirea formatului (ex: GeoPackage, Shapefile, GeoTIFF, CSV).
+2. `Format version` – versiunea formatului (opțională; de exemplu: „1.2” pentru GeoPackage).
+
+De multe ori, mai ales în cazul datelor vectoriale, datele geo-spatial.org sunt publicate pentru download în multiple formate de fișier (`GeoPackage`, `Shapefile`, `GeoParquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`). Se va crea câte o intrare pentru fiecare din aceste formate de fișier.
+
+### Subsecțiunea Distributions (Online resource)
+
+Definește linkul direct sau punctul de acces (end-point) la setul de date sau la serviciul informatic aferent.
+
+Deși, în cadrul structurii fișierului de metadate face parte din secțiunea `Distribution Information`, din motive practice, în interfața grafică a GeoNetwork este plasată în partea din dreapta a interfeței grafice.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-distributions.jpg')} alt="Subsecțiunea Distributions" />
+  <figcaption><em>Subsecțiunea Distributions (Online resource).</em></figcaption>
+</figure>
+
+Se va utiliza butonul `+ Add online resource` pentru a adăuga, pe rând, link-uri pentru diversele tipuri de resurse (link direct pentru download, link către servicii web - ex: WMS, WFS, WCS, etc). Acest buton va deschide o fereastră un un număr de câmpuri ce trebuiesc completate:
+
+- `Protocol` - o listă lungă de opțiuni, de la `File download` la o multitudine de servicii web (ex: WMS, WFS, WCS, etc.);
+- `URL` - linkul complet către fișierul de date sau serviciul web;
+- `Resource name` - denumire clară și concisă
+- `Description` explicație suplimentară despre conținutul resursei;
+- `Function`:
+  - `Download`  - resursa permite descărcarea directă a setului de date sau a unui pachet de date (ex.: un link către un fișier `.gpkg`, `.zip`, `.tif`, etc.);
+  - `Information` - resursa oferă acces la date prin intermediul unui serviciu web;
+  - `Offline access` - resursa indică posibilitatea de a accesa datele offline, prin alte mijloace decât internetul (ex.: date disponibile pe suport fizic - DCD, USB - se practica în trecut pentru, când lățimea de bandă era relativ mică, pentru seturile mari de date, cum ar fi datele satelitare) sau prin solicitare formală;
+  - `Order` - resursa permite comandarea datelor printr-un formular sau serviciu dedicat;
+  - `Search` - resursa oferă interfață de căutare în cadrul unui catalog sau al unui serviciu de descoperire de date;
+- `Application profile` - completat doar dacă există cerințe speciale (ex.: personalizare specifică a standardului ISO 19115, creată pentru a răspunde cerințelor unei anumite comunități sau aplicații).
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-new-link.jpg')} alt="Fereastra Add online resource" />
+  <figcaption><em>Fereastra Add online resource.</em></figcaption>
+</figure>
+
+:::info
+
+O dată ce o resursă a fost adăugată, aceasta va fi adăugată și în interfața principală de editare a fișierului de metadate. Acestea vor putea fi editate/șterse folosind atât meniul dedicat, din dreapta, cât și cel din pagina principală.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/metadate/geonetwork-online-resources-main.jpg')} alt="Resursele online adăugate în formularul principal de editare a metadatelor" />
+  <figcaption><em>Resursele online adăugate în formularul principal de editare a metadatelor.</em></figcaption>
+</figure>
+
+:::
+
+## Secțiunea Data Quality Info
+
+Oferă informații despre acuratețea, proveniența și istoricul de procesare al setului de date.
+
+### Câmpul Hierarchy level
+
+Definește nivelul de detaliu sau de organizare al resursei documentate. Câmpul are valori predefinite în GeoNetwork:
+
+- `Dataset` – pentru un set de date.
+- `Series` – pentru o colecție de seturi de date tematice sau în serie temporală.
+- `Service` – pentru un serviciu de acces sau procesare a datelor (ex: WMS, WFS).
+- `Tile` – pentru un subset spațial al unui raster sau grid (ex: tile-uri Sentinel).
+- `Attribute` - o proprietate individuală sau un câmp dintr-un set de date.
+- `Attribute type` - se referă la tipul de date asociat unui atribut (ex: text, număr întreg, dată).
+- `Collection hardware` - indică faptul că resursa descrisă este un echipament hardware utilizat pentru colectarea datelor.
+- `Dimension group` - descrie un grup de dimensiuni într-un set de date multidimensional.
+- `Feature` - reprezintă un obiect geografic individual dintr-un set de date.
+- `Feature type` - se referă la tipul de obiecte geografice dintr-un set de date.
+- `Field session` - descrie o sesiune de colectare de date pe teren.
+- `Model` - se referă la un model conceptual sau computațional.
+- `Non geographic dataset` - indică un set de date care nu conține informații spațiale.
+- `Property type` - descrie o categorie de proprietăți asociată obiectelor geografice.
+- `Software` - se referă la aplicații sau instrumente software asociate cu datele sau utilizate pentru prelucrarea lor.
+
+Evident, pentru geo-spatial.org, în marea majoritate a cazurilor se va utiliza valoarea implicită, `Dataset`.
+
+### Subsecțiunea Lineage și câmpul Statement
+
+Subsecțiunea `Lineage` descrie proveniența și procesările efectuate asupra datelor. Este locul unde se documentează:
+
+- Sursa sau sursele originale ale datelor.
+- Procesările aplicate (ex: îmbunătățiri, corectări, reproiectări, conversii).
+- Transformările spațiale sau tematice relevante.
+- Orice alte aspecte importante care influențează calitatea datelor.
+
+Câmpul principal din `Lineage` este `Statement`, un text narativ care explică clar proveniența și procesările datelor.
+
+Mai jos, un exemplu de completare a acestui câmp pentru setul de date cu limitele administrative ale județelor din România:
+
+> Stratul de date a fost derivat din datele oficiale furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară (ANCPI), disponibile pe platforma de date deschise a instituției. Datele originale, în format Shapefile, au fost prelucrate prin conversie într-un format deschis (GeoPackage), reproiectate în sistemul de coordonate ETRS89-LAEA (EPSG:3035) și verificate topologic pentru a elimina erorile geometrice. Au fost corectate unele discrepanțe minore la frontierele județene, pe baza ortofotoplanurilor de referință din 2020–2022. Stratul rezultat este optimizat pentru utilizare în aplicații GIS tematice și analize spațiale la scară națională.
