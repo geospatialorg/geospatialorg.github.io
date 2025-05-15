@@ -6,6 +6,10 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 **`ro_admin_lau_polygon`**
 
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/limite-administrative/ro_admin_lau_polygon.svg')} alt="Limite administrative - UAT, România (poligon)" />
+</figure>
+
 ## Abordare practică
 
 Limitele unităților administrativ teritoriale (UAT) din România, format vectorial/poligon, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de îmbunătățire folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina GitHub a geo-spatial.org.
@@ -56,14 +60,33 @@ Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org 
 
 ### Publicare datelor
 
-Datele au fost puse la dispoziție pentru download prin protocolul HTTP. De asemenea, au fost expune prin intermediul serviciilor standardizate OGC. Stratul poate fi găsit sub numele `ro_admin_lau_polygon` în documentele getCapabilities pentru WMS și WFS.
+Datele au fost puse la dispoziție pentru download prin protocolul HTTP:
+
+* [GeoPackage](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.gpkg);
+* [Shapefile](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.zip);
+* [Geoparquet](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.parquet);
+* [FlatGeobuf](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.fgb);
+* [GeoJSON](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.geojson);
+* [TopoJSON](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.topojson);
+* [KLM](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.kml).
+
+De asemenea, au fost expune prin intermediul serviciilor standardizate OGC. Stratul poate fi găsit sub numele `ro_admin_lau_polygon` în documentele getCapabilities pentru:
+
+* [WMS](https://services.geo-spatial.org/geoserver/limite-administrative/ows?service=WMS&version=1.3.0&request=GetCapabilities);
+* [WMTS](https://services.geo-spatial.org/geoserver/limite-administrative/gwc/service/wmts?service=WMTS&version=1.1.1&request=GetCapabilities);
+* [WFS](https://services.geo-spatial.org/geoserver/limite-administrative/ows?service=WFS&acceptversions=2.0.0&request=GetCapabilities).
+
+Datele pot fi previzualizate online:
+
+* [Preview simplu (OpenLayers/GeoServer)](https://services.geo-spatial.org/geoserver/limite-administrative/wms?service=WMS&version=1.1.0&request=GetMap&layers=limite-administrative%3Aro_admin_lau_polygon&bbox=134106.265625%2C235541.25%2C870652.0%2C753224.5625&width=768&height=539&srs=EPSG%3A3844&styles=&format=application/openlayers);
+* [Aplicație cartografică web](https://services.geo-spatial.org/maps/#/viewer/19)
 
 ## Script ETL
 
 ```bash title="procesare_limite_uat.sh"
 #!/usr/bin/zsh
 
-# Activarea profilului Anaconda cu utilitare instalate
+# Activarea profilului Anaconda cu utilitare software instalate
 source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
 conda activate geo
 
@@ -71,10 +94,6 @@ insDataPath="/data/ins/siruta"
 ancpiDataPath="/data/ancpi/limite_administrative"
 lauDataPath="/data/output/administrative_boundaries/lau"
 tmpDataPath="/data/tmp"
-
-##############################################################################################################
-#1. 🛠 UAT poligon
-##############################################################################################################
 
 echo "
 🛠 Procesare UAT poligon
@@ -173,7 +192,7 @@ CLUSTER romania.ro_admin_lau_polygon USING ro_admin_lau_polygon_geom_idx;"
 
 #💾 actualizarea metadatelor din serviciile de date
 echo "💾 actualizarea metadatelor din serviciile de date"
-curl -u user:password -XPUT -H "Content-type: text/xml" -d "<featureType><abstract>Limitele unităților administrativ teritoriale din România (poligon). Actualizare 05.05.2025. Sursa ANCPI.</abstract><enabled>true</enabled></featureType>" http://localhost:8080/geoserver/rest/workspaces/geospatial/datastores/romania/featuretypes/ro_admin_lau_polygon
+curl -u user:password -XPUT -H "Content-type: text/xml" -d "<featureType><abstract>Limitele unităților administrativ teritoriale din România (poligon). Actualizare 05.05.2025. Sursa ANCPI.</abstract><enabled>true</enabled></featureType>" http://localhost:8080/geoserver/rest/workspaces/limite-administrative/datastores/romania/featuretypes/ro_admin_lau_polygon
 
 #🗑️ Ștergere fișiere intermediare
 echo "🗑️ Ștergere fișiere Shapefile"

@@ -25,7 +25,7 @@ export default {
             {
               type: "category",
               label: "Limite administrative",
-              items: ["procesari-etl/limite-administrative/uat"],
+              items: ["procesari-etl/limite-administrative/uat-poligon", "procesari-etl/limite-administrative/uat-linie"],
             },
             {
               type: "category",
