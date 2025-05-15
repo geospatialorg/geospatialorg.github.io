@@ -106,6 +106,7 @@ const config = {
           //  },
           { to: "/blog/tags/articole", label: "Articole", position: "left" },
           { to: "/blog/tags/tutoriale", label: "Tutoriale", position: "left" },
+          { to: "/ghiduri", label: "Ghiduri", position: "left" },
           { to: "/blog/tags/evenimente", label: "Evenimente", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",

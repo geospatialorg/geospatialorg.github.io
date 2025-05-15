@@ -8,8 +8,8 @@ const FeatureList = [
     Svg: require("@site/static/img/cunostinte.svg").default,
     description: (
       <>
-        <a href="blog/tags/articole">Articole</a> și <a href="blog/tags/tutoriale">tutoriale</a>, publicate cu generozitate de membrii comunității, ce explică concepte
-        sau tehnici specifice lumii geospațiale.{" "}
+        <a href="blog/tags/articole">Articole</a>, <a href="blog/tags/tutoriale">tutoriale</a> și <a href="ghiduri">ghiduri</a>, publicate cu generozitate de membrii
+        comunității, ce explică concepte sau tehnici specifice lumii geospațiale.{" "}
       </>
     ),
   },
