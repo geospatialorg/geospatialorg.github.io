@@ -25,7 +25,7 @@ export default {
             {
               type: "category",
               label: "Limite administrative",
-              items: ["procesari-etl/limite-administrative/ro-admin-lau-polygon", "procesari-etl/limite-administrative/ro-admin-lau-line"],
+              items: ["procesari-etl/administrative-boundaries/ro-admin-lau-polygon", "procesari-etl/administrative-boundaries/ro-admin-lau-line"],
             },
             {
               type: "category",
