@@ -1,0 +1,169 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# UAT, România  (poligon, geometrie simplificată)
+
+## Cod set de date
+
+**`ro_admin_lau_simplified_polygon`**
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/ro_admin_lau_polygon.svg')} alt="Limite administrative - UAT, România (poligon)" />
+</figure>
+
+## Abordare practică
+
+Geometria setului de date [Limite administrative - UAT, România (poligon)](ro-admin-lau-polygon) a fost simplificată folosind biblioteca [mapshaper](https://mapshaper.org/):
+* Algoritm: `Visvalingam / weighted area`;
+* Factor de simplificare: `3%`;
+
+Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina GitHub a geo-spatial.org.
+
+## Prelucrarea datelor
+
+### Definirea corectă a proiecției
+
+Datele au venit cu o definiție nestandardizată a proiecției:
+
+>PROJCRS["Romania_double_stereo",BASEGEOGCRS["Pulkovo 1942",DATUM["Pulkovo 1942",ELLIPSOID["Krassowsky 1940",6378245,298.3,LENGTHUNIT["metre",1]],ID["EPSG",6284]],PRIMEM["Greenwich",0,ANGLEUNIT["Degree",0.0174532925199433]]],CONVERSION["unnamed",METHOD["Oblique Stereographic",ID["EPSG",9809]],PARAMETER["Latitude of natural origin",46,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",25,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.99975,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",500000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]
+
+Aceasta a fost înlocuită cu [EPSG:3844](https://epsg.io/3844).
+
+### Eliminarea câmpurilor cu informație redundantă
+
+O serie din câmpuri au fost considerate neimportante pentru utilizatorul obișnuit: `IFCID`, `localId`, `namespace`, `country`, `versionId`, `resOfOut`, `endVersion`, `Shape_Leng`, `ShapeArea`. Aceste câmpuri, cum ar fi `namespace`, pot avea importanța lor în demersuri precum Directiva INSPIRE dar, din punct de vedere practic, când nu sunt exploatate într-un context de interoperabilitate cu date la nivel european, dar care, altfel, doar încarcă inutil setul de date (au aceeași valoare pentru toate entitățile din setul de date).
+
+### Adăugarea de câmpuri noi
+
+Din nomenclatorul [SIRUTA](http://80.96.186.4:81/senin/classifications.htm), publicat de [Institutul Național de Statistică](https://insse.ro), au fost adăugate o serie de câmpuri suplimentare:
+
+* `countyId` - codul numeric al județului;
+* `countyCode` - codul SIRUTA al județului;
+* `county` - numele județului;
+* `countyMn` - abrevierea județului;
+* `regionId` - codul numeric a regiunii de dezvoltare;
+* `regionCode` - codul SIRUTA a regiunii de dezvoltare;
+* `region` - numele regiunii de dezvoltare.
+
+### Formatarea denumirii UAT-urilor și corectarea diacriticelor
+
+Atât în fișierul Shapefile publicat de ANCPI, cât și în nomenclatorul SIRUTA, denumirile UAT-urilor au două probleme importante:
+
+* Sunt scrise cu majuscule
+* O parte din diacritice sunt greșite (`ş` în loc de `ș`; `ţ` în loc de `ț`; `ã` în loc de `ă`').
+
+Ambele au fost corectate.
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/corectare-denumiri-uat.jpg')} alt="Exemplu: denumirea de intrare a UAT-urilor (stânga) și rezultatul final (dreapta)" />
+  <figcaption><em>Exemplu: denumirea de intrare a UAT-urilor (stânga) și rezultatul final (dreapta).</em></figcaption>
+</figure>
+
+### Conversia în formate de fișier populare
+
+Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org pentru distribuirea de date vectoriale: `GeoPackage`, `Shapefile`, `Geoparquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`. Detalii despre motivația alegerii acestor formate și beneficiile fiecăruia sunt prezentate în ghidul cu privire la date. De asemenea, pentru nevoi interne, datele au fost încărcate în baza de date PostgreSQL/PostGIS.
+
+### Publicare datelor
+
+Datele au fost puse la dispoziție pentru download prin protocolul HTTP:
+
+* [GeoPackage](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.gpkg);
+* [Shapefile](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.zip);
+* [Geoparquet](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.parquet);
+* [FlatGeobuf](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.fgb);
+* [GeoJSON](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.geojson);
+* [TopoJSON](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.topojson);
+* [KLM](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.kml).
+
+De asemenea, au fost expune prin intermediul serviciilor standardizate OGC. Stratul poate fi găsit sub numele `ro_admin_lau_polygon` în documentele getCapabilities pentru:
+
+* [WMS](https://services.geo-spatial.org/geoserver/limite-administrative/ows?service=WMS&version=1.3.0&request=GetCapabilities);
+* [WMTS](https://services.geo-spatial.org/geoserver/limite-administrative/gwc/service/wmts?service=WMTS&version=1.1.1&request=GetCapabilities);
+* [WFS](https://services.geo-spatial.org/geoserver/limite-administrative/ows?service=WFS&acceptversions=2.0.0&request=GetCapabilities).
+
+Datele pot fi previzualizate online:
+
+* [Preview simplu (OpenLayers/GeoServer)](https://services.geo-spatial.org/geoserver/limite-administrative/wms?service=WMS&version=1.1.0&request=GetMap&layers=limite-administrative%3Aro_admin_lau_polygon&bbox=134106.265625%2C235541.25%2C870652.0%2C753224.5625&width=768&height=539&srs=EPSG%3A3844&styles=&format=application/openlayers);
+* [Aplicație cartografică web](https://services.geo-spatial.org/maps/#/viewer/19)
+
+## Script ETL
+
+```bash title="ro_admin_lau_simplified_polygon.sh"
+#!/usr/bin/zsh
+
+# Activarea profilului Anaconda cu utilitare software instalate
+source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
+conda activate geo
+
+lauDataPath="administrative_boundaries/lau"
+tmpDataPath="tmp"
+
+echo "
+🛠 Procesare UAT poligon geometrie simplificată
+"
+
+#💾 creare versiune GeoJSON
+echo "💾 creare versiune GeoJSON"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.geojson ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.geojson
+fi
+mapshaper -i ${lauDataPath}/ro_admin_lau_polygon.geojson -simplify 3% keep-shapes -o ${lauDataPath}/ro_admin_lau_simplified_polygon.geojson
+
+#💾 creare versiune GeoPackage
+echo "💾 creare versiune GeoPackage"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg
+fi
+ogr2ogr -of GPKG -s_srs EPSG:4326 -t_srs EPSG:3844 -nln ro_admin_lau_simplified_polygon_int ${lauDataPath}/ro_admin_lau_simplified_polygon_int.gpkg ${lauDataPath}/ro_admin_lau_simplified_polygon.geojson
+
+ogr2ogr -of GPKG -lco FID=id -nln ro_admin_lau_simplified_polygon -dialect sqlite -sql "SELECT geom AS geometry, * FROM ro_admin_lau_simplified_polygon_int" ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg ${lauDataPath}/ro_admin_lau_simplified_polygon_int.gpkg
+
+#💾 creare versiune Esri Shapefile
+echo "💾 creare versiune Esri Shapefile"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.zip ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.zip
+fi
+ogr2ogr -lco ENCODING=UTF-8 ${lauDataPath}/ro_admin_lau_simplified_polygon.shp ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg
+
+#📦 arhivare versiune shp
+echo "📦 arhivare versiune shp"
+zip -j ${lauDataPath}/ro_admin_lau_simplified_polygon.zip ${lauDataPath}/ro_admin_lau_simplified_polygon.dbf ${lauDataPath}/ro_admin_lau_simplified_polygon.shp ${lauDataPath}/ro_admin_lau_simplified_polygon.prj ${lauDataPath}/ro_admin_lau_simplified_polygon.shx ${lauDataPath}/ro_admin_lau_simplified_polygon.cpg
+
+#💾 creare versiune FlatGeobuf
+echo "💾 creare versiune FlatGeobuf"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.fgb ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.fgb
+fi
+ogr2ogr -of FlatGeobuf -nlt MULTIPOLYGON ${lauDataPath}/ro_admin_lau_simplified_polygon.fgb ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg
+
+#💾 creare versiune GeoParquet
+echo "💾 creare versiune GeoParquet"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.parquet ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.parquet
+fi
+ogr2ogr -of Parquet -nlt MULTIPOLYGON ${lauDataPath}/ro_admin_lau_simplified_polygon.parquet ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg
+
+#💾 creare versiune KML
+echo "💾 creare versiune KML"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.kml ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.kml
+fi
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${lauDataPath}/ro_admin_lau_simplified_polygon.kml ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg
+
+#💾 creare versiune TopoJSON
+echo "💾 creare versiune TopoJSON"
+if [ -f ${lauDataPath}/ro_admin_lau_simplified_polygon.topojson ]; then
+    rm ${lauDataPath}/ro_admin_lau_simplified_polygon.topojson
+fi
+mapshaper -i ${lauDataPath}/ro_admin_lau_simplified_polygon.geojson -o format=topojson ${lauDataPath}/ro_admin_lau_simplified_polygon.topojson
+
+#💾 actualizarea setului de date în baza de date PostGIS
+echo "💾 actualizarea setului de date în baza de date PostGIS"
+ogr2ogr -of "PostgreSQL" PG:"host=localhost port=5432 user=user dbname=geospatial password=password" -lco schema=romania -lco GEOMETRY_NAME=geom -lco overwrite=yes  -lco LAUNDER=NO -nlt MULTIPOLYGON ${lauDataPath}/ro_admin_lau_simplified_polygon.gpkg ro_admin_lau_simplified_polygon -skipfailures -overwrite
+psql -h localhost -p 25432 -U geospatialorg -d geospatial -c "
+CREATE INDEX ro_admin_lau_simplified_polygon_geom_idx ON romania.ro_admin_lau_simplified_polygon USING GIST (geom);
+CLUSTER romania.ro_admin_lau_simplified_polygon USING ro_admin_lau_simplified_polygon_geom_idx;"
+
+#💾 actualizarea metadatelor din serviciile de date
+echo "💾 actualizarea metadatelor din serviciile de date"
+curl -u user:password -XPUT -H "Content-type: text/xml" -d "<featureType><abstract>Limitele unităților administrativ teritoriale din România (poligon, geometrie simplificată). Actualizare 26.03.2025. Sursa ANCPI.</abstract><enabled>true</enabled></featureType>" http://localhost:8080/geoserver/rest/workspaces/limite-administrative/datastores/romania/featuretypes/ro_admin_lau_simplified_polygon
+```
