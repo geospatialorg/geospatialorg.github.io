@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="20"
+   height="34.2"
+   version="1.1"
+   viewBox="0 0 5.2917 9.0488"
+   id="svg1"
+   sodipodi:docname="flatgeobuf-icon.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.5497076"
+     inkscape:cx="9.6792455"
+     inkscape:cy="16.777359"
+     inkscape:window-width="2056"
+     inkscape:window-height="1205"
+     inkscape:window-x="0"
+     inkscape:window-y="44"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="matrix(.040001 0 0 .040001 -1.5875 -1.2438)"
+     id="g1"
+     style="fill:#2f8555;fill-opacity:1">
+    <path
+       transform="scale(.26458)"
+       d="m400 117.52-155 155h5c50-40 93.914-50 150-50s100 10 150 50h5zm0.0117 210.09a155 155 0 0 0-155 155 155 155 0 0 0 155 155 155 155 0 0 0 155-155 155 155 0 0 0-155-155zm-250.01 213.91v431h500v-431h-8c-22 76-17 66-242 296-225-230-220-220-242-296z"
+       fill="#1b1464"
+       id="path1"
+       style="fill:#2f8555;fill-opacity:1" />
+  </g>
+</svg>

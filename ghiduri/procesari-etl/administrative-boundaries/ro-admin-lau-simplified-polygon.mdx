@@ -20,70 +20,13 @@ Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open sourc
 
 ## Prelucrarea datelor
 
-### Definirea corectă a proiecției
-
-Datele au venit cu o definiție nestandardizată a proiecției:
-
->PROJCRS["Romania_double_stereo",BASEGEOGCRS["Pulkovo 1942",DATUM["Pulkovo 1942",ELLIPSOID["Krassowsky 1940",6378245,298.3,LENGTHUNIT["metre",1]],ID["EPSG",6284]],PRIMEM["Greenwich",0,ANGLEUNIT["Degree",0.0174532925199433]]],CONVERSION["unnamed",METHOD["Oblique Stereographic",ID["EPSG",9809]],PARAMETER["Latitude of natural origin",46,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",25,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.99975,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",500000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]
-
-Aceasta a fost înlocuită cu [EPSG:3844](https://epsg.io/3844).
-
-### Eliminarea câmpurilor cu informație redundantă
-
-O serie din câmpuri au fost considerate neimportante pentru utilizatorul obișnuit: `IFCID`, `localId`, `namespace`, `country`, `versionId`, `resOfOut`, `endVersion`, `Shape_Leng`, `ShapeArea`. Aceste câmpuri, cum ar fi `namespace`, pot avea importanța lor în demersuri precum Directiva INSPIRE dar, din punct de vedere practic, când nu sunt exploatate într-un context de interoperabilitate cu date la nivel european, dar care, altfel, doar încarcă inutil setul de date (au aceeași valoare pentru toate entitățile din setul de date).
-
-### Adăugarea de câmpuri noi
-
-Din nomenclatorul [SIRUTA](http://80.96.186.4:81/senin/classifications.htm), publicat de [Institutul Național de Statistică](https://insse.ro), au fost adăugate o serie de câmpuri suplimentare:
-
-* `countyId` - codul numeric al județului;
-* `countyCode` - codul SIRUTA al județului;
-* `county` - numele județului;
-* `countyMn` - abrevierea județului;
-* `regionId` - codul numeric a regiunii de dezvoltare;
-* `regionCode` - codul SIRUTA a regiunii de dezvoltare;
-* `region` - numele regiunii de dezvoltare.
-
-### Formatarea denumirii UAT-urilor și corectarea diacriticelor
-
-Atât în fișierul Shapefile publicat de ANCPI, cât și în nomenclatorul SIRUTA, denumirile UAT-urilor au două probleme importante:
-
-* Sunt scrise cu majuscule
-* O parte din diacritice sunt greșite (`ş` în loc de `ș`; `ţ` în loc de `ț`; `ã` în loc de `ă`').
-
-Ambele au fost corectate.
-
-<figure style={{ textAlign: "center" }}>
-  <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/corectare-denumiri-uat.jpg')} alt="Exemplu: denumirea de intrare a UAT-urilor (stânga) și rezultatul final (dreapta)" />
-  <figcaption><em>Exemplu: denumirea de intrare a UAT-urilor (stânga) și rezultatul final (dreapta).</em></figcaption>
-</figure>
-
 ### Conversia în formate de fișier populare
 
 Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org pentru distribuirea de date vectoriale: `GeoPackage`, `Shapefile`, `Geoparquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`. Detalii despre motivația alegerii acestor formate și beneficiile fiecăruia sunt prezentate în ghidul cu privire la date. De asemenea, pentru nevoi interne, datele au fost încărcate în baza de date PostgreSQL/PostGIS.
 
-### Publicare datelor
+### Publicarea datelor
 
-Datele au fost puse la dispoziție pentru download prin protocolul HTTP:
-
-* [GeoPackage](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.gpkg);
-* [Shapefile](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.zip);
-* [Geoparquet](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.parquet);
-* [FlatGeobuf](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.fgb);
-* [GeoJSON](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.geojson);
-* [TopoJSON](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.topojson);
-* [KLM](https://services.geo-spatial.org/data/administrative_boundaries/lau/ro_admin_lau_polygon.kml).
-
-De asemenea, au fost expune prin intermediul serviciilor standardizate OGC. Stratul poate fi găsit sub numele `ro_admin_lau_polygon` în documentele getCapabilities pentru:
-
-* [WMS](https://services.geo-spatial.org/geoserver/limite-administrative/ows?service=WMS&version=1.3.0&request=GetCapabilities);
-* [WMTS](https://services.geo-spatial.org/geoserver/limite-administrative/gwc/service/wmts?service=WMTS&version=1.1.1&request=GetCapabilities);
-* [WFS](https://services.geo-spatial.org/geoserver/limite-administrative/ows?service=WFS&acceptversions=2.0.0&request=GetCapabilities).
-
-Datele pot fi previzualizate online:
-
-* [Preview simplu (OpenLayers/GeoServer)](https://services.geo-spatial.org/geoserver/limite-administrative/wms?service=WMS&version=1.1.0&request=GetMap&layers=limite-administrative%3Aro_admin_lau_polygon&bbox=134106.265625%2C235541.25%2C870652.0%2C753224.5625&width=768&height=539&srs=EPSG%3A3844&styles=&format=application/openlayers);
-* [Aplicație cartografică web](https://services.geo-spatial.org/maps/#/viewer/19)
+Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/f00bfc1b-aba6-4f26-a81a-dba0e188a6b7) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/f00bfc1b-aba6-4f26-a81a-dba0e188a6b7) sau secțiunea [Descărcare](../../../descarcare/date/administrative-boundaries).
 
 ## Script ETL
 
