@@ -3,15 +3,13 @@ export default {
     {
       type: "category",
       label: "Ghiduri",
-      link: { type: "doc", id: "introducere" }, // id din introducere.mdx
+      link: { type: "doc", id: "introducere" },
       items: [
-        { type: "doc", id: "introducere" }, // introducere.mdx
+        { type: "doc", id: "introducere" },
         {
           type: "category",
           label: "Publicare materiale scrise",
-          items: [
-            "publicare/date-despre", // publicare/date-despre.mdx
-          ],
+          items: ["publicare/date-despre"],
         },
         {
           type: "category",
@@ -41,7 +39,7 @@ export default {
         {
           type: "category",
           label: "Accesare date",
-          items: ["date/formate-date"],
+          items: ["date/formate-date", "date/generalitati"],
         },
       ],
     },

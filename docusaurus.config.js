@@ -84,6 +84,15 @@ const config = {
         sidebarPath: require.resolve("./sidebarsGhiduri.js"),
       },
     ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "descarcare",
+        path: "descarcare",
+        routeBasePath: "descarcare",
+        sidebarPath: require.resolve("./sidebarsDescarcare.js"),
+      },
+    ],
   ],
 
   themeConfig:

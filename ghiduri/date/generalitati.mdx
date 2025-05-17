@@ -1,0 +1,15 @@
+import React from 'react';
+import FiltrableTable from '@site/src/components/FiltrableTable';
+
+export const data = [
+  { nume: 'Vasile', rol: 'Coordonator' },
+  { nume: 'Maria', rol: 'Editor' },
+  { nume: 'Ion', rol: 'Voluntar' },
+];
+
+export const columns = [
+  { Header: 'Nume', accessor: 'nume' },
+  { Header: 'Rol', accessor: 'rol' },
+];
+
+<FiltrableTable data={data} columns={columns} />
