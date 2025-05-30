@@ -27,6 +27,7 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-lau-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-lau-line",
                 "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-polygon",
+                "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-line",
               ],
             },
             {
