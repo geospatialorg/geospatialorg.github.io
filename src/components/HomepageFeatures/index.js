@@ -18,15 +18,21 @@ const FeatureList = [
     Svg: require("@site/static/img/date.svg").default,
     description: (
       <>
-        Seturi de date atent "periate" și optimizate, publicate în formate standardizate, sub licențe deschise. Detalii în secțiunile Download și{" "}
-        <a href="https://services.geo-spatial.org/geonetwork/">Catalog</a>.
+        Seturi de date atent "periate" și optimizate, publicate în formate standardizate, sub licențe deschise. Detalii în secțiunile <a href="descarcare">Descărcare</a>{" "}
+        și <a href="https://services.geo-spatial.org/geonetwork/">Catalog</a>.
       </>
     ),
   },
   {
     title: "Hărți interactive",
     Svg: require("@site/static/img/harti_interactive.svg").default,
-    description: <>O modalitate simplă și intuitivă de a explora datele publicate de geo-spatial.org prin intermediul unor hărți și dashboard-uri interactive.</>,
+    description: (
+      <>
+        O modalitate simplă și intuitivă de a explora datele publicate de geo-spatial.org prin intermediul unor{" "}
+        <a href="https://services.geo-spatial.org/maps/#/?f=map">hărți</a> și <a href="https://services.geo-spatial.org/maps/#/?f=dashboard">dashboard-uri</a>{" "}
+        interactive.
+      </>
+    ),
   },
   {
     title: "Servicii",
@@ -36,12 +42,22 @@ const FeatureList = [
   {
     title: "Evenimente",
     Svg: require("@site/static/img/evenimente.svg").default,
-    description: <>Evenimente fizice sau hibride organizate periodic de comunitatea geo-spatial.org sau unele la care comunitatea contribuie prin membrii ei.</>,
+    description: (
+      <>
+        <a href="noutati/tags/evenimente">Evenimente</a> fizice, online sau hibride organizate periodic de comunitatea geo-spatial.org sau unele la care comunitatea
+        contribuie prin membrii ei.
+      </>
+    ),
   },
   {
     title: "Noutăți",
     Svg: require("@site/static/img/news.svg").default,
-    description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
+    description: (
+      <>
+        <a href="noutati/tags/noutati">Anunțuri</a> despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială
+        internațională.
+      </>
+    ),
   },
   {
     title: "Proiecte",
@@ -51,7 +67,7 @@ const FeatureList = [
   {
     title: "Acces liber",
     Svg: require("@site/static/img/acces_deschis.svg").default,
-    description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
+    description: <>geo-spatial.org promovează utilizarea soluțiilor software open source, accesul deschis la date și cunoștințe și adoptarea standardelor deschise.</>,
   },
   {
     title: "Situl vechi",

@@ -1,0 +1,26 @@
+vcraciunescu:
+  name: Vasile Crăciunescu
+  title: Cercetător științific | Meteo România
+  url: https://www.linkedin.com/in/vasilecraciunescu/
+  image_url: https://geo-spatial.org/autori/vasile_craciunescu.jpg
+  page: true
+  socials:
+    x: vcraciunescu
+    github: vasile33
+    linkedin: vasilecraciunescu
+    researchgate: https://www.researchgate.net/profile/Vasile-Craciunescu
+
+cavrinceanu:
+  name: Cristina Andra Vrînceanu
+  title: Doctorand | Universitatea din Nottingham
+  url: https://www.linkedin.com/in/vasilecraciunescu/
+  image_url: https://geo-spatial.org/autori/cristina_vrinceanu.jpg
+  page: true
+  socials:
+    linkedin: cristinavrinceanu
+
+geo-spatial.org:
+  name: Echipa geo-spatial.org
+  url: https://www.linkedin.com/groups/4221861/
+  image_url: https://geo-spatial.org/autori/logo-glob-blue.png
+  page: true

@@ -46,20 +46,7 @@ const config = {
           // Remove this to remove the "edit this page" links.
           //editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ["rss", "atom"],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          // Useful options to enforce blogging best practices
-          onInlineTags: "warn",
-          onInlineAuthors: "warn",
-          onUntruncatedBlogPosts: "warn",
-        },
+        blog: false,
         theme: {
           customCss: "./src/css/custom.css",
         },
@@ -93,6 +80,29 @@ const config = {
         sidebarPath: require.resolve("./sidebarsDescarcare.js"),
       },
     ],
+    // Blog 1: Noutăți
+    [
+      "@docusaurus/plugin-content-blog",
+      {
+        id: "noutati",
+        routeBasePath: "noutati", // accesezi prin /noutati
+        path: "./noutati",
+        blogTitle: "Noutăți",
+        blogDescription: "Articole de tip știri și comunicate",
+      },
+    ],
+
+    // Blog 2: Cunoștințe
+    [
+      "@docusaurus/plugin-content-blog",
+      {
+        id: "cunostinte",
+        routeBasePath: "cunostinte", // accesezi prin /cunostinte
+        path: "./cunostinte",
+        blogTitle: "Cunoștințe",
+        blogDescription: "Articole de tip știri și comunicate",
+      },
+    ],
   ],
 
   themeConfig:
@@ -113,10 +123,29 @@ const config = {
           //    position: "left",
           //    label: "Tutoriale",
           //  },
-          { to: "/blog/tags/articole", label: "Articole", position: "left" },
-          { to: "/blog/tags/tutoriale", label: "Tutoriale", position: "left" },
-          { to: "/ghiduri", label: "Ghiduri", position: "left" },
-          { to: "/blog/tags/evenimente", label: "Evenimente", position: "left" },
+          {
+            label: "Cunoștințe",
+            position: "left",
+            items: [
+              { to: "/cunostinte/tags/articole", label: "Articole" },
+              { to: "/cunostinte/tags/tutoriale", label: "Tutoriale" },
+              { to: "/ghiduri", label: "Ghiduri" },
+            ],
+          },
+          {
+            label: "Date",
+            position: "left",
+            items: [
+              { to: "https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/search", label: "Catalog interactiv" },
+              { to: "/descarcare", label: "Descarcare directă" },
+            ],
+          },
+          {
+            label: "Hărți",
+            position: "left",
+            items: [{ to: "https://services.geo-spatial.org/maps/#/", label: "Hărți interactive" }],
+          },
+          { to: "/noutati/tags/evenimente", label: "Evenimente", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",
             label: "GitHub",
