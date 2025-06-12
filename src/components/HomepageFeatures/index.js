@@ -8,8 +8,8 @@ const FeatureList = [
     Svg: require("@site/static/img/cunostinte.svg").default,
     description: (
       <>
-        <a href="blog/tags/articole">Articole</a>, <a href="blog/tags/tutoriale">tutoriale</a> și <a href="ghiduri">ghiduri</a>, publicate cu generozitate de membrii
-        comunității, ce explică concepte sau tehnici specifice lumii geospațiale.{" "}
+        <a href="cunostinte/tags/articole">Articole</a>, <a href="cunostinte/tags/tutoriale">tutoriale</a> și <a href="ghiduri">ghiduri</a>, publicate cu generozitate de
+        membrii comunității, ce explică concepte sau tehnici specifice lumii geospațiale.{" "}
       </>
     ),
   },
@@ -62,7 +62,7 @@ const FeatureList = [
   {
     title: "Proiecte",
     Svg: require("@site/static/img/proiecte2.svg").default,
-    description: <>Anunțuri despre inițiativele noi ale geo-spatial.org, precum și informații care contează din comunitatea geospațială internațională.</>,
+    description: <>geo-spatial.org este un proiect. Uneori, face însă pui și este nevoie de un spațiu separat pentru ca puii să crească.</>,
   },
   {
     title: "Acces liber",

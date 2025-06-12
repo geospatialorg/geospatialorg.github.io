@@ -1,3 +1,5 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 ---
 title: Despre geo-spatial.org
 ---
@@ -5,7 +7,7 @@ title: Despre geo-spatial.org
 
 ## Conținut
 
-geo-spatial.org explorează concepte, tehnici și instrumente specifice comunității geospațiale. Promovează adoptarea soluțiilor software libere open source, neignorîndu-le însă nici pe cele proprietare (comerciale sau freeware). Militează pentru democratizarea accesului la datele geografice și propune harta ca instrument universal de comunicare și înregistrare a relațiilor dintre componentele sociale (științifice, politice, culturale, religioase, economice) și dimensiunea lor geospațială.
+geo-spatial.org explorează concepte, tehnici și instrumente specifice comunității geospațiale. Promovează adoptarea soluțiilor software libere open source, neignorându-le însă nici pe cele proprietare (comerciale sau freeware). Militează pentru democratizarea accesului la datele geografice și propune harta ca instrument universal de comunicare și înregistrare a relațiilor dintre componentele sociale (științifice, politice, culturale, religioase, economice) și dimensiunea lor geospațială.
 
 Aceasta este versiunea a doua a sitului nostru web. Vechiul sit este în continuare disponibil la [https://www.geo-spatial.org/vechi](https://www.geo-spatial.org/vechi).
 
@@ -21,12 +23,12 @@ geo-spatial.org a apărut din lipsa unor repere de profil în spațiul românesc
 
 geo-spatial.org își propune să devină un punct de referință în peisajul românesc, prin coagularea unei comunități active, care să progreseze profesional prin partajarea cunoștințelor acumulate, contribuind în același timp la formarea noilor generații de specialiști. Pentru acest lucru mizăm pe entuziasmul, generozitatea și înțelepciunea dumneavoastră. Dacă ne împărtășiți viziunea vă așteptăm cu:
 
-* Materiale scrise, care să se încadreze în subiectele abordate de secțiunile Articole sau Tutoriale;
-* Reprezentări cartografice pentru secțiunea Galerii;
-* Date geospațiale, hărți, software etc. pentru secțiunea Download;
+* Materiale scrise, care să se încadreze în subiectele abordate de secțiunile [articole](/cunostinte/tags/articole), [tutoriale](/cunostinte/tags/tutoriale) sau [ghiduri](/ghiduri);
+* Reprezentări cartografice pentru secțiunea hărți;
+* Date geospațiale, hărți, software, teze, cărți, etc. pentru secțiunea Download;
 * Feedback la materialele existente;
-* Participarea în calitate de prezentator la evenimentele noastre;
-* orice alte propuneri sau sugestii.
+* Participarea în calitate de prezentator la [evenimentele](noutati/tags/evenimente) noastre;
+* Orice alte propuneri sau sugestii.
 
 Vă asigurăm că ne vom onora sloganul și nu vom permite transformarea acestui sit într-un loc de reglare a conturilor sau de stabilire a ierarhiilor. *Howgh!*
 
