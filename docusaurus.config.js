@@ -143,7 +143,10 @@ const config = {
           {
             label: "Hărți",
             position: "left",
-            items: [{ to: "https://services.geo-spatial.org/maps/#/", label: "Hărți interactive" }],
+            items: [
+              { to: "https://services.geo-spatial.org/maps/#/", label: "Hărți interactive" },
+              { to: "https://geo-spatial.org/harti/#/", label: "Hărți interactive (versiunea veche)" },
+            ],
           },
           { to: "/noutati/tags/evenimente", label: "Evenimente", position: "left" },
           {

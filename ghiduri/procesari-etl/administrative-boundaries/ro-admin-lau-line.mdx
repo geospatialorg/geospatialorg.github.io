@@ -58,7 +58,7 @@ Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-
 #!/usr/bin/zsh
 
 ##############################################################################################################
-#🛠 Publicare/actualizare frontieră linie
+#🛠 Publicare/actualizare UAT linie
 ##############################################################################################################
 
 #🎛 configurații
@@ -68,8 +68,10 @@ source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
 conda activate geo
 
 #🚏 definire căi date
+ins_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ins/siruta"
 ancpi_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ancpi/limite_administrative"
-out_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/country"
+lau_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/lau"
+tmp_data_path="/storage/volumes/geoserver-1-storage/tmp"
 
 #⚙️ PostGIS
 pg_host="localhost"
@@ -85,75 +87,81 @@ gs_user="user"
 gs_pass="pass"
 gs_workspace="administrative-boundaries"
 gs_store="administrative-boundaries"
-gs_layer_title="Limite administrative - frontiera de stat, România (linie)"
-gs_layer_abstract="Acest set de date conține limitele oficiale ale teritoriului României, în format vectorial de tip linie, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară."
-gs_layer_keywords=("România" "frontiera de stat" "limite administrative" "vector" "linie")
-gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/a824c22d-6243-410e-a89a-d7d11199c077"
-gs_layer_style="ro_admin_country_line"
+gs_layer_title="Limite administrative - UAT, România (linie)"
+gs_layer_abstract="Acest set de date conține limitele oficiale ale unităților administrative (UAT) din România, în format vectorial de tip linie, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară. Atributele includ denumirea și codul SIRUTA a celor două UAT-uri care împart respectiva limită, statutul legal (dacă limita a fost sau nu agreată oficial de către cele două UAT-uri) și versiunea setului de date. Versiunea curentă reflectă organizarea administrativ-teritorială valabilă în România anulului 2025."
+gs_layer_keywords=("România" "UAT" "limite administrative" "vector" "linie")
+gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/e4d24e1e-f749-4425-806f-1c33dabd20f2"
+gs_layer_style="administrative-boundaries:ro_admin_lau_line"
 
 #⚙️ Date
-layer_name="ro_admin_country_line"
+layer_name="ro_admin_lau_line"
 
 echo "
-🛠 Procesare frontieră linie
-"
+🛠 Procesare UAT linie
+ "
 
-#💾 creare versiune GPKG
-echo "💾 creare versiune GPKG"
-if [ -f ${out_data_path}/${layer_name}.gpkg ]; then
-    rm ${out_data_path}/${layer_name}.gpkg
-fi
-ogr2ogr -of GPKG -lco FID=id -a_srs "EPSG:3844" -nln ${layer_name} -dialect sqlite -sql "SELECT a.localId AS border, a.beginVers AS version, a.Geometry AS geometry FROM Limita_administrativa_tara AS a" ${out_data_path}/${layer_name}.gpkg ${ancpi_data_path}/Limita_administrativa_tara.shp
+ogr2ogr -of SQLite -append -a_srs "EPSG:3844" ${tmp_data_path}/uat.db ${ancpi_data_path}/Limita_administrativa_UAT.shp
 
-#💾 creare versiune Shapefile
-echo "💾 creare versiune Shapefile"
-if [ -f ${out_data_path}/${layer_name}.zip ]; then
-    rm ${out_data_path}/${layer_name}.zip
+sqlite3 ${tmp_data_path}/uat.db "CREATE TABLE split_siruta AS SELECT id, substr(localid, 1, instr(localid, '.') - 1) AS leftId, substr(localid, instr(localid, '.') + 1) AS rightId FROM Limita_administrativa_UAT"
+
+ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ${layer_name} -sql "SELECT a.OGC_FID AS id, c.name AS leftLAU, d.name AS rightLAU, CAST(b.leftId AS INTEGER) AS leftId, CAST(b.rightId AS INTEGER) AS rightId, a.beginvers AS version, a.legalStat AS legalStat, a.GEOMETRY FROM Limita_administrativa_UAT AS a LEFT JOIN split_siruta AS b ON (a.id = b.id) LEFT JOIN ro_admin_lau_polygon AS c ON (b.leftId=c.natCode) LEFT JOIN ro_admin_lau_polygon AS d ON (b.rightId=d.natCode)" ${tmp_data_path}/uat.db ${tmp_data_path}/uat.db
+
+#💾 creare versiune GeoPackage
+echo "💾 creare versiune GeoPackage"
+if [ -f ${lau_data_path}/${layer_name}.gpkg ]; then
+    rm ${lau_data_path}/${layer_name}.gpkg
 fi
-ogr2ogr -lco ENCODING=UTF-8 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${out_data_path}/${layer_name}.shp ${out_data_path}/${layer_name}.gpkg
+ogr2ogr -of GPKG -lco FID=id -a_srs EPSG:3844 -nlt MULTILINESTRING -nln ${layer_name} -dialect sqlite -sql "SELECT GEOMETRY AS geometry, * FROM ${layer_name}" ${lau_data_path}/${layer_name}.gpkg ${tmp_data_path}/uat.db
+
+#💾 creare fișiere Esri Shapefile
+echo "💾 creare fișiere Esri Shapefile"
+if [ -f ${lau_data_path}/${layer_name}.zip ]; then
+    rm ${lau_data_path}/${layer_name}.zip
+fi
+ogr2ogr -lco ENCODING=UTF-8 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.gpkg
 
 #📦 arhivare fișiere shp
 echo "📦 arhivare fișiere shp"
-zip -j ${out_data_path}/${layer_name}.zip ${out_data_path}/${layer_name}.dbf ${out_data_path}/${layer_name}.shp ${out_data_path}/${layer_name}.prj ${out_data_path}/${layer_name}.shx ${out_data_path}/${layer_name}.cpg
+zip -j ${lau_data_path}/${layer_name}.zip ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg
 
 #💾 creare versiune FlatGeobuf
 echo "💾 creare versiune FlatGeobuf"
-if [ -f ${out_data_path}/${layer_name}.fgb ]; then
-    rm ${out_data_path}/${layer_name}.fgb
+if [ -f ${lau_data_path}/${layer_name}.fgb ]; then
+    rm ${lau_data_path}/${layer_name}.fgb
 fi
-ogr2ogr -of FlatGeobuf -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" -nlt MULTILINESTRING ${out_data_path}/${layer_name}.fgb ${out_data_path}/${layer_name}.gpkg
+ogr2ogr -of FlatGeobuf -nlt MULTILINESTRING -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${lau_data_path}/${layer_name}.fgb ${lau_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune GeoParquet
 echo "💾 creare versiune GeoParquet"
-if [ -f ${out_data_path}/${layer_name}.parquet ]; then
-    rm ${out_data_path}/${layer_name}.parquet
+if [ -f ${lau_data_path}/${layer_name}.parquet ]; then
+    rm ${lau_data_path}/${layer_name}.parquet
 fi
-ogr2ogr -of Parquet -nlt MULTILINESTRING -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${out_data_path}/${layer_name}.parquet ${out_data_path}/${layer_name}.gpkg
+ogr2ogr -of Parquet -nlt MULTILINESTRING -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${lau_data_path}/${layer_name}.parquet ${lau_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune GeoJSON
 echo "💾 creare versiune GeoJSON"
-if [ -f ${out_data_path}/${layer_name}.geojson ]; then
-    rm ${out_data_path}/${layer_name}.geojson
+if [ -f ${lau_data_path}/${layer_name}.geojson ]; then
+    rm ${lau_data_path}/${layer_name}.geojson
 fi
-ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${out_data_path}/${layer_name}.geojson ${out_data_path}/${layer_name}.gpkg
+ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${lau_data_path}/${layer_name}.geojson ${lau_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune KML
 echo "💾 creare versiune KML"
-if [ -f ${out_data_path}/${layer_name}.kml ]; then
-    rm ${out_data_path}/${layer_name}.kml
+if [ -f ${lau_data_path}/${layer_name}.kml ]; then
+    rm ${lau_data_path}/${layer_name}.kml
 fi
-ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${out_data_path}/${layer_name}.kml ${out_data_path}/${layer_name}.gpkg
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${lau_data_path}/${layer_name}.kml ${lau_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune TopoJSON
 echo "💾 creare versiune TopoJSON"
-if [ -f ${out_data_path}/${layer_name}.topojson ]; then
-    rm ${out_data_path}/${layer_name}.topojson
+if [ -f ${lau_data_path}/${layer_name}.topojson ]; then
+    rm ${lau_data_path}/${layer_name}.topojson
 fi
-mapshaper -i ${out_data_path}/${layer_name}.geojson -o format=topojson ${out_data_path}/${layer_name}.topojson
+mapshaper -i ${lau_data_path}/${layer_name}.shp -o format=topojson ${lau_data_path}/${layer_name}.topojson
 
 #💾 actualizarea setului de date în baza de date PostGIS
 echo "💾 actualizarea setului de date în baza de date PostGIS"
-ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${out_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
+ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${lau_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
 
 #🖇 indexare date PostGIS
 psql -h ${pg_host} -p ${pg_port} -U ${pg_user} -d ${pg_db} -c "
@@ -210,12 +218,12 @@ curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
     </featureType>" \
 "${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes/${layer_name}"
 
-#💾 Setare stil implicit
-echo "🎨 Setare stil ${gs_layer_style}..."
+#💾 Setare stil implicit + atașare stil suplimentar
+echo "🎨 Setare stil implicit + atașare stil suplimentar..."
 curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
   -d "<layer>
          <defaultStyle>
-             <name>${gs_layer_style}</name>
+             <name>${gs_layer_style##*:}</name>
          </defaultStyle>
      </layer>" \
   "${gs_url}/rest/layers/${gs_workspace}:${layer_name}"
@@ -224,6 +232,36 @@ echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în Geo
 
 #🗑️ Ștergere fișiere intermediare
 echo "🗑️ Ștergere fișiere Shapefile"
-rm ${out_data_path}/${layer_name}.dbf ${out_data_path}/${layer_name}.shp ${out_data_path}/${layer_name}.prj ${out_data_path}/${layer_name}.shx ${out_data_path}/${layer_name}.cpg
+rm ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg ${tmp_data_path}/uat.db ${tmp_data_path}/siruta.csv ${tmp_data_path}/siruta_corectat.csv
 
 ```
+
+## Simbolizare SLD
+
+### Simbolizare SLD implicită
+
+```xml title="ro_admin_lau_polygon_labels.sld"
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+  <NamedLayer>
+    <se:Name>UAT-uri</se:Name>
+    <UserStyle>
+      <se:Name>Limită UAT</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:Name>Limită UAT</se:Name>
+          <se:LineSymbolizer>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#be2edd</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">1</se:SvgParameter>
+              <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+              <se:SvgParameter name="stroke-linecap">square</se:SvgParameter>
+            </se:Stroke>
+          </se:LineSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+```
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_lau_line.sld).
