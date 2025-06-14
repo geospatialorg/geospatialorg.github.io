@@ -9,7 +9,7 @@ export default {
         {
           type: "category",
           label: "Publicare materiale scrise",
-          items: ["publicare/date-despre"],
+          items: ["publicare/materiale-scrise"],
         },
         {
           type: "category",
@@ -30,17 +30,12 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-line",
               ],
             },
-            {
-              type: "category",
-              label: "Ortofotoplanuri",
-              items: ["procesari-etl/ortofoto/intro"],
-            },
           ],
         },
         {
           type: "category",
           label: "Accesare date",
-          items: ["date/formate-date", "date/generalitati"],
+          items: ["date/formate-date"],
         },
       ],
     },
