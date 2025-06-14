@@ -1,8 +1,5 @@
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
----
-title: Despre geo-spatial.org
----
 # Despre geo-spatial.org
 
 ## Conținut
