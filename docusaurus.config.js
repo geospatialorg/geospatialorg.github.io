@@ -160,11 +160,19 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "Acces rapid",
             items: [
               {
-                label: "Tutorial",
-                to: "/docs/intro",
+                label: "Catalog date",
+                to: "https://services.geo-spatial.org/geonetwork/",
+              },
+              {
+                label: "Hărți interactive",
+                to: "https://services.geo-spatial.org/maps/#",
+              },
+              {
+                label: "Situl vechi",
+                to: "https://www.geo-spatial.org/vechi",
               },
             ],
           },
