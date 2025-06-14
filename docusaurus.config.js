@@ -148,6 +148,7 @@ const config = {
               { to: "https://geo-spatial.org/harti/#/", label: "Hărți interactive (versiunea veche)" },
             ],
           },
+          { to: "/noutati/tags/noutati", label: "Noutăți", position: "left" },
           { to: "/noutati/tags/evenimente", label: "Evenimente", position: "left" },
           {
             href: "https://github.com/geospatialorg/geospatialorg.github.io",
