@@ -29,6 +29,7 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-line",
                 "procesari-etl/administrative-boundaries/ro-admin-lau-bucharest-merged-polygon",
+                "procesari-etl/administrative-boundaries/ro-admin-lau-bucharest-merged-line",
               ],
             },
           ],
