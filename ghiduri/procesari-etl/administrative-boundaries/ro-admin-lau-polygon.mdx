@@ -1,4 +1,5 @@
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import React from 'react';
 
 # UAT, România (poligon)
 
@@ -61,6 +62,24 @@ Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org 
 ### Publicare datelor
 
 Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
+
+## Diagrama fluxului de lucru
+
+<iframe
+  src="http://localhost/jsoncrack/editor/?json=http://localhost/test.json"
+  width="100%"
+  height="600"
+  style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+  loading="lazy"
+/>
+
+<a
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/json-etl/etl_ro_admin_lau_polygon.json"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Deschide diagrama într-o pagină separată <i className="fa fa-external-link-alt" style={{ marginLeft: '0.3rem' }}></i>
+</a>
 
 ## Script ETL
 
@@ -140,6 +159,7 @@ sed -i -e 's/ De / de /g' -e 's/ Din / din /g' -e 's/ La / la /g' -e 's/ Pe / pe
 #💾 încărcare tabel SIRUTA în SQLITE
 csvsql --db sqlite:///${tmp_data_path}/uat.db --insert ${tmp_data_path}/siruta_corectat.csv
 
+#💾 creare fișier final în SQLITE prin unirea datele originale optimizate (ex: câmpurile redundante eliminate) cu cele din tabelele SIRUTA
 ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ro_admin_lau_polygon -sql "SELECT CAST(a.natCode AS INTEGER) AS natCode, b.denloc AS name, a.natLevName AS natLevName, CAST(c.jud AS INTEGER) AS countyId, CAST(c.siruta AS INTEGER) AS countyCode, c.denj AS county, c.mnemonic AS countyMn, CAST(d.zona AS INTEGER) AS regionId, CAST(d.siruta AS INTEGER) AS regionCode, d.denzona AS region, a.beginvers AS version, a.GEOMETRY FROM Unitate_administrativa_UAT AS a LEFT JOIN siruta_corectat AS b ON (a.natcode = b.siruta) LEFT JOIN siruta_judete AS c ON (c.jud=b.jud) LEFT JOIN siruta_zone AS d ON (c.zona=d.zona)" ${tmp_data_path}/uat.db ${tmp_data_path}/uat.db
 
 #💾 creare versiune GeoPackage
