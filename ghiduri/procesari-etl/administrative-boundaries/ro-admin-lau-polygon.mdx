@@ -13,7 +13,7 @@ import React from 'react';
 
 ## Abordare practică
 
-Limitele unităților administrativ teritoriale (UAT) din România, format vectorial/poligon, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de procesare folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina GitHub a geo-spatial.org.
+Limitele unităților administrativ teritoriale (UAT) din România, format vectorial/poligon, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de procesare folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_polygon.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 
@@ -295,6 +295,7 @@ echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în Geo
 echo "🗑️ Ștergere fișiere Shapefile"
 rm ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg ${tmp_data_path}/uat.db ${tmp_data_path}/siruta.csv ${tmp_data_path}/siruta_corectat.csv
 ```
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_polygon.sh).
 
 ## Simbolizare SLD
 
