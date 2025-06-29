@@ -12,6 +12,12 @@ const config = {
   tagline: "An elegant place for sharing geoKnowledge & geoData",
   favicon: "img/favicon.ico",
 
+  markdown: {
+    mermaid: true,
+  },
+
+  themes: ["@docusaurus/theme-mermaid"],
+
   // Set the production url of your site here
   //url: "https://geospatialorg.github.io",
   url: "https://geo-spatial.org",
