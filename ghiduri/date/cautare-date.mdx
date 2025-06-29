@@ -1,0 +1,114 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Căutarea datelor
+
+## Introducere
+
+geo-spatial.org oferă două mecanisme de căutare/identificare a datelor:
+- [Catalogul interactiv](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/search) bazat pe GeoNetwork;
+- [Catalogul static](/descarcare) de explorare a datelor.
+
+Ambele oferă acces complet la toate datele disponibile, diferă doar modul în care acestea sunt prezentate.
+
+## Catalogul interactiv GeoNetwork
+
+Catalogul interactiv este un catalog de date bazat pe aplicația open-source [GeoNetwork](https://geonetwork-opensource.org). Aceasta oferă o interfață intuitivă pentru descoperirea rapidă a seturilor de date, serviciilor și aplicațiilor disponibile în catalogul geo-spatial.org. Utilizatorul poate realiza căutări simple sau avansate, folosind cuvinte-cheie, filtre tematice sau geografice și poate accesa metadatele și resursele asociate direct din interfață.
+
+### Accesarea interfeței de căutare
+
+După [accesarea platformei GeoNetwork](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/search), utilizatorul va fi întâmpinat cu o pagină de start care include o bară de căutare centrală, o listă cu seturile de date indexate în zona centrală și un meniu de filtre în partea stângă.
+
+<figure style={{ textAlign: "center" }}>
+    <a
+      href={useBaseUrl('/img/ghiduri/date/cautare-date-interfata-geonetwork.jpg')}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+        <img src={useBaseUrl('/img/ghiduri/date/cautare-date-interfata-geonetwork.jpg')} alt="Interfața grafică de căutarea a datelor în Catalogul GeoNetwork" />
+    </a>
+  <figcaption><em>Interfața grafică de căutarea a datelor în Catalogul GeoNetwork.</em></figcaption>
+</figure>
+
+---
+
+### Căutare simplă (full-text)
+
+Pentru a efectua o căutare rapidă:
+
+- Se introduce un cuvânt-cheie sau o expresie (ex: „județe”, „hidrografie”, „UAT”) în bara principală de căutare.
+- Sistemul returnează toate metadatele care conțin termenul căutat în titlu, descriere, cuvinte-cheie sau alte câmpuri relevante.
+- Rezultatele pot fi sortate după **relevanță**, **ultima actualizare**, **data publicării**, **titlu** **rating** și **popularitate**.
+
+---
+
+### Căutare avansată
+
+Pentru rezultate mai precise, utilizatorul poate utiliza filtrele din partea stângă a interfeței. Criteriile disponibile includ:
+
+- **Tip resursă**: set de date, serviciu, document, etc.
+- **Organizații**: permite filtrarea după organizația implicată în producția/distribuția datelor.
+- **Tip de date**: vector, raster, etc.
+- **Tipul de serviciu prin care datele sunt accesibile**: vizualizare, descărcare, API, etc.
+- **Formatul fișierului**: GeoPackage, Shapefile, COG, etc.
+- **Scara de referință**
+
+De asemenea, prin utilizarea butonului <i className="fa-solid fa-sliders"></i> (Search options) din dreapta barei de căutare, se poate limita intervalul de timp când datele au fost publicate sau revizuite.
+
+---
+
+### Căutare geografică (spațială)
+
+GeoNetwork permite restrângerea rezultatelor pe baza unei **extinderi geografice**:
+
+- Utilizatorul poate folosi harta interactivă din colțul din stânga-jos și să traseze un **dreptunghi de selecție** pentru a limita căutarea la o zonă de interes (date ce intersectează zona indicată sau care se află complet în interiorul zonei indicate).
+
+---
+
+### Vizualizarea și descărcarea rezultatelor
+
+După identificarea unui set de date relevant, utilizatorul poate:
+
+- Accesa fișa completă de metadate.
+- Consulta informații detaliate despre sursă, rezoluție/scară, licență, acoperire geografică și temporală.
+- Descărca datele sau accesa serviciile web (WMS, WFS etc.) folosind linkurile din secțiunea „Resurse online”.
+- Previzualiza datele folosind harta interactivă inclusă direct în fișa de metadate.
+
+<figure style={{ textAlign: "center" }}>
+    <a
+      href={useBaseUrl('/img/ghiduri/date/cautare-date-exemplu-fisa-metadate.jpg')}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+        <img src={useBaseUrl('/img/ghiduri/date/cautare-date-exemplu-fisa-metadate.jpg')} alt="Exemplu de fișă de metadate din Catalogul GeoNetwork." />
+    </a>
+  <figcaption><em>Exemplu de fișă de metadate din Catalogul GeoNetwork.</em></figcaption>
+</figure>
+---
+
+## 🔹 6. Salvarea și partajarea căutărilor
+
+- Fiecare căutare are un URL unic, care poate fi **copiat și partajat**.
+- Unele implementări GeoNetwork oferă funcționalitatea de a **salva căutări recurente** sau de a se abona la **alerte de noi metadate** (dacă platforma e configurată corespunzător).
+
+---
+
+## ✅ Recomandări utile
+
+- Căutarea full-text funcționează mai bine dacă se folosesc termeni generici în limba metadatelor (română sau engleză).
+- Dacă rezultatele sunt prea multe, este recomandat să se combine **filtrarea tematică** cu **căutarea geografică**.
+- Pentru a evalua calitatea unui set de date, este esențială consultarea secțiunilor „Lineage” și „Distribution”.
+
+---
+
+## 📚 Exemplu practic
+
+Pentru a găsi stratul cu limitele administrative ale județelor:
+
+1. Introduce „limite județe” în bara de căutare.
+2. Activează filtrul „Tip resursă: Dataset”.
+3. Opțional: trasează pe hartă conturul României pentru a restrânge căutarea spațială.
+4. Selectează setul de date dorit și accesează resursele disponibile pentru descărcare sau vizualizare.
+
+## Catalogul static
+
+Catalogul static este un catalog de date bazat pe descărcarea datelor. Aceasta este o pagină web care permite descărcarea datelor disponibile.

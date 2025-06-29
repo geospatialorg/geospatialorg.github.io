@@ -14,7 +14,11 @@ export default {
         {
           type: "category",
           label: "Publicare metadate",
-          items: ["metadate/generalitati", "metadate/adaugare-metadate", "metadate/completare-metadate"],
+          items: [
+            "metadate/generalitati",
+            "metadate/adaugare-metadate",
+            "metadate/completare-metadate",
+          ],
         },
         {
           type: "category",
@@ -37,7 +41,7 @@ export default {
         {
           type: "category",
           label: "Accesare date",
-          items: ["date/introducere", "date/formate-date"],
+          items: ["date/introducere", "date/cautare-date", "date/formate-date"],
         },
       ],
     },
