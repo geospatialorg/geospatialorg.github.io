@@ -37,7 +37,7 @@ export default {
         {
           type: "category",
           label: "Accesare date",
-          items: ["date/formate-date"],
+          items: ["date/introducere", "date/formate-date"],
         },
       ],
     },
