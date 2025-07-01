@@ -167,15 +167,15 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Acces rapid",
+            title: "Resurse",
             items: [
               {
-                label: "Catalog date",
-                to: "https://services.geo-spatial.org/geonetwork/",
+                label: "GitHub",
+                to: "https://github.com/geospatialorg",
               },
               {
-                label: "Hărți interactive",
-                to: "https://services.geo-spatial.org/maps/#",
+                label: "Feed RSS",
+                to: "https://geo-spatial.org/noutati/rss.xml",
               },
               {
                 label: "Situl vechi",
