@@ -171,11 +171,11 @@ const config = {
             items: [
               {
                 label: "GitHub",
-                to: "https://github.com/geospatialorg",
+                href: "https://github.com/geospatialorg",
               },
               {
                 label: "Feed RSS",
-                to: "https://geo-spatial.org/noutati/rss.xml",
+                href: "https://geo-spatial.org/noutati/rss.xml",
               },
               {
                 label: "Situl vechi",
