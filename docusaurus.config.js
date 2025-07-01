@@ -175,7 +175,7 @@ const config = {
               },
               {
                 label: "Feed RSS",
-                href: "https://geo-spatial.org/noutati/rss.xml",
+                to: "https://geo-spatial.org/noutati/rss.xml",
               },
               {
                 label: "Situl vechi",
