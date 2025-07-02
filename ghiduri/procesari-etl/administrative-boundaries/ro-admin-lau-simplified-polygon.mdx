@@ -16,7 +16,7 @@ Geometria setului de date [Limite administrative - UAT, România (poligon)](http
 * Algoritm: `Visvalingam / weighted area`;
 * Factor de simplificare: `3%`;
 
-Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_polygon.sh) a geo-spatial.org.
+Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem precum [mapshaper](https://mapshaper.org/), [GDAL](https://gdal.org), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_polygon.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 
@@ -74,7 +74,7 @@ echo "
 🛠 Procesare UAT poligon geometrie simplificată
 "
 
-#💾 creare versiune GeoJSON
+#💾 creare versiune GeoJSON prin simplificarea stratului original
 echo "💾 creare versiune GeoJSON"
 if [ -f ${lau_data_path}/${layer_name}.geojson ]; then
     rm ${lau_data_path}/${layer_name}.geojson
@@ -209,6 +209,8 @@ echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în Geo
 echo "🗑️ Ștergere fișiere Shapefile"
 rm ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg
 ```
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_polygon.sh).
+
 ## Simbolizare SLD
 
 ### Simbolizare SLD implicită

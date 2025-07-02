@@ -12,7 +12,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Limitele unităților administrativ teritoriale (UAT) din România, format vectorial/linie, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de îmbunătățire folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [sqlite3](https://sqlite.org/). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_country_line.sh) a geo-spatial.org.
+Limitele unităților administrativ teritoriale (UAT) din România, format vectorial/linie, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de îmbunătățire folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [sqlite3](https://sqlite.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_country_line.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 
@@ -26,7 +26,7 @@ Aceasta a fost înlocuită cu [EPSG:3844](https://epsg.io/3844).
 
 ### Eliminarea câmpurilor cu informație redundantă
 
-O serie din câmpuri au fost considerate neimportante pentru utilizatorul obișnuit: `IFCID`, `localId`, `namespace`, `country`, `versionId`, `natLevel`, `tehnStatus`, `endVersion`, `Shape_Leng`. Aceste câmpuri, cum ar fi `namespace`, pot avea importanța lor în demersuri precum Directiva INSPIRE dar, din punct de vedere practic, când nu sunt exploatate într-un context de interoperabilitate cu date la nivel european, dar care, altfel, doar încarcă inutil setul de date (au aceeași valoare pentru toate entitățile din setul de date).
+O serie din câmpuri au fost considerate neimportante pentru utilizatorul obișnuit: `IFCID`, `localId`, `namespace`, `country`, `versionId`, `natLevel`, `tehnStatus`, `endVersion`, `Shape_Leng`. Aceste câmpuri, cum ar fi `namespace`, pot avea importanța lor în demersuri precum [Directiva INSPIRE](https://knowledge-base.inspire.ec.europa.eu/) dar, din punct de vedere practic, când nu sunt exploatate într-un context de interoperabilitate cu date la nivel european, dar care, altfel, doar încarcă inutil setul de date (au aceeași valoare pentru toate entitățile din setul de date).
 
 ### Adăugarea de câmpuri noi
 
@@ -86,7 +86,6 @@ source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
 conda activate geo
 
 #🚏 definire căi date
-ins_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ins/siruta"
 ancpi_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ancpi/limite_administrative"
 lau_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/lau"
 tmp_data_path="/storage/volumes/geoserver-1-storage/tmp"
@@ -118,11 +117,14 @@ echo "
 🛠 Procesare UAT linie
  "
 
-ogr2ogr -of SQLite -append -a_srs "EPSG:3844" ${tmp_data_path}/uat.db ${ancpi_data_path}/Limita_administrativa_UAT.shp
+ #💾 încărcare SHP ANCPI în SQLite
+ ogr2ogr -of SQLite -append -a_srs "EPSG:3844" ${tmp_data_path}/uat.db ${ancpi_data_path}/Limita_administrativa_UAT.shp
 
-sqlite3 ${tmp_data_path}/uat.db "CREATE TABLE split_siruta AS SELECT id, substr(localid, 1, instr(localid, '.') - 1) AS leftId, substr(localid, instr(localid, '.') + 1) AS rightId FROM Limita_administrativa_UAT"
+ #💾 creare tabel SQLite cu extragerea codurilor SIRUTA ale UAT-urilor vecine unei limite din câmpul localid și salvarea lor în câmpurile leftId și rightId
+ sqlite3 ${tmp_data_path}/uat.db "CREATE TABLE split_siruta AS SELECT id, substr(localid, 1, instr(localid, '.') - 1) AS leftId, substr(localid, instr(localid, '.') + 1) AS rightId FROM Limita_administrativa_UAT"
 
-ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ${layer_name} -sql "SELECT a.OGC_FID AS id, c.name AS leftLAU, d.name AS rightLAU, CAST(b.leftId AS INTEGER) AS leftId, CAST(b.rightId AS INTEGER) AS rightId, a.beginvers AS version, a.legalStat AS legalStat, a.GEOMETRY FROM Limita_administrativa_UAT AS a LEFT JOIN split_siruta AS b ON (a.id = b.id) LEFT JOIN ro_admin_lau_polygon AS c ON (b.leftId=c.natCode) LEFT JOIN ro_admin_lau_polygon AS d ON (b.rightId=d.natCode)" ${tmp_data_path}/uat.db ${tmp_data_path}/uat.db
+ #💾 creare fișier final în SQLITE prin preluarea numelor UAT-urilor vecine din tabelul ro_admin_lau_polygon făcând join cu câmpurile cu coduri SIRUTA
+ ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ${layer_name} -sql "SELECT a.OGC_FID AS id, c.name AS leftLAU, d.name AS rightLAU, CAST(b.leftId AS INTEGER) AS leftId, CAST(b.rightId AS INTEGER) AS rightId, a.beginvers AS version, a.legalStat AS legalStat, a.GEOMETRY FROM Limita_administrativa_UAT AS a LEFT JOIN split_siruta AS b ON (a.id = b.id) LEFT JOIN ro_admin_lau_polygon AS c ON (b.leftId=c.natCode) LEFT JOIN ro_admin_lau_polygon AS d ON (b.rightId=d.natCode)" ${tmp_data_path}/uat.db ${tmp_data_path}/uat.db
 
 #💾 creare versiune GeoPackage
 echo "💾 creare versiune GeoPackage"
@@ -251,7 +253,6 @@ echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în Geo
 #🗑️ Ștergere fișiere intermediare
 echo "🗑️ Ștergere fișiere Shapefile"
 rm ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg ${tmp_data_path}/uat.db ${tmp_data_path}/siruta.csv ${tmp_data_path}/siruta_corectat.csv
-
 ```
 Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_line.sh).
 
