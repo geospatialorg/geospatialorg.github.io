@@ -16,7 +16,7 @@ Geometria setului de date [Limite administrative - UAT, România (linie)](https:
 * Algoritm: `Visvalingam / weighted area`;
 * Factor de simplificare: `3%`;
 
-Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [mdb-tools](https://mdbtools.github.io/), [sed](https://www.gnu.org/software/sed/manual/sed.html), [awk](https://www.gnu.org/software/gawk/manual/gawk.html). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina GitHub a geo-spatial.org.
+Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [mapshaper](https://mapshaper.org/), [GDAL](https://gdal.org), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_line.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 
@@ -27,6 +27,24 @@ Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org 
 ### Publicarea datelor
 
 Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/16e2798e-c024-4c46-9e6e-de2c1212d41a) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/16e2798e-c024-4c46-9e6e-de2c1212d41a) și/sau secțiunea [Descărcare](../../../descarcare/date/administrative-boundaries).
+
+## Diagrama fluxului de lucru
+
+<iframe
+  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_simplified_line.json"
+  width="100%"
+  height="600"
+  style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+  loading="lazy"
+/>
+
+<a
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_line.json"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Deschide diagrama într-o pagină separată <i className="fa fa-external-link-alt" style={{ marginLeft: '0.3rem' }}></i>
+</a>
 
 ## Script ETL
 
@@ -73,7 +91,7 @@ echo "
 🛠 Procesare UAT linie geometrie simplificată
 "
 
-#💾 creare versiune GeoJSON
+#💾 creare versiune GeoJSON prin simplificarea stratului original
 echo "💾 creare versiune GeoJSON"
 if [ -f ${lau_data_path}/${layer_name}.geojson ]; then
     rm ${lau_data_path}/${layer_name}.geojson
@@ -203,6 +221,8 @@ echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în Geo
 echo "🗑️ Ștergere fișiere Shapefile"
 rm ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg
 ```
+
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_line.sh).
 
 ## Simbolizare SLD
 
