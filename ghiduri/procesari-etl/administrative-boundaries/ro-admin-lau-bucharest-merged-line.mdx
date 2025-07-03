@@ -12,13 +12,13 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Geometria setului de date [Limite administrative - UAT, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/e4d24e1e-f749-4425-806f-1c33dabd20f2) a fost procesată pentru a comasa sectoarele Municipiului București într-o singură entitate. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/). Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_bucharest_merged_line.sh) a geo-spatial.org.
+Geometria setului de date [Limite administrative - UAT, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/e4d24e1e-f749-4425-806f-1c33dabd20f2) a fost procesată pentru a elimina limitele interne dintre sectoarele Municipiului București. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_bucharest_merged_line.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 
-### Comasarea geometriei Municipiului București
+### Obținere geometrie Municipiul București
 
-Geometria originală pentru cele șase sectoare ale Municipiului București au fost unificată într-o singură geometrie.
+Au fost eliminate limitele interioare ale sectoarelor pentru a păstra doar conturul exterior al Municipiului București. Pentru segmentele exterioare, s-a procedat la înlocuirea valorilor din câmpurile `leftLAU` și `rightLAU` din "București Sectorul X" cu "București".
 
 ### Conversia în formate de fișier populare
 
@@ -27,6 +27,24 @@ Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org 
 ### Publicare datelor
 
 Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/0b8dc7cd-26a7-4743-99b3-4957ca034ccd) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/0b8dc7cd-26a7-4743-99b3-4957ca034ccd) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
+
+## Diagrama fluxului de lucru
+
+<iframe
+  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_bucharest_merged_line.json"
+  width="100%"
+  height="600"
+  style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+  loading="lazy"
+/>
+
+<a
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_bucharest_merged_line.json"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Deschide diagrama într-o pagină separată <i className="fa fa-external-link-alt" style={{ marginLeft: '0.3rem' }}></i>
+</a>
 
 ## Script ETL
 
@@ -48,7 +66,7 @@ lau_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/la
 
 #⚙️ PostGIS
 pg_host="localhost"
-pg_port=5432
+pg_port=25432
 pg_user="user"
 pg_db="geospatial"
 pg_pass="pass"
@@ -73,12 +91,35 @@ echo "
 🛠  Procesare UAT linie București comasat
 "
 
-#💾 creare versiune GeoPackage
+#💾 creare versiune GeoPackage cu ștergerea limitelor interne dintre sectoare și păstrarea conturului Municipiului București (și înlocuirea leftLAU/rightLAU din sector în București)
 echo "💾 creare versiune GeoPackage"
 if [ -f ${lau_data_path}/${layer_name}.gpkg ]; then
 rm ${lau_data_path}/${layer_name}.gpkg
 fi
-ogr2ogr -of GPKG -lco FID=id -nln ${layer_name} -dialect sqlite -sql "SELECT * FROM ro_admin_lau_line WHERE id NOT IN (9010, 9011, 9012, 9633, 9215, 9009, 9013, 9014, 9015)" ${lau_data_path}/${layer_name}.gpkg ${lau_data_path}/ro_admin_lau_line.gpkg
+ogr2ogr -of GPKG -lco FID=id -nln ${layer_name} \
+  -dialect sqlite \
+  -sql "SELECT
+           id,
+           CASE
+             WHEN leftLAU IN ('București Sectorul 1', 'București Sectorul 2', 'București Sectorul 3',
+                              'București Sectorul 4', 'București Sectorul 5', 'București Sectorul 6')
+             THEN 'București'
+             ELSE leftLAU
+           END AS leftLAU,
+           CASE
+             WHEN rightLAU IN ('București Sectorul 1', 'București Sectorul 2', 'București Sectorul 3',
+                               'București Sectorul 4', 'București Sectorul 5', 'București Sectorul 6')
+             THEN 'București'
+             ELSE rightLAU
+           END AS rightLAU,
+           leftId,
+           rightId,
+           version,
+           legalStat,
+           geometry
+        FROM ro_admin_lau_line
+        WHERE id NOT IN (9010, 9011, 9012, 9633, 9215, 9009, 9013, 9014, 9015)" \
+  ${lau_data_path}/${layer_name}.gpkg ${lau_data_path}/ro_admin_lau_line.gpkg
 
 #💾 creare fișiere Esri Shapefile
 echo "💾 creare fișiere Esri Shapefile"
@@ -185,7 +226,7 @@ curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
     </featureType>" \
 "${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes/${layer_name}"
 
-#💾 Setare stil implicit + atașare stil suplimentar
+#💾 Setare stil implicit
 echo "🎨 Setare stil implicit + atașare stil suplimentar..."
 curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
   -d "<layer>
