@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import React, { useState } from "react";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 const data = [
   {
@@ -174,11 +174,9 @@ const data = [
 ];
 
 export default function ListaLimiteAdministrative() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
-  const filtered = data.filter(item =>
-    item.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const filtered = data.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <div>
@@ -188,34 +186,55 @@ export default function ListaLimiteAdministrative() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         style={{
-          marginBottom: '1rem',
-          padding: '0.5rem',
-          width: '100%',
-          maxWidth: '400px',
-          borderRadius: '6px',
-          border: '1px solid #ccc',
+          marginBottom: "1rem",
+          padding: "0.5rem",
+          width: "100%",
+          maxWidth: "400px",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
         }}
       />
       {filtered.map((item, idx) => (
-        <details key={idx} style={{ marginBottom: '1rem' }}>
+        <details key={idx} style={{ marginBottom: "1rem" }}>
           <summary
             style={{
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              fontSize: '1rem',
-              padding: '0.5rem 0',
+              cursor: "pointer",
+              fontWeight: "bold",
+              fontSize: "1rem",
+              padding: "0.5rem 0",
             }}
           >
             <span dangerouslySetInnerHTML={{ __html: item.nameHtml }} />
           </summary>
           <Tabs>
-            <TabItem value="desc" label={<><i className="fa fa-download" style={{ marginRight: '0.5rem' }}></i>Descărcare/Accesare</>}>
+            <TabItem
+              value="desc"
+              label={
+                <>
+                  <i className="fa fa-download" style={{ marginRight: "0.5rem" }}></i>Descărcare/Accesare
+                </>
+              }
+            >
               <div dangerouslySetInnerHTML={{ __html: item.download }} />
             </TabItem>
-            <TabItem value="meta" label={<><i className="fa fa-circle-info" style={{ marginRight: '0.5rem' }}></i>Descriere</>}>
+            <TabItem
+              value="meta"
+              label={
+                <>
+                  <i className="fa fa-circle-info" style={{ marginRight: "0.5rem" }}></i>Descriere
+                </>
+              }
+            >
               <div dangerouslySetInnerHTML={{ __html: item.metadata }} />
             </TabItem>
-            <TabItem value="res" label={<><i className="fa fa-link" style={{ marginRight: '0.5rem' }}></i>Resurse</>}>
+            <TabItem
+              value="res"
+              label={
+                <>
+                  <i className="fa fa-link" style={{ marginRight: "0.5rem" }}></i>Resurse
+                </>
+              }
+            >
               <div dangerouslySetInnerHTML={{ __html: item.resources }} />
             </TabItem>
           </Tabs>
