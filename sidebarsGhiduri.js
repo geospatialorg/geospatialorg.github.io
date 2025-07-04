@@ -14,11 +14,7 @@ export default {
         {
           type: "category",
           label: "Publicare metadate",
-          items: [
-            "metadate/generalitati",
-            "metadate/adaugare-metadate",
-            "metadate/completare-metadate",
-          ],
+          items: ["metadate/generalitati", "metadate/adaugare-metadate", "metadate/completare-metadate"],
         },
         {
           type: "category",
@@ -34,6 +30,7 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-line",
                 "procesari-etl/administrative-boundaries/ro-admin-lau-bucharest-merged-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-lau-bucharest-merged-line",
+                "procesari-etl/administrative-boundaries/ro-admin-lau-simplified-bucharest-merged-polygon",
               ],
             },
           ],
