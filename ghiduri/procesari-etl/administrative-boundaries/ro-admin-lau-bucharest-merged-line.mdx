@@ -1,13 +1,13 @@
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# UAT, România  (linie, geometrie unificată București)
+# UAT, România (linie, București unificat)
 
 ## Cod set de date
 
 **`ro_admin_lau_bucharest_merged_line`**
 
 <figure style={{ textAlign: "center" }}>
-  <img src={useBaseUrl('https://services.geo-spatial.org/data/thumbnails/administrative-boundaries/lau/ro-admin-lau-bucharest-merged-line.svg')} alt="Limite administrative - UAT, România  (linie, geometrie unificată București)" />
+  <img src={useBaseUrl('https://services.geo-spatial.org/data/thumbnails/administrative-boundaries/lau/ro-admin-lau-bucharest-merged-line.svg')} alt="Limite administrative - UAT, România (linie, București unificat)" />
 </figure>
 
 ## Abordare practică
@@ -52,7 +52,7 @@ Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-
 #!/usr/bin/zsh
 
 ##############################################################################################################
-#🛠 Publicare/actualizare UAT, România  (linie, geometrie unificată București)
+#🛠 Publicare/actualizare UAT, România (linie, București unificat)
 ##############################################################################################################
 
 #🎛 configurații
@@ -88,7 +88,7 @@ gs_layer_style="administrative-boundaries:ro_admin_lau_bucharest_merged_line"
 layer_name="ro_admin_lau_bucharest_merged_line"
 
 echo "
-🛠  Procesare UAT linie București comasat
+🛠  Procesare UAT, România (linie, București unificat)
 "
 
 #💾 creare versiune GeoPackage cu ștergerea limitelor interne dintre sectoare și păstrarea conturului Municipiului București (și înlocuirea leftLAU/rightLAU din sector în București)
