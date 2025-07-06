@@ -1,0 +1,292 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Județe, România (linie)
+
+## Cod set de date
+
+**`ro_admin_county_line`**
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('https://services.geo-spatial.org/data/thumbnails/administrative-boundaries/county/ro-admin-county-line.svg')} alt="Limite administrative - Județe, România (linie)" />
+</figure>
+
+## Abordare practică
+
+Limitele județelor din România, format vectorial/poligon, au fost descărcate de pe [geoportalul ANCPI](https://geoportal.ancpi.ro/portal/apps/webappviewer/index.html?id=faeba2d173374445b1f13512bd477bb2) în format Shapefile. Ulterior, au fost trecute printr-o procedură automată de procesare folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [csvkit](https://csvkit.readthedocs.io/en/latest/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_county_line.sh) a geo-spatial.org.
+
+## Prelucrarea datelor
+
+### Definirea corectă a proiecției
+
+Datele au venit cu o definiție nestandardizată a proiecției:
+
+>PROJCRS["Romania_double_stereo",BASEGEOGCRS["Pulkovo 1942",DATUM["Pulkovo 1942",ELLIPSOID["Krassowsky 1940",6378245,298.3,LENGTHUNIT["metre",1]],ID["EPSG",6284]],PRIMEM["Greenwich",0,ANGLEUNIT["Degree",0.0174532925199433]]],CONVERSION["unnamed",METHOD["Oblique Stereographic",ID["EPSG",9809]],PARAMETER["Latitude of natural origin",46,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",25,ANGLEUNIT["Degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.99975,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",500000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",500000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1,ID["EPSG",9001]]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1,ID["EPSG",9001]]]]
+
+Aceasta a fost înlocuită cu [EPSG:3844](https://epsg.io/3844).
+
+### Eliminarea câmpurilor cu informație redundantă
+
+O serie din câmpuri au fost considerate neimportante pentru utilizatorul obișnuit: `IFCID`, `localId`, `namespace`, `country`, `versionId`, `natLevel`, `beginVersion`, `endVersion`, `Shape_Leng`. Aceste câmpuri, cum ar fi `namespace`, pot avea importanța lor în demersuri precum [Directiva INSPIRE](https://knowledge-base.inspire.ec.europa.eu/) dar, din punct de vedere practic, când nu sunt exploatate într-un context de interoperabilitate cu date la nivel european, dar care, altfel, doar încarcă inutil setul de date (au aceeași valoare pentru toate entitățile din setul de date).
+
+### Adăugarea de câmpuri noi
+
+Din nomenclatorul [SIRUTA](http://80.96.186.4:81/senin/classifications.htm), publicat de [Institutul Național de Statistică](https://insse.ro), au fost adăugate o serie de câmpuri suplimentare:
+
+* `leftId` - codul SIRUTA al județului vecin 1 (extras din câmpul original `localId`);
+* `rightId` - codul SIRUTA al județului vecin 2 (extras din câmpul original `localId`);
+* `leftCounty` - numele județului vecin 1 (obținut prin join folosind codul SIRUTA);
+* `rightCounty` - numele județului vecin 2 (obținut prin join folosind codul SIRUTA);
+
+### Conversia în formate de fișier populare
+
+Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org pentru distribuirea de date vectoriale: `GeoPackage`, `Shapefile`, `Geoparquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`. Detalii despre motivația alegerii acestor formate și beneficiile fiecăruia sunt prezentate în ghidul cu privire la date. De asemenea, pentru nevoi interne, datele au fost încărcate în baza de date PostgreSQL/PostGIS.
+
+### Publicare datelor
+
+Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/9fa6e7ae-460b-47c0-bae8-bc81b7446386) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/9fa6e7ae-460b-47c0-bae8-bc81b7446386) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
+
+## Diagrama fluxului de lucru
+
+<iframe
+  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_county_line.json"
+  width="100%"
+  height="600"
+  style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+  loading="lazy"
+/>
+
+<a
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_county_line.json"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Deschide diagrama într-o pagină separată <i className="fa fa-external-link-alt" style={{ marginLeft: '0.3rem' }}></i>
+</a>
+
+## Script ETL
+
+```bash title="procesare_limite_uat.sh"
+#!/usr/bin/zsh
+
+##############################################################################################################
+#🛠 Publicare/actualizare Județe, România (linie)
+##############################################################################################################
+
+#🎛 configurații
+
+#🕹 activare mediu Anaconda cu bibliotecile necesare pentru procesare
+source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
+conda activate geo
+
+#🚏 definire căi date
+ins_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ins/siruta"
+ancpi_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ancpi/limite_administrative"
+county_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/county"
+tmp_data_path="/storage/volumes/geoserver-1-storage/tmp"
+
+#⚙️ PostGIS
+pg_host="localhost"
+pg_port=5432
+pg_user="user"
+pg_db="geospatial"
+pg_pass="pass"
+pg_schema="romania"
+
+#⚙️ GeoServer
+gs_url="http://localhost:8080/geoserver"
+gs_user="user"
+gs_pass="pass"
+gs_workspace="administrative-boundaries"
+gs_store="administrative-boundaries"
+gs_layer_title="Limite administrative - județe, România (linie)"
+gs_layer_abstract="Set de date ce conține limitele oficiale ale județelor din România, în format vectorial de tip linie, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară. Versiunea curentă reflectă organizarea administrativ-teritorială valabilă în România anulului 2025."
+gs_layer_keywords=("România" "județe" "limite administrative" "vector" "linie")
+gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/9fa6e7ae-460b-47c0-bae8-bc81b7446386"
+gs_layer_style="administrative-boundaries:ro_admin_county_line"
+
+#⚙️ Date
+layer_name="ro_admin_county_line"
+
+echo "
+🛠 Procesare Județe, România (linie)
+ "
+
+echo "💾 Încărcare date în SQLite"
+
+#💾 încărcare SHP ANCPI în SQLite (se încarcă și datele de tip poligon pentru join-ul ulterior)
+ogr2ogr -of "SQLite" -a_srs "EPSG:3844" -lco LAUNDER=NO ${tmp_data_path}/judete.db ${ancpi_data_path}/Unitate_administrativa_judet.shp
+ogr2ogr -of SQLite -append -a_srs "EPSG:3844" ${tmp_data_path}/judete.db ${ancpi_data_path}/Limita_administrativa_judet.shp
+
+#💾 încărcare tabel regiuni de dezvoltare în SQLite
+csvsql --db sqlite:///${tmp_data_path}/judete.db --insert ${ins_data_path}/siruta_zone.csv
+
+#💾 încărcare tabel județe în SQLITE
+csvsql --db sqlite:///${tmp_data_path}/judete.db --insert ${ins_data_path}/siruta_judete.csv
+
+#💾 creare tabel SQLite cu extragerea codurilor SIRUTA ale județelor vecine unei limite din câmpul localid și salvarea lor în câmpurile leftId și rightId
+sqlite3 ${tmp_data_path}/judete.db "CREATE TABLE split_siruta AS SELECT id, substr(localid, 1, instr(localid, '.') - 1) AS leftId, substr(localid, instr(localid, '.') + 1) AS rightId FROM Limita_administrativa_judet"
+
+#💾 creare tabel pentru stratul de tip poligon (join cu SIRUTA)
+ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ro_admin_county_polygon -sql "SELECT a.OGC_FID AS id, CAST(b.jud AS INTEGER) AS countyId, CAST(b.siruta AS INTEGER) AS countyCode, b.denj AS name, b.mnemonic, CAST(c.zona AS INTEGER) AS regionId, CAST(c.siruta AS INTEGER)  AS regionCode, c.denzona AS region, CAST(b.FSJ AS INTEGER) AS sortCode, a.beginvers AS version, a.GEOMETRY FROM Unitate_administrativa_judet AS a LEFT JOIN siruta_judete AS b ON (a.natcode = b.siruta) LEFT JOIN siruta_zone AS c ON (b.zona=c.zona)" ${tmp_data_path}/judete.db ${tmp_data_path}/judete.db
+
+#💾 creare tabel pentru stratul de tip linie (join cu SIRUTA și stratul poligon)
+ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ro_admin_county_line -sql "SELECT a.OGC_FID AS id, a.id, c.name AS leftCounty, d.name AS rightCounty, CAST(b.leftId AS INTEGER) AS leftId, CAST(b.rightId AS INTEGER) AS rightId, a.beginvers AS version, a.GEOMETRY FROM Limita_administrativa_judet AS a LEFT JOIN split_siruta AS b ON (a.id = b.id) LEFT JOIN ro_admin_county_polygon AS c ON (b.leftId=c.countycode) LEFT JOIN ro_admin_county_polygon AS d ON (b.rightId=d.countycode)" ${tmp_data_path}/judete.db ${tmp_data_path}/judete.db
+
+#💾 creare versiune GeoPackage
+echo creare versiune GeoPackage
+if [ -f ${county_data_path}/ro_admin_county_line.gpkg ]; then
+    rm ${county_data_path}/ro_admin_county_line.gpkg
+fi
+ogr2ogr -of GPKG -lco FID=id -a_srs EPSG:3844 -nlt MULTILINESTRING -nln ro_admin_county_line -dialect sqlite -sql "SELECT GEOMETRY AS geometry, * FROM ro_admin_county_line" ${county_data_path}/ro_admin_county_line.gpkg ${tmp_data_path}/judete.db
+
+#💾 creare fișiere Esri Shapefile
+echo "💾 creare fișiere Esri Shapefile"
+if [ -f ${county_data_path}/ro_admin_county_line.zip ]; then
+    rm ${county_data_path}/ro_admin_county_line.zip
+fi
+ogr2ogr -lco ENCODING=UTF-8 -nln ro_admin_county_line -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_county_line AS a" ${county_data_path}/ro_admin_county_line.shp ${county_data_path}/ro_admin_county_line.gpkg
+
+#📦 arhivare fișiere shp
+echo "📦 arhivare fișiere shp"
+zip -j ${county_data_path}/ro_admin_county_line.zip ${county_data_path}/ro_admin_county_line.dbf ${county_data_path}/ro_admin_county_line.shp ${county_data_path}/ro_admin_county_line.prj ${county_data_path}/ro_admin_county_line.shx ${county_data_path}/ro_admin_county_line.cpg
+
+#💾 creare versiune FlatGeobuf
+echo "💾 creare versiune FlatGeobuf"
+if [ -f ${county_data_path}/ro_admin_county_line.fgb ]; then
+    rm ${county_data_path}/ro_admin_county_line.fgb
+fi
+ogr2ogr -of FlatGeobuf -nlt MULTILINESTRING -nln ro_admin_county_line -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_county_line AS a" ${county_data_path}/ro_admin_county_line.fgb ${county_data_path}/ro_admin_county_line.gpkg
+
+#💾 creare versiune GeoParquet
+echo "💾 creare versiune GeoParquet"
+if [ -f ${county_data_path}/ro_admin_county_line.parquet ]; then
+    rm ${county_data_path}/ro_admin_county_line.parquet
+fi
+ogr2ogr -of Parquet -nlt MULTILINESTRING -nln ro_admin_county_line -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_county_line AS a" ${county_data_path}/ro_admin_county_line.parquet ${county_data_path}/ro_admin_county_line.gpkg
+
+#💾 creare versiune GeoJSON
+echo "💾 creare versiune GeoJSON"
+if [ -f ${county_data_path}/ro_admin_county_line.geojson ]; then
+    rm ${county_data_path}/ro_admin_county_line.geojson
+fi
+ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ro_admin_county_line -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_county_line AS a" ${county_data_path}/ro_admin_county_line.geojson ${county_data_path}/ro_admin_county_line.gpkg
+
+#💾 creare versiune KML
+echo "💾 creare versiune KML"
+if [ -f ${county_data_path}/ro_admin_county_line.kml ]; then
+    rm ${county_data_path}/ro_admin_county_line.kml
+fi
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${county_data_path}/ro_admin_county_line.kml ${county_data_path}/ro_admin_county_line.gpkg
+
+#💾 creare versiune TopoJSON
+echo "💾 creare versiune TopoJSON"
+if [ -f ${county_data_path}/ro_admin_county_line.topojson ]; then
+    rm ${county_data_path}/ro_admin_county_line.topojson
+fi
+mapshaper -i ${county_data_path}/ro_admin_county_line.shp -o format=topojson ${county_data_path}/ro_admin_county_line.topojson
+
+#💾 actualizarea setului de date în baza de date PostGIS
+echo "💾 actualizarea setului de date în baza de date PostGIS"
+ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${county_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
+
+#🖇 indexare date PostGIS
+psql -h ${pg_host} -p ${pg_port} -U ${pg_user} -d ${pg_db} -c "
+CREATE INDEX ${layer_name}_geom_idx ON romania.${layer_name} USING GIST (geom);
+CLUSTER romania.${layer_name} USING ${layer_name}_geom_idx;"
+
+#💾 publicarea/actualizarea serviciilor de date
+echo "💾 publicarea/actualizarea serviciilor de date"
+
+#❌ ștergere strat existent (dacă există)
+echo "🔍 Verificare dacă există stratul."
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u $gs_user:$gs_pass \
+  "${gs_url}/rest/layers/${gs_workspace}:${layer_name}.xml")
+
+if [ "$HTTP_STATUS" == "200" ]; then
+    echo "⚠️  Stratul există. Se șterge."
+    curl -s -u $gs_user:$gs_pass -XDELETE \
+      "${gs_url}/rest/layers/${gs_workspace}:${layer_name}?recurse=true"
+    echo "🗑️  Stratul a fost șters."
+else
+    echo "✅ Nu există strat cu acest nume."
+fi
+
+#💾 creare strat
+echo "➕ Creare strat ${layer_name}"
+curl -s -u $gs_user:$gs_pass -XPOST -H "Content-type: text/xml" \
+  -d "<featureType>
+         <name>${layer_name}</name>
+         <nativeName>${layer_name}</nativeName>
+         <title>${gs_layer_title}</title>
+         <abstract>${gs_layer_abstract}</abstract>
+     </featureType>" \
+  "${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes"
+
+#💾 adăugare detalii suplimentare (keywords și metadata link)
+echo "📝 Actualizare metadate"
+keywords_xml=""
+for keyword in "${gs_layer_keywords[@]}"; do
+    keywords_xml+="<string>${keyword}</string>"
+done
+
+curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
+-d "<featureType>
+        <keywords>
+            ${keywords_xml}
+        </keywords>
+        <metadataLinks>
+            <metadataLink>
+                <type>text/xml</type>
+                <metadataType>ISO19115:2003</metadataType>
+                <content>${gs_layer_metadata_link}</content>
+            </metadataLink>
+        </metadataLinks>
+    </featureType>" \
+"${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes/${layer_name}"
+
+#💾 Setare stil implicit + atașare stil suplimentar
+echo "🎨 Setare stil implicit + atașare stil suplimentar..."
+curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
+  -d "<layer>
+         <defaultStyle>
+             <name>${gs_layer_style##*:}</name>
+         </defaultStyle>
+     </layer>" \
+  "${gs_url}/rest/layers/${gs_workspace}:${layer_name}"
+
+echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în GeoServer."
+
+#🗑️ Ștergere fișiere intermediare
+echo "🗑️ Ștergere fișiere Shapefile"
+rm ${county_data_path}/${layer_name}.dbf ${county_data_path}/${layer_name}.shp ${county_data_path}/${layer_name}.prj ${county_data_path}/${layer_name}.shx ${county_data_path}/${layer_name}.cpg ${tmp_data_path}/judete.db
+```
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_county_line.sh).
+
+## Simbolizare SLD
+
+### Simbolizare SLD implicită
+
+```xml title="ro_admin_county_line_labels.sld"
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+  <NamedLayer>
+  <se:Name>Județe</se:Name>
+  <UserStyle>
+    <se:Name>Limită județ</se:Name>
+    <se:FeatureTypeStyle>
+      <se:Rule>
+        <se:Name>Limită județ</se:Name>
+          <se:PolygonSymbolizer>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#b71540</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
+              <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+            </se:Stroke>
+          </se:PolygonSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+```
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_county_line.sld).
