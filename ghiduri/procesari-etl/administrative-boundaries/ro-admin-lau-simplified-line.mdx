@@ -26,7 +26,7 @@ S-a făcut folosind biblioteca [mapshaper](https://mapshaper.org/) cu următoare
 
 ### Inserarea geometriei UAT Bălan
 
-Simplificarea independentă a stratului de tip poligon și a celui de tip linie a dus la mici diferențe între aceste două seturi de date. 99.9% din vertexi sunt identici, cu excepția câtorva situații. Cea mai importantă fiind cea a UAT Bălan, care apare în setul de date de tip poligon, dar care nu se mai regăsește în setul de date de tip linie (figura de mai jos). Am optat pentru a insera manual această entitate. Alternativa ar fi fost convertirea versiunii cu geometrie poligon în linie și obținerea programatică a atributelor specifice setului de date de tip linie (numele UAT-urile ce împart o limită, codul lor SIRUTA, etc.). Diferența notabilă este însă dată de faptul că datele de tip linie de la ANCPI conțin un atribut ceva mai greu de obținut prin scripturi ce folosesc în special GDAL/Shapely și anume `legalStat`, care ne indică dacă limita de UAT a fost agreeată sau nu oficial între cele două UAT-uri ce o împart. De acceea, pentru a nu complica fluxul de lucru, a fost inserată această entitate printr-o comandă de tip SQL.
+Simplificarea independentă a stratului de tip poligon și a celui de tip linie a dus la mici diferențe între aceste două seturi de date. 99.9% din vertexi sunt identici, cu excepția câtorva situații. Cea mai importantă fiind cea a UAT Bălan, care apare în setul de date de tip poligon, dar care nu se mai regăsește în setul de date de tip linie (figura de mai jos). S-a optat pentru a insera manual această entitate. Alternativa ar fi fost convertirea versiunii cu geometrie poligon în linie și obținerea programatică a atributelor specifice setului de date de tip linie (numele UAT-urile ce împart o limită, codul lor SIRUTA, etc.). Diferența notabilă este însă dată de faptul că datele de tip linie de la ANCPI conțin un atribut ceva mai greu de obținut prin scripturi ce folosesc în special GDAL/Shapely și anume `legalStat`, care ne indică dacă limita de UAT a fost agreeată sau nu oficial între cele două UAT-uri ce o împart. De acceea, pentru a nu complica fluxul de lucru, a fost inserată această entitate printr-o comandă de tip SQL.
 
 <figure style={{ textAlign: "center" }}>
   <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/geometrie_uat_bălan.jpg')} alt="Exemplu: situația geometriei UAT Bălan (albastru: geometria originală; roșu: geometria simplificată de tip polygon)" />
@@ -35,7 +35,9 @@ Simplificarea independentă a stratului de tip poligon și a celui de tip linie 
 
 :::info[Notă]
 
-Algoritmul de simplicare a păstrat intrarea pentru UAT Bălan în tabela de atribute, doar geometria asociată este nulă.
+Algoritmul de simplicare a păstrat intrarea pentru UAT Bălan în tabela de atribute, doar geometria asociată este nulă. Identificarea geometriilor nule se poate face cu o comandă de genul:
+
+`ogrinfo ro_admin_lau_simplified_line.gpkg -dialect SQLite -sql "SELECT id, * FROM ro_admin_lau_simplified_line WHERE geometry IS NULL OR ST_IsEmpty(geometry)=1"`
 
 :::
 
