@@ -12,7 +12,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Geometria setului de date [Limite administrative - județe, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/9fa6e7ae-460b-47c0-bae8-bc81b7446386) a fost simplificată.
+Datele au fost obținute prin simplificarea geometriei stratului [Limite administrative - județe, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/9fa6e7ae-460b-47c0-bae8-bc81b7446386).
 
 Procesarea s-a făcut folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [mapshaper](https://mapshaper.org/), [GDAL](https://gdal.org), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_line.sh) a geo-spatial.org.
 
