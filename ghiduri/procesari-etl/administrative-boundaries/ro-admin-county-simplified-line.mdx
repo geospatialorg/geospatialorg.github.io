@@ -12,17 +12,25 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Datele au fost obținute prin simplificarea geometriei stratului [Limite administrative - județe, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/9fa6e7ae-460b-47c0-bae8-bc81b7446386).
+Datele au fost obținute prin conversia geometriei stratului [Limite administrative - județe, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/1aebaee6-04e7-4a64-81c9-102060a57dc5) din poligon în linie și extragerea atributelor relevante.
 
 Procesarea s-a făcut folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [mapshaper](https://mapshaper.org/), [GDAL](https://gdal.org), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_line.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 
-### Simplificarea geometriei
+### Conversia poligon în linie și adăugarea câmpurilor
 
-S-a făcut folosind biblioteca [mapshaper](https://mapshaper.org/) cu următoarele setări:
-* Algoritm: `Visvalingam / weighted area`;
-* Factor de simplificare: `3%`;
+Datele originale cu limita de tip linie a județelor, de la ANCPI, conțin o serie de atribute interesante precum `leftId`, `rightId`, `leftCounty` și `rightCounty`. Totuși, simplificarea geometriei acestora, independent de simplificarea geometriei stratului de tip poligon, ar fi dus la o nealiniere a geometriei celor două straturi (datorită modului în care funcționează algoritmul de simplificare - a se vedea figura de mai jos). Conversia stratului [Limite administrative - județe, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/1aebaee6-04e7-4a64-81c9-102060a57dc5) în linie a creat o geometrie perfect aliniată a celor două straturi pe limitele comune. Deoarece nu vorbim despre o simplă conversie poligon în linie, pentru aceastră operațiune s-a folosit o bibliotecă avansată pentru lucrul cu date vectoriale: [Shapely](https://shapely.readthedocs.io/en/stable/), în jurul căreia s-a scris un [script dedicat în Python](https://github.com/geospatialorg/ingestie-date/blob/main/convert_ro_admin_county_polygon_to_line.py). Cu ajutorul acesteia, conversia s-a făcut în așa fel încât să existe o singură linie comună între două poligoane vecine sau limitele exterioare. De asemenea, au fost adăugate următoarele câmpuri, extrase din stratul de intrare:
+
+* `leftId` - codul SIRUTA al regiunii vecine 1;
+* `rightId` - codul SIRUTA al regiunii vecine 2;
+* `leftCounty` - numele regiunii vecine 1;
+* `rightCounty` - numele regiunii vecine 2;
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/diferente_simplificare_independenta.jpg')} alt="Exemplu: simplificarea independentă a două straturi cu laturi comune" />
+  <figcaption><em>Exemplu: simplificarea independentă a două straturi cu laturi comune.</em></figcaption>
+</figure>
 
 ### Conversia în formate de fișier populare
 
