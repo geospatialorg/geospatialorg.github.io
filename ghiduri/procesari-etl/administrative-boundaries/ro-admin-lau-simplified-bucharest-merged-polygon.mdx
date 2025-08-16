@@ -12,7 +12,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Geometria setului de date [Limite administrative - UAT, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/f00bfc1b-aba6-4f26-a81a-dba0e188a6b7) a fost procesată pentru a comasa sectoarele Municipiului București într-o singură entitate. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_bucharest_merged_polygon.sh) a geo-spatial.org.
+Geometria setului de date [Limite administrative - UAT, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/f00bfc1b-aba6-4f26-a81a-dba0e188a6b7) a fost procesată pentru a comasa sectoarele Municipiului București într-o singură entitate. Procesarea s-a făcut folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_bucharest_merged_polygon.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 

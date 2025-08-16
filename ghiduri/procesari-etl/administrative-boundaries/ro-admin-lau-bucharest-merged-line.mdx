@@ -12,7 +12,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Geometria setului de date [Limite administrative - UAT, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/e4d24e1e-f749-4425-806f-1c33dabd20f2) a fost procesată pentru a elimina limitele interne dintre sectoarele Municipiului București. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_bucharest_merged_line.sh) a geo-spatial.org.
+Geometria setului de date [Limite administrative - UAT, România (linie)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/e4d24e1e-f749-4425-806f-1c33dabd20f2) a fost procesată pentru a elimina limitele interne dintre sectoarele Municipiului București. Procesarea s-a făcut folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Scriptul utilizează mai multe biblioteci open source: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_bucharest_merged_line.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
 

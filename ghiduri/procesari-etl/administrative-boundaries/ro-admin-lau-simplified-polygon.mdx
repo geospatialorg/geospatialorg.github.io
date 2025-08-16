@@ -12,13 +12,17 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Abordare practică
 
-Geometria setului de date [Limite administrative - UAT, România (poligon)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) a fost simplificată folosind biblioteca [mapshaper](https://mapshaper.org/):
-* Algoritm: `Visvalingam / weighted area`;
-* Factor de simplificare: `3%`;
+Geometria setului de date [Limite administrative - UAT, România (poligon)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) a fost simplificată.
 
-Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem precum [mapshaper](https://mapshaper.org/), [GDAL](https://gdal.org), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_polygon.sh) a geo-spatial.org.
+Procesarea s-a făcut folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Scriptul utilizează mai multe biblioteci open source și utilitare de sistem precum [mapshaper](https://mapshaper.org/), [GDAL](https://gdal.org), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_simplified_polygon.sh) a geo-spatial.org.
 
 ## Prelucrarea datelor
+
+### Simplificarea geometriei
+
+S-a făcut folosind biblioteca [mapshaper](https://mapshaper.org/) cu următoarele setări:
+* Algoritm: `Visvalingam / weighted area`;
+* Factor de simplificare: `3%`;
 
 ### Conversia în formate de fișier populare
 
