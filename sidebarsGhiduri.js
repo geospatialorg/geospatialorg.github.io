@@ -39,6 +39,7 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-county-simplified-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-county-simplified-line",
                 "procesari-etl/administrative-boundaries/ro-admin-region-simplified-polygon",
+                "procesari-etl/administrative-boundaries/ro-admin-region-simplified-line",
               ],
             },
           ],
