@@ -28,6 +28,7 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-lau-line",
                 "procesari-etl/administrative-boundaries/ro-admin-county-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-county-line",
+                "procesari-etl/administrative-boundaries/ro-admin-country-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-region-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-region-line",
                 "procesari-etl/administrative-boundaries/ro-admin-macroregion-polygon",
