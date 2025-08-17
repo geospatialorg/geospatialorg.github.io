@@ -20,6 +20,8 @@ Datele au fost obținute prin prelucrarea stratului [Limite administrative - mac
 
 Deoarece nu vorbim despre o simplă conversie poligon în linie, pentru aceastră operațiune s-a folosit o bibliotecă avansată pentru lucrul cu date vectoriale: [Shapely](https://shapely.readthedocs.io/en/stable/), în jurul căreia s-a scris un [script dedicat în Python](https://github.com/geospatialorg/ingestie-date/blob/main/convert_ro_admin_macroregion_polygon_to_line.py). Cu ajutorul acesteia, conversia s-a făcut în așa fel încât să existe o singură linie comună între două poligoane vecine sau limitele exterioare. De asemenea, au fost adăugate următoarele câmpuri, extrase din stratul de intrare:
 
+* `leftId` - ID-ul macroregiunii vecine 1;
+* `rightId` - ID-ul macroregiunii vecine 2;
 * `leftMacroregion` - numele macroregiunii vecine 1;
 * `rightMacroregion` - numele macroregiunii vecine 2;
 
