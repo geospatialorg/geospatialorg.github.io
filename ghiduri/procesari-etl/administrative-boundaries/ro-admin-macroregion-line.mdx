@@ -1,0 +1,378 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Macroregiuni, România (linie)
+
+## Cod set de date
+
+**`ro_admin_macroregion_line`**
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('https://services.geo-spatial.org/data/thumbnails/administrative-boundaries/macroregion/ro-admin-macroregion-line.svg')} alt="Limite administrative - Macroregiuni, România (linie)" />
+</figure>
+
+## Abordare practică
+
+Datele au fost obținute prin prelucrarea stratului [Limite administrative - macroregiuni, România (poligon)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/168c15e4-6774-409b-a0bc-06e06cd40717). Acest lucru s-a realizat printr-o procedură automată de procesare ce folosește un script Bash (mediu *nix), script ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [Shapely](https://shapely.readthedocs.io/en/stable/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_macroregion_line.sh) a geo-spatial.org.
+
+## Prelucrarea datelor
+
+### Conversia poligon în linie și adăugarea câmpurilor
+
+Deoarece nu vorbim despre o simplă conversie poligon în linie, pentru aceastră operațiune s-a folosit o bibliotecă avansată pentru lucrul cu date vectoriale: [Shapely](https://shapely.readthedocs.io/en/stable/), în jurul căreia s-a scris un [script dedicat în Python](https://github.com/geospatialorg/ingestie-date/blob/main/convert_ro_admin_macroregion_polygon_to_line.py). Cu ajutorul acesteia, conversia s-a făcut în așa fel încât să existe o singură linie comună între două poligoane vecine sau limitele exterioare. De asemenea, au fost adăugate următoarele câmpuri, extrase din stratul de intrare:
+
+* `leftMacroregion` - numele macroregiunii vecine 1;
+* `rightMacroregion` - numele macroregiunii vecine 2;
+
+### Conversia în formate de fișier populare
+
+Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org pentru distribuirea de date vectoriale: `GeoPackage`, `Shapefile`, `Geoparquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`. Detalii despre motivația alegerii acestor formate și beneficiile fiecăruia sunt prezentate în ghidul cu privire la date. De asemenea, pentru nevoi interne, datele au fost încărcate în baza de date PostgreSQL/PostGIS.
+
+### Publicare datelor
+
+Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/fbed201c-fb51-4327-b333-ef0459c6d7ee) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/fbed201c-fb51-4327-b333-ef0459c6d7ee) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
+
+## Diagrama fluxului de lucru
+
+<iframe
+  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_macroregion_line.json"
+  width="100%"
+  height="600"
+  style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+  loading="lazy"
+/>
+
+<a
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_macroregion_line.json"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Deschide diagrama într-o pagină separată <i className="fa fa-external-link-alt" style={{ marginLeft: '0.3rem' }}></i>
+</a>
+
+## Script ETL
+
+```bash title="publish_update_ro_admin_macroregion_line.sh"
+#!/usr/bin/zsh
+
+##############################################################################################################
+#🛠 Publicare/actualizare Macroregiuni, România (linie)
+##############################################################################################################
+
+#🎛 configurații
+
+#🕹 activare mediu Anaconda cu bibliotecile necesare pentru procesare
+source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
+conda activate geo
+
+#🚏 definire căi date
+macroregion_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/macroregion"
+
+
+#⚙️ PostGIS
+pg_host="localhost"
+pg_port=5432
+pg_user="user"
+pg_db="geospatial"
+pg_pass="pass"
+pg_schema="romania"
+
+#⚙️ GeoServer
+gs_url="http://localhost:8080/geoserver"
+gs_user="user"
+gs_pass="pass"
+gs_workspace="administrative-boundaries"
+gs_store="administrative-boundaries"
+gs_layer_title="Limite administrative - Macroregiuni, România (linie)"
+gs_layer_abstract="Set de date care conține limitele macroregiunilor din România, în format vectorial de tip linie, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară și Institutul Național de Statistică. Versiunea curentă reflectă organizarea administrativ-teritorială valabilă în România anului 2025."
+gs_layer_keywords=("România" "macroregiuni" "limite administrative" "vector" "linie")
+gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/fbed201c-fb51-4327-b333-ef0459c6d7ee"
+gs_layer_style="administrative-boundaries:ro_admin_macroregion_line"
+
+
+#⚙️ Date
+layer_name="ro_admin_macroregion_line"
+
+echo "
+🛠 Procesare Macroregiuni, România (linie)
+"
+
+#💾 creare versiune GeoPackage
+echo "💾 creare versiune GeoPackage"
+if [ -f ${macroregion_data_path}/${layer_name}.gpkg ]; then
+    rm ${macroregion_data_path}/${layer_name}.gpkg
+fi
+
+#💾 apelează script Python pentru conversie și crearea câmpurilor leftName, leftId, respectiv rightName și rightId
+echo "💾 apelează script Python pentru conversie"
+python convert_ro_admin_macroregion_polygon_to_line.py
+
+#💾 creare fișier GeoPackage final
+echo "💾 creare fișier GeoPackage final"
+ogr2ogr -of GPKG -lco FID=id -nln ${layer_name} -nlt MULTILINESTRING ${macroregion_data_path}/${layer_name}.gpkg ${macroregion_data_path}/${layer_name}_tmp.gpkg
+
+#💾 creare fișiere Esri Shapefile
+echo "💾 creare fișiere Esri Shapefile"
+if [ -f ${macroregion_data_path}/${layer_name}.zip ]; then
+    rm ${macroregion_data_path}/${layer_name}.zip
+fi
+ogr2ogr -lco ENCODING=UTF-8 -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${macroregion_data_path}/${layer_name}.shp ${macroregion_data_path}/${layer_name}.gpkg
+
+#📦 arhivare fișiere shp
+echo "📦 arhivare fișiere shp"
+zip -j ${macroregion_data_path}/${layer_name}.zip ${macroregion_data_path}/${layer_name}.dbf ${macroregion_data_path}/${layer_name}.shp ${macroregion_data_path}/${layer_name}.prj ${macroregion_data_path}/${layer_name}.shx ${macroregion_data_path}/${layer_name}.cpg
+
+#💾 creare versiune FlatGeobuf
+echo "💾 creare versiune FlatGeobuf"
+if [ -f ${macroregion_data_path}/${layer_name}.fgb ]; then
+    rm ${macroregion_data_path}/${layer_name}.fgb
+fi
+ogr2ogr -of FlatGeobuf -nlt MULTILINESTRING -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${macroregion_data_path}/${layer_name}.fgb ${macroregion_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune GeoParquet
+echo "💾 creare versiune GeoParquet"
+if [ -f ${macroregion_data_path}/${layer_name}.parquet ]; then
+    rm ${macroregion_data_path}/${layer_name}.parquet
+fi
+ogr2ogr -of Parquet -nlt MULTILINESTRING ${macroregion_data_path}/${layer_name}.parquet ${macroregion_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune GeoJSON
+echo "💾 creare versiune GeoJSON"
+if [ -f ${macroregion_data_path}/${layer_name}.geojson ]; then
+    rm ${macroregion_data_path}/${layer_name}.geojson
+fi
+ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${macroregion_data_path}/${layer_name}.geojson ${macroregion_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune KML
+echo "💾 creare versiune KML"
+if [ -f ${macroregion_data_path}/${layer_name}.kml ]; then
+    rm ${macroregion_data_path}/${layer_name}.kml
+fi
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${macroregion_data_path}/${layer_name}.kml ${macroregion_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune TopoJSON
+echo "💾 creare versiune TopoJSON"
+if [ -f ${macroregion_data_path}/${layer_name}.topojson ]; then
+    rm ${macroregion_data_path}/${layer_name}.topojson
+fi
+mapshaper -i ${macroregion_data_path}/${layer_name}.shp -o format=topojson ${macroregion_data_path}/${layer_name}.topojson
+
+#💾 actualizarea setului de date în baza de date PostGIS
+echo "💾 actualizarea setului de date în baza de date PostGIS"
+ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${macroregion_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
+
+#🖇 indexare date PostGIS
+psql -h ${pg_host} -p ${pg_port} -U ${pg_user} -d ${pg_db} -c "
+CREATE INDEX ${layer_name}_geom_idx ON romania.${layer_name} USING GIST (geom);
+CLUSTER romania.${layer_name} USING ${layer_name}_geom_idx;"
+
+#💾 publicarea/actualizarea serviciilor de date
+echo "💾 publicarea/actualizarea serviciilor de date"
+
+#❌ ștergere strat existent (dacă există)
+echo "🔍 Verificare dacă există stratul."
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u $gs_user:$gs_pass \
+  "${gs_url}/rest/layers/${gs_workspace}:${layer_name}.xml")
+
+if [ "$HTTP_STATUS" == "200" ]; then
+    echo "⚠️  Stratul există. Se șterge."
+    curl -s -u $gs_user:$gs_pass -XDELETE \
+      "${gs_url}/rest/layers/${gs_workspace}:${layer_name}?recurse=true"
+    echo "🗑️  Stratul a fost șters."
+else
+    echo "✅ Nu există strat cu acest nume."
+fi
+
+#💾 creare strat
+echo "➕ Creare strat ${layer_name}"
+curl -s -u $gs_user:$gs_pass -XPOST -H "Content-type: text/xml" \
+  -d "<featureType>
+         <name>${layer_name}</name>
+         <nativeName>${layer_name}</nativeName>
+         <title>${gs_layer_title}</title>
+         <abstract>${gs_layer_abstract}</abstract>
+     </featureType>" \
+  "${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes"
+
+#💾 adăugare detalii suplimentare (keywords și metadata link)
+echo "📝 Actualizare metadate"
+keywords_xml=""
+for keyword in "${gs_layer_keywords[@]}"; do
+    keywords_xml+="<string>${keyword}</string>"
+done
+
+curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
+-d "<featureType>
+        <keywords>
+            ${keywords_xml}
+        </keywords>
+        <metadataLinks>
+            <metadataLink>
+                <type>text/xml</type>
+                <metadataType>ISO19115:2003</metadataType>
+                <content>${gs_layer_metadata_link}</content>
+            </metadataLink>
+        </metadataLinks>
+    </featureType>" \
+"${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes/${layer_name}"
+
+#💾 Setare stil implicit + atașare stil suplimentar
+echo "🎨 Setare stil implicit + atașare stil suplimentar..."
+curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
+  -d "<layer>
+         <defaultStyle>
+             <name>${gs_layer_style##*:}</name>
+         </defaultStyle>
+     </layer>" \
+  "${gs_url}/rest/layers/${gs_workspace}:${layer_name}"
+
+echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în GeoServer."
+
+#🗑️ Ștergere fișiere intermediare
+echo "🗑️ Ștergere fișiere Shapefile"
+rm ${macroregion_data_path}/${layer_name}.dbf ${macroregion_data_path}/${layer_name}.shp ${macroregion_data_path}/${layer_name}.prj ${macroregion_data_path}/${layer_name}.shx ${macroregion_data_path}/${layer_name}.cpg ${macroregion_data_path}/ro_admin_macroregion_line_tmp.gpkg
+```
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_region_line.sh).
+
+```python title="convert_ro_admin_macroregion_polygon_to_line.py"
+import json
+from collections import defaultdict
+from osgeo import ogr
+from shapely.geometry import shape, LineString
+from shapely.ops import unary_union
+
+# Activăm excepțiile pentru debugare
+ogr.UseExceptions()
+
+# === CONFIGURARE ===
+input_file = "/storage/volumes/geoserver-1-storage/administrative_boundaries/macroregion/ro_admin_macroregion_polygon.gpkg"
+input_layer_name = "ro_admin_macroregion_polygon"
+field_name_name = "name"
+field_name_id = "id"
+output_file = "/storage/volumes/geoserver-1-storage/administrative_boundaries/macroregion/ro_admin_macroregion_line_tmp.gpkg"
+output_layer_name = "ro_admin_macroregion_line_tmp"
+
+# === Citim poligoanele și preluăm valoarea version ===
+source = ogr.Open(input_file)
+layer = source.GetLayerByName(input_layer_name)
+features = list(layer)
+
+# Preluăm valoarea 'version' din primul poligon (identică în toate)
+version_value = features[0].GetField("version")
+
+# Dicționar cu segmentele normalizate și vecinii lor
+segment_dict = defaultdict(list)
+
+def normalize_segment(p1, p2):
+    return (p1, p2) if p1 <= p2 else (p2, p1)
+
+for feat in features:
+    geom = shape(json.loads(feat.geometry().ExportToJson()))
+    name = feat.GetField(field_name_name)
+    code = feat.GetField(field_name_id)
+    boundary = geom.boundary
+
+    if boundary.geom_type == "LineString":
+        coords = list(boundary.coords)
+        for i in range(len(coords) - 1):
+            seg = normalize_segment(coords[i], coords[i + 1])
+            segment_dict[seg].append((name, code))
+    elif boundary.geom_type == "MultiLineString":
+        for part in boundary.geoms:
+            coords = list(part.coords)
+            for i in range(len(coords) - 1):
+                seg = normalize_segment(coords[i], coords[i + 1])
+                segment_dict[seg].append((name, code))
+
+# Grupăm segmentele după perechi de vecini
+neighbor_segments = defaultdict(list)
+
+for (p1, p2), neighbors in segment_dict.items():
+    geom = LineString([p1, p2])
+    if len(neighbors) == 1:
+        key = (neighbors[0], None)
+    elif len(neighbors) == 2:
+        key = tuple(sorted(neighbors))
+    else:
+        continue
+    neighbor_segments[key].append(geom)
+
+# === Creăm fișierul GeoPackage de ieșire ===
+driver = ogr.GetDriverByName("GPKG")
+driver.DeleteDataSource(output_file)
+out_ds = driver.CreateDataSource(output_file)
+
+srs = ogr.osr.SpatialReference()
+srs.ImportFromEPSG(3844)
+
+out_layer = out_ds.CreateLayer(output_layer_name, srs, geom_type=ogr.wkbMultiLineString)
+
+# Cîmpuri: vecini + version
+out_layer.CreateField(ogr.FieldDefn("leftMacroregion", ogr.OFTString))
+out_layer.CreateField(ogr.FieldDefn("leftId", ogr.OFTInteger))
+out_layer.CreateField(ogr.FieldDefn("rightMacroregion", ogr.OFTString))
+out_layer.CreateField(ogr.FieldDefn("rightId", ogr.OFTInteger))
+
+# Notă: câmpul 'version' este salvat ca text (nu OFTDate), deoarece:
+# - ogr + GPKG nu salvează corect valorile OFTDate din Python
+# - varianta string este stabilă, vizibilă și portabilă
+out_layer.CreateField(ogr.FieldDefn("version", ogr.OFTString))
+
+# Scriem segmentele cu atribute
+for (left, right), seg_list in neighbor_segments.items():
+    multi = unary_union(seg_list)
+    if multi.is_empty:
+        continue
+
+    feat = ogr.Feature(out_layer.GetLayerDefn())
+    if left:
+        feat.SetField("leftMacroregion", left[0])
+        feat.SetField("leftId", left[1])
+    if right:
+        feat.SetField("rightMacroregion", right[0])
+        feat.SetField("rightId", right[1])
+
+    # Setăm valoarea version ca șir (ex: '2025-01-01')
+    feat.SetField("version", str(version_value))
+
+    geom = ogr.CreateGeometryFromWkb(multi.wkb)
+    feat.SetGeometry(geom)
+    out_layer.CreateFeature(feat)
+    feat = None
+
+# Finalizăm
+out_ds = None
+source = None
+
+print(f"✅ Fișierul '{output_file}' a fost generat cu succes.")
+```
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/convert_ro_admin_macroregion_polygon_to_line.py).
+
+## Simbolizare SLD
+
+### Simbolizare SLD implicită
+
+```xml title="ro_admin_region_line.sld"
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+  <NamedLayer>
+    <se:Name>Macroregiuni</se:Name>
+    <UserStyle>
+      <se:Name>Limită macroregiuni</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:Name>Limită macroregiuni</se:Name>
+          <se:LineSymbolizer>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#0a3d62</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
+              <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+              <se:SvgParameter name="stroke-linecap">square</se:SvgParameter>
+            </se:Stroke>
+          </se:LineSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+```
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_macroregion_line.sld).
