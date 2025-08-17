@@ -1,0 +1,349 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Regiuni dezvoltare, România (poligon, geometrie simplificată)
+
+## Cod set de date
+
+**`ro_admin_region_simplified_polygon`**
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('https://services.geo-spatial.org/data/thumbnails/administrative-boundaries/region/ro-admin-region-simplified-polygon.svg')} alt="Limite administrative - Regiuni dezvoltare, România (poligon, geometrie simplificată)" />
+</figure>
+
+## Abordare practică
+
+Datele au fost obținute prin unirea/comasarea/dizolvarea geometriei stratului [Limite administrative - județe, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/1aebaee6-04e7-4a64-81c9-102060a57dc5) folosind câmpul `regionId`.
+
+Procesarea s-a făcut folosind un script (Bash - mediu *nix) ce este rulat după fiecare actualizare a datelor de la ANCPI. Scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_region_simplified_polygon.sh) a geo-spatial.org.
+
+:::info[Notă]
+
+O întrebare legitimă ar fi de ce nu s-a obținut acest set de date prin simplificarea geometriei stratului [Limite administrative - regiuni dezvoltare, România (poligon)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/b12a299a-1d61-4cfe-9db1-b9cc056279c0). Răspunsul este că simplificarea independentă a stratului cu limitele de regiune și a celor de județ ar fi dus la o nealiniere a geometriei celor două straturi (datorită modului în care funcționează algoritmul de simplificare - a se vedea figura de mai jos). Comasând la nivel de regiune limitele simplificate ale județelor a creat o geometrie perfect aliniată a celor două straturi pe limitele comune (la fel s-a procedat și la obținerea setului simplificat pentru limitele de județ, folosind limitele simplificate UAT).
+
+:::
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/diferente_simplificare_independenta.jpg')} alt="Exemplu: simplificarea independentă a două straturi cu laturi comune" />
+  <figcaption><em>Exemplu: simplificarea independentă a două straturi cu laturi comune.</em></figcaption>
+</figure>
+
+## Prelucrarea datelor
+
+### Comansarea geometriilor
+
+S-a realizat prin unirea/comasarea/dizolvarea geometriilor stratului [Limite administrative - județe, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/1aebaee6-04e7-4a64-81c9-102060a57dc5) folosind codul unic al regiunilor de dezvoltare (obținut din datele INS).
+
+### Conversia în formate de fișier populare
+
+Datele au foct convertite în formatele de fișier utilizate de geo-spatial.org pentru distribuirea de date vectoriale: `GeoPackage`, `Shapefile`, `Geoparquet`, `FlatGeobuf`, `GeoJSON`, `TopoJSON`, `KML`. Detalii despre motivația alegerii acestor formate și beneficiile fiecăruia sunt prezentate în ghidul cu privire la date. De asemenea, pentru nevoi interne, datele au fost încărcate în baza de date PostgreSQL/PostGIS.
+
+### Publicare datelor
+
+Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/b1c716ad-f94e-46bf-804e-2fc53b64bb1c) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/b1c716ad-f94e-46bf-804e-2fc53b64bb1c) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
+
+## Diagrama fluxului de lucru
+
+<iframe
+  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_region_simplified_polygon.json"
+  width="100%"
+  height="600"
+  style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+  loading="lazy"
+/>
+
+<a
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_region_simplified_polygon.json"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Deschide diagrama într-o pagină separată <i className="fa fa-external-link-alt" style={{ marginLeft: '0.3rem' }}></i>
+</a>
+
+## Script ETL
+
+```bash title="publish_update_ro_admin_region_simplified_polygon.sh"
+#!/usr/bin/zsh
+
+##############################################################################################################
+#🛠 Publicare/actualizare Regiuni dezvoltare, România (poligon, geometrie simplificată)
+##############################################################################################################
+
+#🎛 configurații
+
+#🕹 activare mediu Anaconda cu bibliotecile necesare pentru procesare
+source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
+conda activate geo
+
+#🚏 definire căi date
+county_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/county"
+region_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/region"
+
+
+#⚙️ PostGIS
+pg_host="localhost"
+pg_port=25432
+pg_user="geospatialorg"
+pg_db="geospatial"
+pg_pass="krX5v3LYx9DHd61C9aRl"
+pg_schema="romania"
+
+#⚙️ GeoServer
+gs_url="http://localhost:8080/geoserver"
+gs_user="geospatialorg"
+gs_pass="le2pha2Lee7eb5aetooVei"
+gs_workspace="administrative-boundaries"
+gs_store="administrative-boundaries"
+gs_layer_title="Limite administrative - Regiuni dezvoltare, România (poligon, geometrie simplificată)"
+gs_layer_abstract="Set de date care conține limitele regiunilor de dezvoltare din România, în format vectorial de tip poligon, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară și Institutul Național de Statistică. Geometria originală a fost simplificată pentru scenariile în care este nevoie de o afișare rapidă a datelor sau reprezentarea la scări mici (ex: aplicații cartografice web)."
+gs_layer_keywords=("România" "regiuni de dezvoltare" "limite administrative" "vector" "poligon" "geometrie simplificată")
+gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/b1c716ad-f94e-46bf-804e-2fc53b64bb1c"
+gs_layer_style="administrative-boundaries:ro_admin_region_simplified_polygon_labels"
+gs_layer_secondary_style="administrative-boundaries:ro_admin_region_simplified_polygon"
+
+#⚙️ Date
+layer_name="ro_admin_region_simplified_polygon"
+
+echo "
+🛠 Regiuni dezvoltare, România (poligon, geometrie simplificată)
+"
+
+#💾 creare versiune GeoPackage
+echo "💾 creare versiune GeoPackage"
+
+ogr2ogr -f GPKG -lco FID=id -nln ro_admin_region_simplified_polygon_int -dialect sqlite -sql "SELECT ST_Union(geometry) AS geometry, regionId, regionCode, region AS name,  version FROM ro_admin_county_simplified_polygon GROUP BY regionId" ${region_data_path}/ro_admin_region_simplified_polygon_int.gpkg ${county_data_path}/ro_admin_county_simplified_polygon.gpkg
+
+if [ -f ${region_data_path}/${layer_name}.gpkg ]; then
+    rm ${region_data_path}/${layer_name}.gpkg
+fi
+
+ogr2ogr -f GPKG -nln ${layer_name}_int2 ${region_data_path}/${layer_name}_int2.gpkg ${region_data_path}/${layer_name}_int.gpkg
+
+ogr2ogr -f GPKG -lco FID=id -nln ${layer_name} ${region_data_path}/${layer_name}.gpkg ${region_data_path}/${layer_name}_int2.gpkg
+
+#💾 creare versiune Esri Shapefile
+echo "💾 creare versiune Esri Shapefile"
+if [ -f ${region_data_path}/${layer_name}.zip ]; then
+    rm ${region_data_path}/${layer_name}.zip
+fi
+ogr2ogr -lco ENCODING=UTF-8 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${region_data_path}/${layer_name}.shp ${region_data_path}/${layer_name}.gpkg
+
+#📦 arhivare versiune shp
+echo "📦 arhivare versiune shp"
+zip -j ${region_data_path}/${layer_name}.zip ${region_data_path}/${layer_name}.dbf ${region_data_path}/${layer_name}.shp ${region_data_path}/${layer_name}.prj ${region_data_path}/${layer_name}.shx ${region_data_path}/${layer_name}.cpg
+
+#💾 creare versiune GeoJSON
+echo "💾 creare versiune GeoJSON"
+if [ -f ${region_data_path}/${layer_name}.geojson ]; then
+    rm ${region_data_path}/${layer_name}.geojson
+fi
+ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${region_data_path}/${layer_name}.geojson ${region_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune FlatGeobuf
+echo "💾 creare versiune FlatGeobuf"
+if [ -f ${region_data_path}/${layer_name}.fgb ]; then
+    rm ${region_data_path}/${layer_name}.fgb
+fi
+ogr2ogr -of FlatGeobuf -nlt MULTIPOLYGON -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${region_data_path}/${layer_name}.fgb ${region_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune GeoParquet
+echo "💾 creare versiune GeoParquet"
+if [ -f ${region_data_path}/${layer_name}.parquet ]; then
+    rm ${region_data_path}/${layer_name}.parquet
+fi
+ogr2ogr -of Parquet -nlt MULTIPOLYGON -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${region_data_path}/${layer_name}.parquet ${region_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune KML
+echo "💾 creare versiune KML"
+if [ -f ${region_data_path}/${layer_name}.kml ]; then
+    rm ${region_data_path}/${layer_name}.kml
+fi
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${region_data_path}/${layer_name}.kml ${region_data_path}/${layer_name}.gpkg
+
+#💾 creare versiune TopoJSON
+echo "💾 creare versiune TopoJSON"
+if [ -f ${region_data_path}/${layer_name}.topojson ]; then
+    rm ${region_data_path}/${layer_name}.topojson
+fi
+mapshaper -i ${region_data_path}/${layer_name}.geojson -o format=topojson ${region_data_path}/${layer_name}.topojson
+
+#💾 actualizarea setului de date în baza de date PostGIS
+echo "💾 actualizarea setului de date în baza de date PostGIS"
+ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${region_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
+
+#🖇 indexare date PostGIS
+psql -h ${pg_host} -p ${pg_port} -U ${pg_user} -d ${pg_db} -c "
+CREATE INDEX ${layer_name}_geom_idx ON romania.${layer_name} USING GIST (geom);
+CLUSTER romania.${layer_name} USING ${layer_name}_geom_idx;"
+
+#💾 publicarea/actualizarea serviciilor de date
+echo "💾 publicarea/actualizarea serviciilor de date"
+
+#❌ ștergere strat existent (dacă există)
+echo "🔍 Verificare dacă există stratul."
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u $gs_user:$gs_pass \
+  "${gs_url}/rest/layers/${gs_workspace}:${layer_name}.xml")
+
+if [ "$HTTP_STATUS" == "200" ]; then
+    echo "⚠️  Stratul există. Se șterge."
+    curl -s -u $gs_user:$gs_pass -XDELETE \
+      "${gs_url}/rest/layers/${gs_workspace}:${layer_name}?recurse=true"
+    echo "🗑️  Stratul a fost șters."
+else
+    echo "✅ Nu există strat cu acest nume."
+fi
+
+#💾 creare strat
+echo "➕ Creare strat ${layer_name}"
+curl -s -u $gs_user:$gs_pass -XPOST -H "Content-type: text/xml" \
+  -d "<featureType>
+         <name>${layer_name}</name>
+         <nativeName>${layer_name}</nativeName>
+         <title>${gs_layer_title}</title>
+         <abstract>${gs_layer_abstract}</abstract>
+     </featureType>" \
+  "${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes"
+
+#💾 adăugare detalii suplimentare (keywords și metadata link)
+echo "📝 Actualizare metadate"
+keywords_xml=""
+for keyword in "${gs_layer_keywords[@]}"; do
+    keywords_xml+="<string>${keyword}</string>"
+done
+
+curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
+-d "<featureType>
+        <keywords>
+            ${keywords_xml}
+        </keywords>
+        <metadataLinks>
+            <metadataLink>
+                <type>text/xml</type>
+                <metadataType>ISO19115:2003</metadataType>
+                <content>${gs_layer_metadata_link}</content>
+            </metadataLink>
+        </metadataLinks>
+    </featureType>" \
+"${gs_url}/rest/workspaces/${gs_workspace}/datastores/${gs_store}/featuretypes/${layer_name}"
+
+#💾 Setare stil implicit + atașare stil suplimentar
+echo "🎨 Setare stil implicit + atașare stil suplimentar..."
+curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
+  -d "<layer>
+         <defaultStyle>
+             <name>${gs_layer_style##*:}</name>
+         </defaultStyle>
+         <styles>
+             <style>
+                 <name>${gs_layer_secondary_style##*:}</name>
+             </style>
+         </styles>
+     </layer>" \
+  "${gs_url}/rest/layers/${gs_workspace}:${layer_name}"
+
+echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în GeoServer."
+
+#🗑️ Ștergere fișiere intermediare
+echo "🗑️ Ștergere fișiere Shapefile"
+rm ${region_data_path}/${layer_name}.dbf ${region_data_path}/${layer_name}.shp ${region_data_path}/${layer_name}.prj ${region_data_path}/${layer_name}.shx ${region_data_path}/${layer_name}.cpg ${region_data_path}/ro_admin_region_simplified_polygon_int.gpkg ${region_data_path}/${layer_name}_int2.gpkg
+```
+Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_region_simplified_polygon.sh).
+
+## Simbolizare SLD
+
+### Simbolizare SLD implicită
+
+```xml title="ro_admin_region_polygon_labels.sld"
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+  <NamedLayer>
+  <se:Name>Regiuni de dezvoltare</se:Name>
+  <UserStyle>
+    <se:Name>Limită regiuni dezvoltare</se:Name>
+      <se:FeatureTypeStyle>
+
+      <!-- Regula afișată doar la scări < 1:5.000.000, fără etichete -->
+        <se:Rule>
+          <se:Name>Limită regiuni dezvoltare</se:Name>
+          <se:MinScaleDenominator>5000000</se:MinScaleDenominator>
+          <se:PolygonSymbolizer>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#218c74</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
+              <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+            </se:Stroke>
+          </se:PolygonSymbolizer>
+        </se:Rule>
+
+        <!-- Regula afișată doar la scări > 1:5.000.000, cu etichete -->
+        <se:Rule>
+          <se:Name>Limită regiuni dezvoltare</se:Name>
+          <se:MaxScaleDenominator>5000000</se:MaxScaleDenominator>
+          <se:PolygonSymbolizer>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#218c74</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
+              <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+            </se:Stroke>
+          </se:PolygonSymbolizer>
+          <se:TextSymbolizer>
+            <se:Label>
+              <ogc:PropertyName>name</ogc:PropertyName>
+            </se:Label>
+            <se:Font>
+              <se:SvgParameter name="font-family">Helvetica</se:SvgParameter>
+              <se:SvgParameter name="font-size">14</se:SvgParameter>
+            </se:Font>
+            <se:LabelPlacement>
+              <se:PointPlacement>
+                <se:AnchorPoint>
+                  <se:AnchorPointX>0</se:AnchorPointX>
+                  <se:AnchorPointY>0.5</se:AnchorPointY>
+                </se:AnchorPoint>
+              </se:PointPlacement>
+            </se:LabelPlacement>
+            <se:Halo>
+              <se:Radius>2</se:Radius>
+              <se:Fill>
+                <se:SvgParameter name="fill">#ffffff</se:SvgParameter>
+              </se:Fill>
+            </se:Halo>
+            <se:Fill>
+              <se:SvgParameter name="fill">#218c74</se:SvgParameter>
+            </se:Fill>
+            <se:VendorOption name="maxDisplacement">1</se:VendorOption>
+          </se:TextSymbolizer>
+        </se:Rule>
+
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+```
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_region_simplified_polygon_labels.sld).
+
+### Simbolizare SLD alternativă
+
+```xml title="ro_admin_region_polygon.sld"
+<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+  <NamedLayer>
+  <se:Name>Regiuni de dezvoltare</se:Name>
+  <UserStyle>
+    <se:Name>Limită regiuni dezvoltare</se:Name>
+    <se:FeatureTypeStyle>
+      <se:Rule>
+        <se:Name>Limită regiuni dezvoltare</se:Name>
+          <se:PolygonSymbolizer>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#218c74</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
+              <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+            </se:Stroke>
+          </se:PolygonSymbolizer>
+        </se:Rule>
+      </se:FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+```
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_region_simplified_polygon.sld).
