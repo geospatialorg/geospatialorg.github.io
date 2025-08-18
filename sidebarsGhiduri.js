@@ -47,6 +47,7 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-macroregion-simplified-polygon",
                 "procesari-etl/administrative-boundaries/ro-admin-macroregion-simplified-line",
                 "procesari-etl/administrative-boundaries/ro-admin-country-simplified-polygon",
+                "procesari-etl/administrative-boundaries/ro-admin-country-simplified-line",
               ],
             },
           ],
