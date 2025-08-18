@@ -14,6 +14,17 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 Datele au fost obținute prin prelucrarea stratului [Limite administrative - județe, România (poligon, geometrie simplificată)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/1aebaee6-04e7-4a64-81c9-102060a57dc5). Acest lucru s-a realizat printr-o procedură automată de procesare cel folosește un script Bash (mediu *nix), script ce este rulat după fiecare actualizare a datelor de la ANCPI. Pentru pașii de procesare, scriptul utilizează mai multe biblioteci open source și utilitare de sistem: [GDAL](https://gdal.org), [mapshaper](https://mapshaper.org/), [curl](https://curl.se/), zip. Scriptul rezultat este prezentat în secțiunea [Script ETL](#script-etl) și accesibil pentru descărcare pe pagina [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_macroregion_simplified_polygon.sh) a geo-spatial.org.
 
+:::info[Notă]
+
+O întrebare legitimă ar fi de ce nu s-a obținut acest set de date prin simplificarea geometriei stratului [Limite administrative - macroregiuni, România (poligon)](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/168c15e4-6774-409b-a0bc-06e06cd40717). Răspunsul este că simplificarea independentă a stratului cu limitele de macroregiune și a celor de județ (sau a oricărui strat din categoria limitelor administrative) ar fi dus la o nealiniere a geometriei celor două straturi (datorită modului în care funcționează algoritmul de simplificare - a se vedea figura de mai jos). Comasarea la nivel de regiune a limitelor simplificate ale județelor a creat o geometrie perfect aliniată a celor două straturi pe limitele comune (la fel s-a procedat și la obținerea setului simplificat pentru limitele de județ, folosind limitele simplificate UAT).
+
+:::
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/ghiduri/procesari-etl/administrative-boundaries/diferente_simplificare_independenta.jpg')} alt="Exemplu: simplificarea independentă a două straturi cu laturi comune" />
+  <figcaption><em>Exemplu: simplificarea independentă a două straturi cu laturi comune.</em></figcaption>
+</figure>
+
 ## Prelucrarea datelor
 
 ### Comasarea geometriilor (dissolve)
