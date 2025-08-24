@@ -50,6 +50,11 @@ export default {
                 "procesari-etl/administrative-boundaries/ro-admin-country-simplified-line",
               ],
             },
+            {
+              type: "category",
+              label: "Caroiaje",
+              items: ["procesari-etl/grids/ro-grid-ro-grid-data-ancpi-40km"],
+            },
           ],
         },
         {
