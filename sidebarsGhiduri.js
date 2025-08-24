@@ -53,7 +53,7 @@ export default {
             {
               type: "category",
               label: "Caroiaje",
-              items: ["procesari-etl/grids/ro-grid-ro-grid-data-ancpi-40km"],
+              items: ["procesari-etl/grids/ro-grid-data-ancpi-40km"],
             },
           ],
         },
