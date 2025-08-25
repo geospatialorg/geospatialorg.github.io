@@ -49,12 +49,12 @@ Datele finale au fost convertite în formatele de fișier utilizate de geo-spati
 
 ### Publicare datelor
 
-Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
+Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/337d3cb7-45d1-4d60-91b5-76e566d389df) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/337d3cb7-45d1-4d60-91b5-76e566d389df) și/sau secțiunea <a href={useBaseUrl('descarcare/date/grids')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
 
 ## Diagrama fluxului de lucru
 
 <iframe
-  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_polygon.json"
+  src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/grids/etl_ro_grid_data_ancpi_40km.json"
   width="100%"
   height="600"
   style={{ border: '1px solid #ccc', borderRadius: '8px' }}
@@ -62,7 +62,7 @@ Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-
 />
 
 <a
-  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_polygon.json"
+  href="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/grids/etl_ro_grid_data_ancpi_40km.json"
   target="_blank"
   rel="noopener noreferrer"
 >
@@ -71,11 +71,11 @@ Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-
 
 ## Script ETL
 
-```bash title="publish_update_ro_admin_lau_polygon.sh"
+```bash title="publish_update_ro_grid_data_ancpi_40km.sh"
 #!/usr/bin/zsh
 
 ##############################################################################################################
-#🛠 Publicare/actualizare UAT, România (poligon)
+#🛠 Publicare/actualizare Grid ANCPI 40km
 ##############################################################################################################
 
 #🎛 configurații
@@ -85,9 +85,8 @@ source /home/ubuntu/anaconda3/etc/profile.d/conda.sh
 conda activate geo
 
 #🚏 definire căi date
-ins_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ins/siruta"
-ancpi_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ancpi/limite_administrative"
-lau_data_path="/storage/volumes/geoserver-1-storage/administrative_boundaries/lau"
+ancpi_data_path="/storage/volumes/geoserver-1-storage/brute/institutii_romania/ancpi/caroiaje"
+grids_data_path="/storage/volumes/geoserver-1-storage/grids/data"
 tmp_data_path="/storage/volumes/geoserver-1-storage/tmp"
 
 #⚙️ PostGIS
@@ -102,110 +101,108 @@ pg_schema="romania"
 gs_url="http://localhost:8080/geoserver"
 gs_user="user"
 gs_pass="pass"
-gs_workspace="administrative-boundaries"
-gs_store="administrative-boundaries"
-gs_layer_title="Limite administrative - UAT, România (poligon)"
-gs_layer_abstract="Set de date care conține limitele oficiale ale unităților administrativ-teritoriale (UAT) din România, în format vectorial de tip poligon, procesat de comunitatea geo-spatial.org pe baza datelor publice furnizate de Agenția Națională de Cadastru și Publicitate Imobiliară. Versiunea curentă reflectă organizarea administrativ-teritorială valabilă în România anului 2025."
-gs_layer_keywords=("România" "UAT" "limite administrative" "vector" "poligon")
-gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8"
-gs_layer_style="administrative-boundaries:ro_admin_lau_polygon_labels"
-gs_layer_secondary_style="administrative-boundaries:ro_admin_lau_polygon"
+gs_workspace="grids"
+gs_store="grids"
+gs_layer_title="Caroiaje - Grid ANCPI 40km"
+gs_layer_abstract="Set de date care conține caroiajul de 40 x 40 km, în proiecție Stereo70, creat de Agenția Națională de Cadastru și Publicitate Imobiliară pentru distribuirea Modelului Numeric Altimetric de Teren. Caroiajul este utilizat de geo-spatial.org pentru prelucrarea și distribuirea mai multor seturi de date."
+gs_layer_keywords=("România" "caroiaj" "vector" "40x40km")
+gs_layer_metadata_link="https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/337d3cb7-45d1-4d60-91b5-76e566d389df"
+gs_layer_style="grids:ro_grid_data_ancpi_40km_labels"
+gs_layer_secondary_style="grids:ro_grid_data_ancpi_40km"
 
 #⚙️ Date
-layer_name="ro_admin_lau_polygon"
+layer_name="ro_grid_data_ancpi_40km"
 
 echo "
-🛠 Procesare UAT, România (poligon)
+🛠 Grid ANCPI 40km
  "
 
-echo "💾 Încărcare date în SQLite"
+echo "💾 Descărcarea datelor de pe portalul ANCPI"
 
-#💾 încărcare SHP ANCPI în SQLite
-ogr2ogr  -of "SQLite" -a_srs "EPSG:3844" -lco LAUNDER=NO ${tmp_data_path}/uat.db ${ancpi_data_path}/Unitate_administrativa_UAT.shp
+#💾 Descărcarea datelor de pe portalul ANCPI
+ogr2ogr -f GPKG ${ancpi_data_path}/caroiaj_ancpi_40km.gpkg -nln caroiaj_ancpi_40km -nlt MULTIPOLYGON --config OGR_ORGANIZE_POLYGONS SKIP --config CPL_CURL_MAX_RETRY 5 --config CPL_CURL_RETRY_DELAY 2 --config CPL_CURL_HTTPS_VERSION TLSv1_2 -skipfailures  "ESRIJSON:https://geoportal.ancpi.ro/hosted_services/rest/services/Descarcare/MNT_tiles/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&f=json"
 
-#💾 încărcare tabel regiuni de dezvoltare în SQLite
-csvsql --db sqlite:///${tmp_data_path}/uat.db --insert ${ins_data_path}/siruta_zone.csv
+#💾 Eliminare câmpuri neutilizate
+ogr2ogr -of GPKG -lco FID=id -nln caroiaj_ancpi_40km -dialect sqlite -sql "SELECT geom AS geometry, OBJECTID as id, Name as name, L as row, C as col FROM caroiaj_ancpi_40km" ${tmp_data_path}/caroiaj_ancpi_40km.gpkg ${ancpi_data_path}/caroiaj_ancpi_40km.gpkg
 
-#💾 încărcare tabel județe în SQLite
-csvsql --db sqlite:///${tmp_data_path}/uat.db --insert ${ins_data_path}/siruta_judete.csv
+#💾 Corectare atribute pentru celulele 84, 85, 98, 128, 141, 179 (de exemplu, "F13_c" a fost transformat în "F13" și similar)
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET name = 'F13' WHERE ID = 84"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET name = 'F14' WHERE ID = 85"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET name = 'G08' WHERE ID = 98"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET name = 'I15' WHERE ID = 128"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET name = 'J15' WHERE ID = 141"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET name = 'G13' WHERE ID = 179"
 
-#💾 conversie MDB în CSV
-mdb-export ${ins_data_path}/siruta.mdb siruta_rez > ${tmp_data_path}/siruta.csv
+#💾 Calcularea coordonatelor xmin, xmax, ymin, ymax pentru fiecare celulă din caroiaj
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -sql "ALTER TABLE caroiaj_ancpi_40km ADD COLUMN xmin INTEGER"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -sql "ALTER TABLE caroiaj_ancpi_40km ADD COLUMN xmax INTEGER"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -sql "ALTER TABLE caroiaj_ancpi_40km ADD COLUMN ymin INTEGER"
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -sql "ALTER TABLE caroiaj_ancpi_40km ADD COLUMN ymax INTEGER"
 
-#💾 formatare CSV: se elimină câmpurile nerelevante (FSJ, FS2, FS3, fictiv); se formatează câmpurile de tip text ca "lowercase"; se convertesc câmpurile SIRUTA, CODP și SIRSUP din notarea științifică în format integer
-awk -F, 'BEGIN{printf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n","siruta","denloc","codp","jud","sirsup","tip","niv","med","regiune","fsl", "rang")} NR>1{printf("%.0f,%s,%.0f,%d,%.0f,%d,%d,%s,%d,%s,%s\n",$1,tolower($2),$3,$4,$5,$6,$7,$8,$9,$13,$14)}' ${tmp_data_path}/siruta.csv > ${tmp_data_path}/siruta_corectat.csv
+ogrinfo ${tmp_data_path}/caroiaj_ancpi_40km.gpkg -dialect SQLite -sql "UPDATE caroiaj_ancpi_40km SET xmin = MbrMinX(geometry), xmax = MbrMaxX(geometry), ymin = MbrMinY(geometry), ymax = MbrMaxY(geometry)"
 
-#💾 înlocuire diacritice incorecte ("ș" și "ț" din sedilă în virgulă; se corectează "ă")
-sed -i -e 's/ş/ș/g' -e 's/ţ/ț/g' -e 's/ã/ă/g' ${tmp_data_path}/siruta_corectat.csv
+#💾 Conversie în format CSV
+ogr2ogr -of CSV -dialect sqlite -sql "SELECT id, * FROM caroiaj_ancpi_40km" ${tmp_data_path}/caroiaj_ancpi_40km.csv ${tmp_data_path}/caroiaj_ancpi_40km.gpkg
 
-#💾 conversie cîmpuri de tip text din "lowercase" în "titlecase" - este exceptat primul rînd, cel cu numele de coloane
-sed -i '2,$s/.*/\L&/; 2,$s/[a-z]*/\u&/g' ${tmp_data_path}/siruta_corectat.csv
-
-#💾 înlocuire prepoziții folosite în numele de localități din "titlecase" înapoi în "lowercase"
-sed -i -e 's/ De / de /g' -e 's/ Din / din /g' -e 's/ La / la /g' -e 's/ Pe / pe /g' -e 's/ Cu / cu /g' -e 's/ Lui / lui /g' -e 's/ Cel / cel /g' -e 's/ Sub / sub /g' -e 's/ In / în /g' -e 's/ ii/ II/g' -e 's/Municipiul //g' -e 's/Oraș //g' ${tmp_data_path}/siruta_corectat.csv
-
-#💾 încărcare tabel SIRUTA în SQLITE
-csvsql --db sqlite:///${tmp_data_path}/uat.db --insert ${tmp_data_path}/siruta_corectat.csv
-
-#💾 creare fișier final în SQLITE prin unirea datele originale optimizate (ex: câmpurile redundante eliminate) cu cele din tabelele SIRUTA
-ogr2ogr -of "SQLite" -append -dsco SPATIALITE=YES -lco LAUNDER=NO -a_srs EPSG:3844 -nln ro_admin_lau_polygon -sql "SELECT CAST(a.natCode AS INTEGER) AS natCode, TRIM(b.denloc) AS name, a.natLevName AS natLevName, CAST(c.jud AS INTEGER) AS countyId, CAST(c.siruta AS INTEGER) AS countyCode, c.denj AS county, c.mnemonic AS countyMn, CAST(d.zona AS INTEGER) AS regionId, CAST(d.siruta AS INTEGER) AS regionCode, d.denzona AS region, a.beginvers AS version, a.GEOMETRY FROM Unitate_administrativa_UAT AS a LEFT JOIN siruta_corectat AS b ON (a.natcode = b.siruta) LEFT JOIN siruta_judete AS c ON (c.jud=b.jud) LEFT JOIN siruta_zone AS d ON (c.zona=d.zona)" ${tmp_data_path}/uat.db ${tmp_data_path}/uat.db
+#💾 Conversie CSV în format WKT
+python convert_caroiaj_ancpi_40km_to_csv.py
 
 #💾 creare versiune GeoPackage
 echo "💾 creare versiune GeoPackage"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.gpkg ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.gpkg
+if [ -f ${grids_data_path}/${layer_name}.gpkg ]; then
+    rm ${grids_data_path}/${layer_name}.gpkg
 fi
-ogr2ogr -of GPKG -lco FID=id -a_srs EPSG:3844 -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT GEOMETRY AS geometry, * FROM ro_admin_lau_polygon" ${lau_data_path}/ro_admin_lau_polygon.gpkg ${tmp_data_path}/uat.db
+ogr2ogr -of GPKG -lco FID=id -nln ${layer_name} -dialect sqlite -sql "SELECT geometry, id, name, row, col FROM caroiaj_ancpi_40km" ${grids_data_path}/${layer_name}.gpkg ${tmp_data_path}/caroiaj_ancpi_40km.gpkg
 
 #💾 creare fișiere Esri Shapefile
 echo "💾 creare fișiere Esri Shapefile"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.zip ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.zip
+if [ -f ${grids_data_path}/${layer_name}.zip ]; then
+    rm ${grids_data_path}/${layer_name}.zip
 fi
-ogr2ogr -lco ENCODING=UTF-8 -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lau_data_path}/ro_admin_lau_polygon.shp ${lau_data_path}/ro_admin_lau_polygon.gpkg
+ogr2ogr -lco ENCODING=UTF-8 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${grids_data_path}/${layer_name}.shp ${grids_data_path}/${layer_name}.gpkg
 
 #📦 arhivare fișiere shp
 echo "📦 arhivare fișiere shp"
-zip -j ${lau_data_path}/ro_admin_lau_polygon.zip ${lau_data_path}/ro_admin_lau_polygon.dbf ${lau_data_path}/ro_admin_lau_polygon.shp ${lau_data_path}/ro_admin_lau_polygon.prj ${lau_data_path}/ro_admin_lau_polygon.shx ${lau_data_path}/ro_admin_lau_polygon.cpg
+zip -j ${grids_data_path}/${layer_name}.zip ${grids_data_path}/${layer_name}.dbf ${grids_data_path}/${layer_name}.shp ${grids_data_path}/${layer_name}.prj ${grids_data_path}/${layer_name}.shx ${grids_data_path}/${layer_name}.cpg
 
 #💾 creare versiune FlatGeobuf
 echo "💾 creare versiune FlatGeobuf"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.fgb ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.fgb
+if [ -f ${grids_data_path}/${layer_name}.fgb ]; then
+    rm ${grids_data_path}/${layer_name}.fgb
 fi
-ogr2ogr -of FlatGeobuf -nlt MULTIPOLYGON -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lau_data_path}/ro_admin_lau_polygon.fgb ${lau_data_path}/ro_admin_lau_polygon.gpkg
+ogr2ogr -of FlatGeobuf -nlt MULTIPOLYGON -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${grids_data_path}/${layer_name}.fgb ${grids_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune GeoParquet
 echo "💾 creare versiune GeoParquet"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.parquet ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.parquet
+if [ -f ${grids_data_path}/${layer_name}.parquet ]; then
+    rm ${grids_data_path}/${layer_name}.parquet
 fi
-ogr2ogr -of Parquet -nlt MULTIPOLYGON -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lau_data_path}/ro_admin_lau_polygon.parquet ${lau_data_path}/ro_admin_lau_polygon.gpkg
+ogr2ogr -of Parquet -nlt MULTIPOLYGON -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${grids_data_path}/${layer_name}.parquet ${grids_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune GeoJSON
 echo "💾 creare versiune GeoJSON"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.geojson ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.geojson
+if [ -f ${grids_data_path}/${layer_name}.geojson ]; then
+    rm ${grids_data_path}/${layer_name}.geojson
 fi
-ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ro_admin_lau_polygon -dialect sqlite -sql "SELECT a.id AS id, * FROM ro_admin_lau_polygon AS a" ${lau_data_path}/ro_admin_lau_polygon.geojson ${lau_data_path}/ro_admin_lau_polygon.gpkg
+ogr2ogr -of GeoJSON -t_srs EPSG:4326 -nln ${layer_name} -dialect sqlite -sql "SELECT a.id AS id, * FROM ${layer_name} AS a" ${grids_data_path}/${layer_name}.geojson ${grids_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune KML
 echo "💾 creare versiune KML"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.kml ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.kml
+if [ -f ${grids_data_path}/${layer_name}.kml ]; then
+    rm ${grids_data_path}/${layer_name}.kml
 fi
-ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${lau_data_path}/ro_admin_lau_polygon.kml ${lau_data_path}/ro_admin_lau_polygon.gpkg
+ogr2ogr -of KML -t_srs EPSG:4326 -dsco NameField=name ${grids_data_path}/${layer_name}.kml ${grids_data_path}/${layer_name}.gpkg
 
 #💾 creare versiune TopoJSON
 echo "💾 creare versiune TopoJSON"
-if [ -f ${lau_data_path}/ro_admin_lau_polygon.topojson ]; then
-    rm ${lau_data_path}/ro_admin_lau_polygon.topojson
+if [ -f ${grids_data_path}/${layer_name}.topojson ]; then
+    rm ${grids_data_path}/${layer_name}.topojson
 fi
-mapshaper -i ${lau_data_path}/ro_admin_lau_polygon.geojson -o format=topojson ${lau_data_path}/ro_admin_lau_polygon.topojson
+mapshaper -i ${grids_data_path}/${layer_name}.geojson -o format=topojson ${grids_data_path}/${layer_name}.topojson
 
 #💾 actualizarea setului de date în baza de date PostGIS
 echo "💾 actualizarea setului de date în baza de date PostGIS"
-ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${lau_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
+ogr2ogr -of PostgreSQL PG:"host=${pg_host} port=${pg_port} user=${pg_user} dbname=${pg_db} password=${pg_pass}" -lco schema=${pg_schema} -lco GEOMETRY_NAME=geom -lco overwrite=yes ${grids_data_path}/${layer_name}.gpkg ${layer_name} -skipfailures -overwrite
 
 #🖇 indexare date PostGIS
 psql -h ${pg_host} -p ${pg_port} -U ${pg_user} -d ${pg_db} -c "
@@ -280,8 +277,8 @@ curl -s -u $gs_user:$gs_pass -XPUT -H "Content-type: text/xml" \
 echo "✅ Stratul ${layer_name} a fost adăugat și configurat cu succes în GeoServer."
 
 #🗑️ Ștergere fișiere intermediare
-echo "🗑️ Ștergere fișiere Shapefile"
-rm ${lau_data_path}/${layer_name}.dbf ${lau_data_path}/${layer_name}.shp ${lau_data_path}/${layer_name}.prj ${lau_data_path}/${layer_name}.shx ${lau_data_path}/${layer_name}.cpg ${tmp_data_path}/uat.db ${tmp_data_path}/siruta.csv ${tmp_data_path}/siruta_corectat.csv
+echo "🗑️ Ștergere fișiere intermediare"
+rm ${grids_data_path}/${layer_name}.dbf ${grids_data_path}/${layer_name}.shp ${grids_data_path}/${layer_name}.prj ${grids_data_path}/${layer_name}.shx ${grids_data_path}/${layer_name}.cpg ${tmp_data_path}/caroiaj_ancpi_40km.gpkg ${tmp_data_path}/caroiaj_ancpi_40km.csv ${tmp_data_path}/caroiaj_ancpi_40km.wkt
 ```
 Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/blob/main/publish_update_ro_admin_lau_polygon.sh).
 
@@ -289,39 +286,46 @@ Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/
 
 ### Simbolizare SLD implicită
 
-```xml title="ro_admin_lau_polygon_labels.sld"
+```xml title="ro_grid_data_ancpi_40km_labels.sld"
 <?xml version="1.0" encoding="UTF-8"?>
-<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1.0" xmlns:se="http://www.opengis.net/se" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd">
   <NamedLayer>
-  <se:Name>UAT-uri</se:Name>
-  <UserStyle>
-    <se:Name>Limită UAT</se:Name>
+    <se:Name>ro_grid_data_ancpi_40km</se:Name>
+    <UserStyle>
+      <se:Name>ro_grid_data_ancpi_40km</se:Name>
       <se:FeatureTypeStyle>
-
-      <!-- Regula afișată doar la scări < 1:300.000, fără etichete -->
         <se:Rule>
-          <se:Name>Limită UAT</se:Name>
-          <se:MinScaleDenominator>300000</se:MinScaleDenominator>
-          <se:PolygonSymbolizer>
+          <se:Name>Grid ANCPI 40km</se:Name>
+          <se:Description>
+            <se:Title>Grid ANCPI 40km</se:Title>
+          </se:Description>
+          <se:MinScaleDenominator>5000000</se:MinScaleDenominator>
+          <se:LineSymbolizer>
             <se:Stroke>
-              <se:SvgParameter name="stroke">#be2edd</se:SvgParameter>
-              <se:SvgParameter name="stroke-width">1</se:SvgParameter>
+              <se:SvgParameter name="stroke">#000000</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
               <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+              <se:SvgParameter name="stroke-linecap">square</se:SvgParameter>
             </se:Stroke>
-          </se:PolygonSymbolizer>
+          </se:LineSymbolizer>
         </se:Rule>
-
-        <!-- Regula afișată doar la scări > 1:300.000, cu etichete -->
         <se:Rule>
-          <se:Name>Limită UAT</se:Name>
-          <se:MaxScaleDenominator>300000</se:MaxScaleDenominator>
-          <se:PolygonSymbolizer>
+          <se:Name>Grid ANCPI 40km</se:Name>
+          <se:Description>
+            <se:Title>Grid ANCPI 40km</se:Title>
+          </se:Description>
+          <se:MaxScaleDenominator>5000000</se:MaxScaleDenominator>
+          <se:LineSymbolizer>
             <se:Stroke>
-              <se:SvgParameter name="stroke">#be2edd</se:SvgParameter>
-              <se:SvgParameter name="stroke-width">1</se:SvgParameter>
+              <se:SvgParameter name="stroke">#000000</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
               <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+              <se:SvgParameter name="stroke-linecap">square</se:SvgParameter>
             </se:Stroke>
-          </se:PolygonSymbolizer>
+          </se:LineSymbolizer>
+        </se:Rule>
+        <se:Rule>
+          <se:MaxScaleDenominator>5000000</se:MaxScaleDenominator>
           <se:TextSymbolizer>
             <se:Label>
               <ogc:PropertyName>name</ogc:PropertyName>
@@ -339,48 +343,48 @@ Script accesibil și pe [GitHub](https://github.com/geospatialorg/ingestie-date/
               </se:PointPlacement>
             </se:LabelPlacement>
             <se:Halo>
-              <se:Radius>2</se:Radius>
+              <se:Radius>1</se:Radius>
               <se:Fill>
                 <se:SvgParameter name="fill">#ffffff</se:SvgParameter>
               </se:Fill>
             </se:Halo>
             <se:Fill>
-              <se:SvgParameter name="fill">#be2edd</se:SvgParameter>
+              <se:SvgParameter name="fill">#000000</se:SvgParameter>
             </se:Fill>
             <se:VendorOption name="maxDisplacement">1</se:VendorOption>
           </se:TextSymbolizer>
         </se:Rule>
-
       </se:FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>
 ```
-Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_lau_polygon_labels.sld).
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/grids/ro_grid_data_ancpi_40km_labels.sld).
 
 ### Simbolizare SLD alternativă
 
-```xml title="ro_admin_lau_polygon.sld"
+```xml title="ro_grid_data_ancpi_40km.sld"
 <?xml version="1.0" encoding="UTF-8"?>
-<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:se="http://www.opengis.net/se" version="1.1.0">
+<StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1.0" xmlns:se="http://www.opengis.net/se" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd">
   <NamedLayer>
-  <se:Name>UAT-uri</se:Name>
-  <UserStyle>
-    <se:Name>Limită UAT</se:Name>
-    <se:FeatureTypeStyle>
-      <se:Rule>
-        <se:Name>Limită UAT</se:Name>
-          <se:PolygonSymbolizer>
+    <se:Name>ro_grid_data_ancpi_40km</se:Name>
+    <UserStyle>
+      <se:Name>ro_grid_data_ancpi_40km</se:Name>
+      <se:FeatureTypeStyle>
+        <se:Rule>
+          <se:Name>Single symbol</se:Name>
+          <se:LineSymbolizer>
             <se:Stroke>
-              <se:SvgParameter name="stroke">#be2edd</se:SvgParameter>
-              <se:SvgParameter name="stroke-width">1</se:SvgParameter>
+              <se:SvgParameter name="stroke">#000000</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">2</se:SvgParameter>
               <se:SvgParameter name="stroke-linejoin">bevel</se:SvgParameter>
+              <se:SvgParameter name="stroke-linecap">square</se:SvgParameter>
             </se:Stroke>
-          </se:PolygonSymbolizer>
+          </se:LineSymbolizer>
         </se:Rule>
       </se:FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>
 ```
-Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/administrative-boundaries/ro_admin_lau_polygon.sld).
+Fișier accesibil și pe [GitHub](https://github.com/geospatialorg/simbolizare/blob/main/sld/grids/ro_grid_data_ancpi_40km.sld).

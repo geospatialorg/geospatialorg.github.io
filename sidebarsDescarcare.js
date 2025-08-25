@@ -8,7 +8,7 @@ export default {
         {
           type: "category",
           label: "Date",
-          items: ["date/administrative-boundaries"],
+          items: ["date/administrative-boundaries", "date/grids"],
         },
       ],
     },
