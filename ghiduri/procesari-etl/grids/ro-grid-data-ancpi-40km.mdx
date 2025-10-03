@@ -53,6 +53,81 @@ Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-
 
 ## Diagrama fluxului de lucru
 
+```mermaid
+flowchart TD
+  %% =============== SETUP ===============
+  subgraph S[Setup & Config]
+    A1["Activează conda env 'geo'"] --> A2["Definește căi: ancpi_data_path, grids_data_path, tmp_data_path"]
+    A2 --> A3["Setează conexiuni: PostGIS și GeoServer"]
+    A3 --> A4["Definește layer_name = ro_grid_data_ancpi_40km"]
+  end
+
+  %% =============== EXTRAGERE & CURATARE ===============
+  subgraph E[Ingestie & Curățare]
+    E1["ogr2ogr: Descărcare ESRIJSON ANCPI → GPKG"]
+    E2["ogr2ogr: Select atribute utile → GPKG temporar"]
+    E3["ogrinfo: Corectare nume celule ID 84,85,98,128,141,179"]
+    E4a["ALTER TABLE: adaugă xmin,xmax,ymin,ymax"]
+    E4b["UPDATE: calculează coordonate MBR pentru fiecare geometrie"]
+    E5["ogr2ogr: Export CSV din GPKG temporar"]
+    E6["python: convert_caroiaj_ancpi_40km_to_csv.py → CSV WKT"]
+    E1 --> E2 --> E3 --> E4a --> E4b --> E5 --> E6
+  end
+
+  %% =============== CREARE FORMATE DE BAZA ===============
+  subgraph F1[Versiuni de bază]
+    F1a["ogr2ogr: GPKG final → grids/ro_grid_data_ancpi_40km.gpkg"]
+    E6 --> F1a
+  end
+
+  %% =============== DERIVATE MULTI-FORMAT ===============
+  subgraph F2[Derivate multi-format]
+    F2a["ogr2ogr: Shapefile (*.shp)"]
+    F2b["zip: Arhivare SHP"]
+    F2c["ogr2ogr: FlatGeobuf (*.fgb)"]
+    F2d["ogr2ogr: GeoParquet (*.parquet)"]
+    F2e["ogr2ogr: GeoJSON (EPSG:4326)"]
+    F2f["ogr2ogr: KML (EPSG:4326, NameField=name)"]
+    F2g["mapshaper: GeoJSON → TopoJSON"]
+    F1a --> F2a --> F2b
+    F1a --> F2c
+    F1a --> F2d
+    F1a --> F2e --> F2g
+    F1a --> F2f
+  end
+
+  %% =============== POSTGIS LOAD ===============
+  subgraph DB[Încărcare în PostGIS]
+    DB1["ogr2ogr: încărcare GPKG → PostGIS (schema romania)"]
+    DB2["psql: CREATE INDEX GIST + CLUSTER pe tabel"]
+    F1a --> DB1 --> DB2
+  end
+
+  %% =============== PUBLICARE GEOSERVER ===============
+  subgraph GS[Publicare GeoServer]
+    GS0["Verifică existență strat via REST"]
+    GS1{"HTTP_STATUS == 200?"}
+    GS2["DELETE layer & resources"]
+    GS3["POST featureType (name, title, abstract)"]
+    GS4["PUT metadate: keywords + link ISO19115"]
+    GS5["PUT layer: defaultStyle + secondaryStyle"]
+    DB2 --> GS0 --> GS1
+    GS1 -- Da --> GS2 --> GS3
+    GS1 -- Nu --> GS3
+    GS3 --> GS4 --> GS5
+  end
+
+  %% =============== CURATARE TEMP ===============
+  subgraph C[Curățare]
+    C1["rm: fișiere SHP auxiliare"]
+    C2["rm: GPKG și CSV/WKT temporare"]
+    GS5 --> C1 --> C2
+  end
+
+  %% =============== LEGĂTURI INITIALE ===============
+  S --> E
+```
+
 <iframe
   src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/grids/etl_ro_grid_data_ancpi_40km.json"
   width="100%"

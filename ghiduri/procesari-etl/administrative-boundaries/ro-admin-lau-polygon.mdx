@@ -64,6 +64,83 @@ Datele au fost convertite în formatele de fișier utilizate de geo-spatial.org 
 Datele au fost documentate în [Catalogul geo-spatial.org](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) și puse la dispoziție pentru download/access prin protocolul HTTP și prin intermediul serviciilor standardizate OGC. Pentru mai multe detalii accesați [Catalogul](https://services.geo-spatial.org/geonetwork/srv/eng/catalog.search#/metadata/5d90a442-0659-4ad9-9af1-9b890b2ff0c8) și/sau secțiunea <a href={useBaseUrl('descarcare/date/administrative-boundaries')}>Descărcare</a>. Definițiile folosite pentru simbolizarea WMS a datelor au fost documentate în secțiunea [Simbolizare SLD](#simbolizare-sld).
 
 ## Diagrama fluxului de lucru
+```mermaid
+flowchart TD
+  %% ===================== SETUP =====================
+  subgraph S["Setup & Config"]
+    S1["Activează conda env 'geo'"]
+    S2["Definește căi & variabile (fișiere brute/ieșire, PostGIS, GeoServer)"]
+    S1 --> S2
+  end
+
+  %% ===================== ÎNCĂRCARE ÎN SQLITE =====================
+  subgraph L["Încărcare fișiere în SQLite"]
+    L1["ANCPI UAT (SHP) → SQLite"]
+    L2["siruta_zone.csv → SQLite"]
+    L3["siruta_judete.csv → SQLite"]
+    S2 --> L1 --> L2 --> L3
+  end
+
+  %% ===================== SIRUTA: CONVERSIE & CURĂȚARE =====================
+  subgraph C["Conversie & Curățare SIRUTA"]
+    C1["Export siruta.mdb → siruta.csv"]
+    C2["Elimină câmpuri inutile + conversii numerice"]
+    C3["Corectează diacritice (ș/ț/ă)"]
+    C4["Formatează lowercase → titlecase + prepoziții"]
+    C5["Import 'siruta_corectat.csv' → SQLite"]
+    L3 --> C1 --> C2 --> C3 --> C4 --> C5
+  end
+
+  %% ===================== UNIFICARE =====================
+  subgraph U["Unificare date într-un singur strat"]
+    U1["Combină vector + tabele → 'ro_admin_lau_polygon' (SQLite)"]
+    C5 --> U1
+  end
+
+  %% ===================== EXPORTURI =====================
+  subgraph X["Exporturi multi-format"]
+    X1["GeoPackage (*.gpkg)"]
+    X2["Shapefile (*.shp) + arhivare (*.zip)"]
+    X3["FlatGeobuf (*.fgb)"]
+    X4["GeoParquet (*.parquet)"]
+    X5["GeoJSON (EPSG:4326)"]
+    X6["KML (EPSG:4326)"]
+    X7["TopoJSON din GeoJSON (mapshaper)"]
+    U1 --> X1
+    U1 --> X2
+    U1 --> X3
+    U1 --> X4
+    U1 --> X5 --> X7
+    U1 --> X6
+  end
+
+  %% ===================== POSTGIS =====================
+  subgraph DB["Încărcare în PostGIS"]
+    DB1["Import în schema 'romania'"]
+    DB2["Indexare spațială (GIST) + CLUSTER"]
+    X1 --> DB1 --> DB2
+  end
+
+  %% ===================== GEOSERVER =====================
+  subgraph GS["Administrare strat în GeoServer"]
+    GS0["Verifică existența stratului (REST)"]
+    GS1{"Există?"}
+    GS2["Șterge stratul existent (recurse=true)"]
+    GS3["Creează strat nou (featureType)"]
+    GS4["Adaugă metadate (titlu, descriere, keywords, link)"]
+    GS5["Setează stil implicit + stil secundar"]
+    DB2 --> GS0 --> GS1
+    GS1 -- "Da" --> GS2 --> GS3
+    GS1 -- "Nu" --> GS3
+    GS3 --> GS4 --> GS5
+  end
+
+  %% ===================== CURĂȚARE =====================
+  subgraph K["Curățare temporare"]
+    K1["Șterge SQLite/CSV/SHP intermediare"]
+    GS5 --> K1
+  end
+  ```
 
 <iframe
   src="https://geo-spatial.org/jsoncrack/editor/?json=https://geo-spatial.org/descrieri-etl-json/etl_ro_admin_lau_polygon.json"
