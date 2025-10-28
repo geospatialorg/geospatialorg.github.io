@@ -174,6 +174,10 @@ const config = {
                 href: "https://github.com/geospatialorg",
               },
               {
+                label: "YouTube",
+                href: "https://www.facebook.com/geospatialorg",
+              },
+              {
                 label: "Feed RSS",
                 to: "https://geo-spatial.org/noutati/rss.xml",
               },
@@ -184,7 +188,7 @@ const config = {
             ],
           },
           {
-            title: "Comunitatea",
+            title: "Comunicare",
             items: [
               {
                 label: "Lista de discuții",
@@ -194,13 +198,26 @@ const config = {
                 label: "Canal Slack",
                 href: "https://geospatialorg-1.slack.com/join/shared_invite/zt-cle5seo4-u9Bbr_mSV8R_BiROSGWr2A",
               },
+            ],
+          },
+          {
+            title: "Social media",
+            items: [
               {
-                label: "YouTube",
-                href: "https://www.facebook.com/geospatialorg",
+                label: "LinkedIn",
+                href: "https://www.linkedin.com/company/geo-spatial-org",
               },
               {
                 label: "Facebook",
                 href: "https://www.facebook.com/geospatialorg",
+              },
+              {
+                label: "Mastodon",
+                href: "https://mastodon.social/@geospatialorg",
+              },
+              {
+                label: "BlueSky",
+                href: "https://bsky.app/profile/geo-spatial-org.bsky.social",
               },
             ],
           },
