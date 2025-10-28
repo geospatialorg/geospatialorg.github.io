@@ -181,10 +181,6 @@ const config = {
                 label: "Feed RSS",
                 to: "https://geo-spatial.org/noutati/rss.xml",
               },
-              {
-                label: "Situl vechi",
-                to: "https://www.geo-spatial.org/vechi",
-              },
             ],
           },
           {
@@ -227,6 +223,10 @@ const config = {
               {
                 label: "Despre",
                 to: "/despre",
+              },
+              {
+                label: "Situl vechi",
+                to: "https://www.geo-spatial.org/vechi",
               },
               {
                 label: "Redirecționare 3.5%",
