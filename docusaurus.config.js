@@ -175,7 +175,7 @@ const config = {
               },
               {
                 label: "YouTube",
-                href: "https://www.facebook.com/geospatialorg",
+                href: "https://www.youtube.com/@TheGeospatial",
               },
               {
                 label: "Feed RSS",
