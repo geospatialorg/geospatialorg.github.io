@@ -8,7 +8,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "geo-spatial.org",
+  tit„le: "geo-spatial.org",
   tagline: "An elegant place for sharing geoKnowledge & geoData",
   favicon: "img/favicon.ico",
 
@@ -116,6 +116,31 @@ const config = {
     ({
       // Replace with your project's social card
       image: "img/geo-spatialorg-social-card.jpg",
+      metadata: [
+        // Bază
+        { name: 'description', content: 'An elegant place for sharing geoKnowledge & geoData' },
+        { name: 'keywords', content: 'geo-spatial.org, GIS, teledetecție, date geospațiale, open data, date deschise, cartografie, cartografie istorică, geo, spatial, comunitate, FOSS4G, OSGeo, seminarele geo-spatial.org' },
+
+
+        // Open Graph (Facebook, LinkedIn, WhatsApp, etc.)
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'geo-spatial.org' },
+        { property: 'og:title', content: 'An elegant place for sharing geoKnowledge & geoData' },
+        { property: 'og:description', content: 'geo-spatial.or este o comunitate ce promovează adoptarea soluțiilor software geospațiale libere open source, neignorându-le însă nici pe cele proprietare. Militează pentru democratizarea accesului la datele geografice și propune harta ca instrument universal de comunicare și înregistrare a relațiilor dintre componentele sociale (științifice, politice, culturale, religioase, economice) și dimensiunea lor geospațială' },
+        { property: 'og:image', content: 'https://geo-spatial.org/img/geo-spatialorg-social-card.jpg' },
+        { property: 'og:url', content: 'https://geo-spatial.org' },
+
+        // Twitter (X)
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'An elegant place for sharing geoKnowledge & geoData' },
+        { name: 'twitter:description', content: 'geo-spatial.or este o comunitate ce promovează adoptarea soluțiilor software geospațiale libere open source.' },
+        { name: 'twitter:image', content: 'https://geo-spatial.org/img/geo-spatialorg-social-card.jpg' },
+        { name: 'twitter:site', content: '@geospatialorg' },
+
+        // Discord / Slack preview
+        { name: 'discord:image', content: 'https://geo-spatial.org/img/geo-spatialorg-social-card.jpg' },
+        { name: 'slack-app-id', content: 'geo-spatial.org' }, // doar dacă ai aplicație Slack custom
+      ],
       navbar: {
         title: "geo-spatial.org",
         logo: {
