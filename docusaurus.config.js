@@ -114,7 +114,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
       image: "img/geo-spatialorg-social-card.jpg",
       metadata: [
         // Bază
@@ -122,7 +121,7 @@ const config = {
         { name: 'keywords', content: 'geo-spatial.org, GIS, teledetecție, date geospațiale, open data, date deschise, cartografie, cartografie istorică, geo, spatial, comunitate, FOSS4G, OSGeo, seminarele geo-spatial.org' },
 
 
-        // Open Graph (Facebook, LinkedIn, WhatsApp, etc.)
+        // Open Graph
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'geo-spatial.org' },
         { property: 'og:title', content: 'An elegant place for sharing geoKnowledge & geoData' },
@@ -139,7 +138,7 @@ const config = {
 
         // Discord / Slack preview
         { name: 'discord:image', content: 'https://geo-spatial.org/img/geo-spatialorg-social-card.jpg' },
-        { name: 'slack-app-id', content: 'geo-spatial.org' }, // doar dacă ai aplicație Slack custom
+        { name: 'slack-app-id', content: 'geo-spatial.org' },
       ],
       navbar: {
         title: "geo-spatial.org",
