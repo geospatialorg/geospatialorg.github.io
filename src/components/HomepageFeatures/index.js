@@ -93,8 +93,8 @@ function BannerHot() {
         textAlign: "center",
       }}
     >
-      <strong style={{ fontSize: "1.2rem" }}>🔥 Ce este nou?</strong> – Nu ratați{" "}
-      <a href="https://geo-spatial.org/proiecte/seminarii/bucuresti2025/">ediția 44 a seminarului geo-spatial.org</a>, pe 31 octombrie 2025, la București!
+      <strong style={{ fontSize: "1.2rem" }}>🔥 Ce este nou?</strong> – Nu ratați Au fost publicată{" "}
+      <a href="https://www.youtube.com/watch?v=qN787ov2CrY&t=1s">înregistrarea video</a> a ediție București 2025 a seminarelor geo-spatial.org
     </div>
   );
 }
