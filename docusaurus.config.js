@@ -270,7 +270,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © 2006 - 2025 geo-spatial.org și autorii. CC BY-SA 4.0`,
+        copyright: `Copyright © 2006 - 2026 geo-spatial.org și autorii. CC BY-SA 4.0`,
       },
       prism: {
         theme: prismThemes.github,
