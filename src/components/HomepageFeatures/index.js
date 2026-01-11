@@ -94,7 +94,7 @@ function BannerHot() {
       }}
     >
       <strong style={{ fontSize: "1.2rem" }}>🔥 Ce este nou?</strong> – Nu ratați Au fost publicată{" "}
-      <a href="https://www.youtube.com/watch?v=qN787ov2CrY&t=1s">înregistrarea video</a> a ediție București 2025 a seminarelor geo-spatial.org
+      <a href="https://www.youtube.com/watch?v=qN787ov2CrY&t=1s">înregistrarea video</a> a ediției București 2025 a seminarelor geo-spatial.org
     </div>
   );
 }
