@@ -93,8 +93,8 @@ function BannerHot() {
         textAlign: "center",
       }}
     >
-      <strong style={{ fontSize: "1.2rem" }}>🔥 Ce este nou?</strong> – Nu ratați Au fost publicată{" "}
-      <a href="https://www.youtube.com/watch?v=qN787ov2CrY&t=1s">înregistrarea video</a> a ediției București 2025 a seminarelor geo-spatial.org
+      <strong style={{ fontSize: "1.2rem" }}>🔥 Ce este nou?</strong> – <a href="https://geo-spatial.org/redirectionare-impozit">Redirecționați</a> 3.5% din impozitul pe
+      venit din anul 2025 către geo-spatial.org.{" "}
     </div>
   );
 }
