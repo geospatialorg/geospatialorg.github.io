@@ -90,6 +90,8 @@ const config = {
         blogDescription: "Articole de tip tutoriale și articole tehnice",
       },
     ],
+    // Plugin custom pentru caruselul de noutăți
+    require.resolve('./plugins/recent-posts-plugin.js'),
   ],
 
   themeConfig: {
