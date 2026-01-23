@@ -1,0 +1,292 @@
+/* NewsCarousel Component Styles */
+
+.carouselContainer {
+    position: relative;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg,
+            rgba(46, 133, 85, 0.08) 0%,
+            rgba(37, 194, 160, 0.08) 100%);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.carouselContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%,
+            rgba(46, 133, 85, 0.1) 0%,
+            transparent 50%);
+    pointer-events: none;
+}
+
+.carouselHeader {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.carouselTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ifm-heading-color);
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.carouselTitle::before {
+    content: '🔥';
+}
+
+.carouselWrapper {
+    position: relative;
+    padding: 0 3rem;
+}
+
+.carouselTrack {
+    display: flex;
+    gap: 1.5rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.carouselSlide {
+    flex: 0 0 calc(33.333% - 1rem);
+    min-width: 280px;
+}
+
+@media (max-width: 1200px) {
+    .carouselSlide {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .carouselSlide {
+        flex: 0 0 100%;
+    }
+
+    .carouselWrapper {
+        padding: 0 2.5rem;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .card {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.cardLink {
+    text-decoration: none !important;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.cardContent {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badgeNoutati {
+    background: linear-gradient(135deg, #2e8555 0%, #3cad6e 100%);
+    color: white;
+}
+
+.badgeEvenimente {
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+}
+
+.date {
+    font-size: 0.8rem;
+    color: var(--ifm-color-secondary-darker);
+    opacity: 0.7;
+}
+
+.cardTitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 0.75rem 0;
+    color: var(--ifm-heading-color);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.cardExcerpt {
+    font-size: 0.9rem;
+    color: var(--ifm-color-secondary-darkest);
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.readMore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ifm-color-primary);
+    transition: gap 0.2s ease;
+}
+
+.card:hover .readMore {
+    gap: 0.5rem;
+}
+
+/* Navigation Buttons */
+.navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ifm-color-primary);
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+[data-theme='dark'] .navButton {
+    background: rgba(50, 50, 50, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.navButton:hover:not(:disabled) {
+    background: var(--ifm-color-primary);
+    color: white;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.navButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.navButtonPrev {
+    left: 0.5rem;
+}
+
+.navButtonNext {
+    right: 0.5rem;
+}
+
+/* Pagination Dots */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.paginationDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(46, 133, 85, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.paginationDot:hover {
+    background: rgba(46, 133, 85, 0.5);
+}
+
+.paginationDotActive {
+    background: var(--ifm-color-primary);
+    transform: scale(1.2);
+}
+
+/* View All Link */
+.viewAllContainer {
+    text-align: center;
+    margin-top: 1.25rem;
+}
+
+.viewAllLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    border: 2px solid var(--ifm-color-primary);
+    border-radius: 8px;
+    color: var(--ifm-color-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.viewAllLink:hover {
+    background: var(--ifm-color-primary);
+    color: white;
+    text-decoration: none;
+}

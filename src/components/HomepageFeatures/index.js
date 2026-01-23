@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Heading from "@theme/Heading";
 import styles from "./styles.module.css";
+import NewsCarousel from "@site/src/components/NewsCarousel";
 
 const FeatureList = [
   {
@@ -81,24 +82,6 @@ const FeatureList = [
   },
 ];
 
-function BannerHot() {
-  return (
-    <div
-      style={{
-        backgroundColor: "#fff3cd",
-        border: "1px solid #ffeeba",
-        padding: "1rem",
-        marginBottom: "2rem",
-        borderRadius: "8px",
-        textAlign: "center",
-      }}
-    >
-      <strong style={{ fontSize: "1.2rem" }}>🔥 Ce este nou?</strong> – <a href="https://geo-spatial.org/redirectionare-impozit">Redirecționați</a> 3.5% din impozitul pe
-      venit din anul 2025 către geo-spatial.org.{" "}
-    </div>
-  );
-}
-
 function Feature({ Svg, title, description }) {
   return (
     <div className={clsx("col col--4")}>
@@ -117,7 +100,7 @@ export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
       <div className="container">
-        <BannerHot />
+        <NewsCarousel />
         <div className="row">
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
@@ -127,3 +110,4 @@ export default function HomepageFeatures() {
     </section>
   );
 }
+
