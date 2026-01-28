@@ -574,7 +574,7 @@ const EVENTS = {
       location: "Brașov, România",
       description: "Seminar dedicat tehnologiilor webmapping.",
       image: "/img/evenimente/3201320066_e1450bc791_b.jpg",
-      externalUrl: null,
+      externalUrl: "https://geo-spatial.org/vechi/osgeo/index.php?id=243",
       type: "seminar",
       edition: null,
       tags: ["seminar", "Brașov", "2008", "webmapping"],
