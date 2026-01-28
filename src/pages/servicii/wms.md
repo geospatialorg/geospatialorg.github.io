@@ -100,5 +100,5 @@ Exemple:
 
 ## Vezi și
 
-- [WMTS](/standarde-deschise/wmts) - Pentru tile-uri pre-generate;
+- [WMTS](/servicii/wmts) - Pentru tile-uri pre-generate;
 - [Servicii OGC](/servicii/) - toate standardele OGC.

@@ -91,5 +91,5 @@ POST https://services.geo-spatial.org/geonetwork/srv/eng/csw
 
 ## Vezi și
 
-- [WFS](/standarde-deschise/wfs) - Pentru date vector;
+- [WFS](/servicii/wfs) - Pentru date vector;
 - [Servicii OGC](/servicii/) - toate standardele OGC.

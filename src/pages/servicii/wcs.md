@@ -99,5 +99,5 @@ Consultă [GetCapabilities](https://services.geo-spatial.org/geoserver/wcs?servi
 
 ## Vezi și
 
-- [WFS](/standarde-deschise/wfs) - Pentru date vector;
+- [WFS](/servicii/wfs) - Pentru date vector;
 - [Servicii OGC](/servicii/) - toate standardele OGC.

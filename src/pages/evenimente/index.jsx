@@ -744,7 +744,7 @@ export default function EventsPage() {
           <section className={styles.seminarsInfo}>
             <h3>Despre Seminarele geo-spatial.org</h3>
             <p>
-              Din 2008 organizăm seminare hands-on pentru comunitatea geospațială. Citește <Link to="/seminare">povestea completă</Link> a celor aproape 20 de ani de
+              Din 2008 organizăm seminare hands-on pentru comunitatea geospațială. Citește <Link to="/initiative/seminare">povestea completă</Link> a celor aproape 20 de ani de
               evenimente.
             </p>
           </section>

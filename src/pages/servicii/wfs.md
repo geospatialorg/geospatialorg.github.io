@@ -118,5 +118,5 @@ const geojson = await response.json();
 
 ## Vezi și
 
-- [WCS](/standarde-deschise/wcs) - Pentru date raster;
+- [WCS](/servicii/wcs) - Pentru date raster;
 - [Servicii OGC](/servicii/) - toate standardele OGC.

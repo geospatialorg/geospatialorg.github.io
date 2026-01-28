@@ -48,7 +48,7 @@ Mereu am oferit totul liber, gratuit, fără a condiționa de absolut nimic part
 
 A venit și un declin. L-am simțit cumva prin 2017-2018. Era și normal. Când am început, internetul nu era ce este astăzi. Nu exista Stack Overflow, nu existau tutorialele video, documentațiile exhaustive, cărțile de specialitate și celelalte mijloace de partajare a cunoștințelor pe care le avem acum. În primii ani, oamenii veneau de la distanțe mari la evenimentele noastre, că altfel nu aveau cum să ajungă la informație. O dată cu diversificarea "ofertei" și cu transmiterea "live", fără mari pretenții tehnice, a sesiunilor, audiența fizică a început să se mai reducă (rămânând însă lejer peste alte evenimete din aceeași zonă profesională).
 
-Apoi, în 2019 ne-am implicat 100% în organizarea [FOSS4G 2019 București](/initiative/foss4g2019) și am suspendat complet seminarele. Evenimentul internațional, organizat tot absolut voluntar, ne-a secat complet de energie. Glumind, pandemia din 2020 ne-a dat o scuză și ne-a oferit o binemeritată pauză de refacere.
+Apoi, în 2019 ne-am implicat 100% în organizarea [FOSS4G 2019 București](/initiative/foss4g-2019) și am suspendat complet seminarele. Evenimentul internațional, organizat tot absolut voluntar, ne-a secat complet de energie. Glumind, pandemia din 2020 ne-a dat o scuză și ne-a oferit o binemeritată pauză de refacere.
 
 <figure style={{ textAlign: "center" }}>
   <img src={useBaseUrl('/img/proiecte/foss4g-crowd.jpg')} alt="FOSS4G2019." />
