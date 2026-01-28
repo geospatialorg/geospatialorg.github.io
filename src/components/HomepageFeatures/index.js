@@ -38,14 +38,15 @@ const FeatureList = [
   {
     title: "Servicii",
     Svg: require("@site/static/img/servicii.svg").default,
-    description: <>Servicii informatice găzduite de platforma geo-spatial.org ce facilitează accesul la date și informații din sfera geospațială. </>,
+    description: <>{" "}
+        <a href="servicii">Servicii informatice</a> găzduite de platforma geo-spatial.org ce facilitează accesul la date și informații din sfera geospațială. </>,
   },
   {
     title: "Evenimente",
     Svg: require("@site/static/img/evenimente.svg").default,
     description: (
       <>
-        <a href="noutati/tags/evenimente">Evenimente</a> fizice, online sau hibride organizate periodic de comunitatea geo-spatial.org sau unele la care comunitatea
+        <a href="evenimente">Evenimente</a> fizice, online sau hibride organizate periodic de comunitatea geo-spatial.org sau unele la care comunitatea
         contribuie prin membrii ei.
       </>
     ),
@@ -74,8 +75,7 @@ const FeatureList = [
     Svg: require("@site/static/img/acces_deschis.svg").default,
     description: (
       <>
-        geo-spatial.org promovează utilizarea soluțiilor software open source, accesul deschis la date și cunoștințe și adoptarea standardelor deschise. Detalii în{" "}
-        <a href="acces-liber">secțiunea dedicată</a>.
+        geo-spatial.org promovează utilizarea soluțiilor software <a href="acces-liber/software-liber">open source</a>, <a href="acces-liber/date-deschise">accesul deschis la date</a> și cunoștințe și adoptarea <a href="acces-liber/standarde-deschise">standardelor deschise</a>.
       </>
     ),
   },
