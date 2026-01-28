@@ -63,12 +63,21 @@ const FeatureList = [
   {
     title: "Proiecte",
     Svg: require("@site/static/img/proiecte2.svg").default,
-    description: <>geo-spatial.org este un proiect. Uneori, face însă pui și este nevoie de un spațiu separat pentru ca puii să crească.</>,
+    description: (
+      <>
+        geo-spatial.org este un proiect. Uneori, face însă pui și este nevoie de un <a href="initiative">spațiu separat</a> pentru ca puii să crească.
+      </>
+    ),
   },
   {
     title: "Acces liber",
     Svg: require("@site/static/img/acces_deschis.svg").default,
-    description: <>geo-spatial.org promovează utilizarea soluțiilor software open source, accesul deschis la date și cunoștințe și adoptarea standardelor deschise.</>,
+    description: (
+      <>
+        geo-spatial.org promovează utilizarea soluțiilor software open source, accesul deschis la date și cunoștințe și adoptarea standardelor deschise. Detalii în{" "}
+        <a href="acces-liber">secțiunea dedicată</a>.
+      </>
+    ),
   },
   {
     title: "Situl vechi",
@@ -110,4 +119,3 @@ export default function HomepageFeatures() {
     </section>
   );
 }
-

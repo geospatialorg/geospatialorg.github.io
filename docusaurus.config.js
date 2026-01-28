@@ -157,7 +157,10 @@ const config = {
           ],
         },
         { to: "/noutati/tags/noutati", label: "Noutăți", position: "left" },
-        { to: "/noutati/tags/evenimente", label: "Evenimente", position: "left" },
+        { to: "/evenimente", label: "Evenimente", position: "left" },
+        { to: "/initiative", label: "Proiecte", position: "left" },
+        { to: "/servicii", label: "Servicii", position: "left" },
+        { to: "/acces-liber", label: "Acces liber", position: "left" },
         {
           href: "https://github.com/geospatialorg/geospatialorg.github.io",
           label: "GitHub",

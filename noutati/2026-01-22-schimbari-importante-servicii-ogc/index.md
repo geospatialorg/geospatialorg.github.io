@@ -5,7 +5,7 @@ authors: [geo-spatial.org]
 tags: [noutati]
 ---
 
-Începând de astăzi, 22.01.2026, endpoint-ului pentru serviciile OGC oferite de geo-spatial.org prin aplicația GeoServer se modifică. Astfel, în loc de vechiul endpoint, [https://geo-spatial.org/geoserver](https://geo-spatial.org/geoserver), se va utiliza [https://services.geo-spatial.org/geoserver](https://services.geo-spatial.org/geoserver). 
+Începând de astăzi, 22.01.2026, endpoint-ului pentru serviciile OGC oferite de geo-spatial.org prin aplicația GeoServer se modifică. Astfel, în loc de vechiul endpoint, [https://geo-spatial.org/geoserver](https://geo-spatial.org/geoserver), se va utiliza **[https://services.geo-spatial.org/geoserver](https://services.geo-spatial.org/geoserver)**. 
 
 <!-- truncate -->
 
