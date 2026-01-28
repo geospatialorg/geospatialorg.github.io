@@ -118,5 +118,5 @@ Consultă [GetCapabilities](https://services.geo-spatial.org/geoserver/gwc/servi
 
 ## Vezi și
 
-- [WMS](/servicii//wms) - Pentru hărți dinamice
+- [WMS](/servicii/wms) - Pentru hărți dinamice
 - [Servicii OGC](/servicii/) - toate standardele OGC.

@@ -75,4 +75,4 @@ Proiectul este inițiat și coordonat de **[Re:Rise](https://rerise.org/)** - or
 ## Vezi și
 
 - [Proiecte geo-spatial.org](/initiative) - lista completă de proiecte;
-- [COVID-19 România](/initiative//covid19) - alt proiect de date deschise.
+- [COVID-19 România](/initiative/covid19) - alt proiect de date deschise.
