@@ -22,19 +22,32 @@ const EVENTS = {
       tags: ["conferință", "Europe", "FOSS4G", "open source"],
     },
     {
+      name: "Seminare Cluj-Napoca 2026",
+      slug: null,
+      date: "8 mai 2026",
+      location: "Cluj-Napoca, Romania",
+      description: "Ediția 46 a seminarelor geo-spatial.org.",
+      image: "/img/evenimente/cluj2026.jpg",
+      externalUrl: "https://geo-spatial.org/proiecte/seminarii/cluj2026/",
+      type: "seminar",
+      edition: 46,
+      tags: ["seminar", "Cluj-Napoca", "2026"],
+    },
+  ],
+  past: [
+    {
       name: "Seminare Chișinău 2026",
       slug: null,
       date: "6-7 martie 2026",
       location: "Chișinău, Republica Moldova",
-      description: "Ediția 45 a seminarelor geo-spatial.org. Prima ediție pentru anul 2026, revenim la Chișinău!",
+      description:
+        "Ediția 45 a seminarelor geo-spatial.org. Prima ediție pentru anul 2026, revenim la Chișinău!",
       image: "/img/evenimente/chisinau2026.jpg",
       externalUrl: "https://geo-spatial.org/proiecte/seminarii/chisinau2026/",
       type: "seminar",
       edition: 45,
       tags: ["seminar", "Chișinău", "2026"],
     },
-  ],
-  past: [
     {
       name: "Seminare București 2025",
       slug: null,
@@ -211,7 +224,8 @@ const EVENTS = {
       slug: null,
       date: "04 iunie 2021",
       location: "Cluj-Napoca, România",
-      description: "Ediția de primăvară la Cluj-Napoca - prima ediție după pandemie.",
+      description:
+        "Ediția de primăvară la Cluj-Napoca - prima ediție după pandemie.",
       image: "/img/evenimente/cluj2021.jpg",
       externalUrl: "https://geo-spatial.org/proiecte/seminarii/cluj2021/",
       type: "seminar",
@@ -223,7 +237,8 @@ const EVENTS = {
       slug: "foss4g-2019",
       date: "26-30 August 2019",
       location: "București, România",
-      description: "Conferința internațională FOSS4G 2019, cel mai mare eveniment global dedicat software-ului geospațial open source. Organizat de geo-spatial.org.",
+      description:
+        "Conferința internațională FOSS4G 2019, cel mai mare eveniment global dedicat software-ului geospațial open source. Organizat de geo-spatial.org.",
       image: "/img/evenimente/foss4g2019.jpg",
       externalUrl: "https://2019.foss4g.org/",
       type: "conferinta",
@@ -372,7 +387,8 @@ const EVENTS = {
       slug: null,
       date: "28 noiembrie 2014",
       location: "București, România",
-      description: "Atelier practic dedicat utilizării MapBox Studio pentru crearea de hărți web estetice și performante. Organizat în parteneriat cu The Sponge.",
+      description:
+        "Atelier practic dedicat utilizării MapBox Studio pentru crearea de hărți web estetice și performante. Organizat în parteneriat cu The Sponge.",
       image: "/img/evenimente/atelier-spatializare-thesponge-2014.jpg",
       externalUrl:
         "https://web.archive.org/web/20170603111626/http://thesponge.eu/press/releases/11_noiembrie_Atelier%20geo-spa%C8%9Bial.org%20MapBox%20-%20fabrica%20de%20h%C4%83r%C8%9Bi%20frumoase.pdf",
@@ -422,9 +438,11 @@ const EVENTS = {
       slug: null,
       date: "16-20 iunie 2013",
       location: "România",
-      description: "FOSS4G Central and Eastern Europe 2013 - conferință regională dedicată soluțiilor geospațiale open source.",
+      description:
+        "FOSS4G Central and Eastern Europe 2013 - conferință regională dedicată soluțiilor geospațiale open source.",
       image: "/img/evenimente/foss4g2013.jpg",
-      externalUrl: "https://web.archive.org/web/20150228052655/http://2013.foss4g-cee.org/",
+      externalUrl:
+        "https://web.archive.org/web/20150228052655/http://2013.foss4g-cee.org/",
       type: "conferinta",
       edition: null,
       tags: ["conferință", "FOSS4G", "CEE", "open source"],
@@ -472,7 +490,8 @@ const EVENTS = {
       slug: null,
       date: "21-23 iunie 2012",
       location: "România",
-      description: "Simpozionul Internațional de Cartografie Istorică 'European cartographic heritage - historical maps in environmental geosciences'.",
+      description:
+        "Simpozionul Internațional de Cartografie Istorică 'European cartographic heritage - historical maps in environmental geosciences'.",
       image: "/img/evenimente/hmeg.jpg",
       externalUrl: "https://geo-spatial.org/vechi/articole/sici2012",
       type: "conferinta",
@@ -559,7 +578,8 @@ const EVENTS = {
       slug: null,
       date: "3-4 aprilie 2009",
       location: "Cluj-Napoca, România",
-      description: "Primul seminar geo-spatial.org! Începutul unei tradiții de peste 15 ani.",
+      description:
+        "Primul seminar geo-spatial.org! Începutul unei tradiții de peste 15 ani.",
       image: "/img/evenimente/3417026115_8994641688_b.jpg",
       externalUrl: "https://geo-spatial.org/vechi/osgeo/index.php?id=244",
       type: "seminar",
@@ -608,7 +628,8 @@ const EVENTS = {
       slug: null,
       date: "2008",
       location: "România",
-      description: "Primele întâlniri ale comunității geo-spatial.org - începutul poveștii.",
+      description:
+        "Primele întâlniri ale comunității geo-spatial.org - începutul poveștii.",
       image: "/img/evenimente/1512.jpg",
       externalUrl: "https://geo-spatial.org/vechi/osgeo/index.php?id=240",
       type: "seminar",
@@ -621,11 +642,23 @@ const EVENTS = {
 // Componenta pentru un card de eveniment
 function EventCard({ event, isUpcoming = false }) {
   const linkUrl = event.externalUrl || (event.slug ? `/${event.slug}` : "#");
-  const isExternal = event.externalUrl && (event.externalUrl.startsWith("http") || event.externalUrl.startsWith("/noutati"));
+  const isExternal =
+    event.externalUrl &&
+    (event.externalUrl.startsWith("http") ||
+      event.externalUrl.startsWith("/noutati"));
 
   return (
     <article className={styles.eventCard}>
-      <a href={linkUrl} className={styles.cardLink} target={isExternal && event.externalUrl.startsWith("http") ? "_blank" : "_self"} rel="noopener noreferrer">
+      <a
+        href={linkUrl}
+        className={styles.cardLink}
+        target={
+          isExternal && event.externalUrl.startsWith("http")
+            ? "_blank"
+            : "_self"
+        }
+        rel="noopener noreferrer"
+      >
         {/* Imaginea evenimentului */}
         <div className={styles.cardImageContainer}>
           {event.image ? (
@@ -639,17 +672,34 @@ function EventCard({ event, isUpcoming = false }) {
               }}
             />
           ) : null}
-          <div className={styles.imagePlaceholder} style={{ display: event.image ? "none" : "flex" }}>
+          <div
+            className={styles.imagePlaceholder}
+            style={{ display: event.image ? "none" : "flex" }}
+          >
             📅
           </div>
 
           {/* Badge-uri */}
           <div className={styles.badgeContainer}>
-            <span className={`${styles.statusBadge} ${isUpcoming ? styles.statusUpcoming : styles.statusPast}`}>{isUpcoming ? "🔴 În curând" : "Încheiat"}</span>
-            {event.isCoOrganizer && <span className={styles.coOrganizerBadge}>🤝 Co-organizator</span>}
+            <span
+              className={`${styles.statusBadge} ${isUpcoming ? styles.statusUpcoming : styles.statusPast}`}
+            >
+              {isUpcoming ? "🔴 În curând" : "Încheiat"}
+            </span>
+            {event.isCoOrganizer && (
+              <span className={styles.coOrganizerBadge}>🤝 Co-organizator</span>
+            )}
             {event.type && (
-              <span className={`${styles.typeBadge} ${styles[`type${event.type.charAt(0).toUpperCase() + event.type.slice(1)}`]}`}>
-                {event.type === "seminar" ? "🎓 Seminar" : event.type === "conferinta" ? "🎤 Conferință" : event.type === "workshop" ? "🔧 Workshop" : event.type}
+              <span
+                className={`${styles.typeBadge} ${styles[`type${event.type.charAt(0).toUpperCase() + event.type.slice(1)}`]}`}
+              >
+                {event.type === "seminar"
+                  ? "🎓 Seminar"
+                  : event.type === "conferinta"
+                    ? "🎤 Conferință"
+                    : event.type === "workshop"
+                      ? "🔧 Workshop"
+                      : event.type}
               </span>
             )}
           </div>
@@ -679,7 +729,9 @@ function EventCard({ event, isUpcoming = false }) {
 
           {/* Footer */}
           <div className={styles.cardFooter}>
-            <span className={styles.readMore}>{isUpcoming ? "Detalii →" : "Detalii →"}</span>
+            <span className={styles.readMore}>
+              {isUpcoming ? "Detalii →" : "Detalii →"}
+            </span>
           </div>
         </div>
       </a>
@@ -688,7 +740,13 @@ function EventCard({ event, isUpcoming = false }) {
 }
 
 // Componenta pentru o secțiune de evenimente
-function EventsSection({ title, icon, description, events, isUpcoming = false }) {
+function EventsSection({
+  title,
+  icon,
+  description,
+  events,
+  isUpcoming = false,
+}) {
   if (!events || events.length === 0) {
     return null;
   }
@@ -698,11 +756,17 @@ function EventsSection({ title, icon, description, events, isUpcoming = false })
       <div className={styles.sectionHeader}>
         <span className={styles.sectionIcon}>{icon}</span>
         <h2 className={styles.sectionTitle}>{title}</h2>
-        {description && <span className={styles.sectionDescription}>{description}</span>}
+        {description && (
+          <span className={styles.sectionDescription}>{description}</span>
+        )}
       </div>
       <div className={styles.eventsGrid}>
         {events.map((event, index) => (
-          <EventCard key={event.slug || index} event={event} isUpcoming={isUpcoming} />
+          <EventCard
+            key={event.slug || index}
+            event={event}
+            isUpcoming={isUpcoming}
+          />
         ))}
       </div>
     </section>
@@ -712,13 +776,19 @@ function EventsSection({ title, icon, description, events, isUpcoming = false })
 // Pagina principală de evenimente
 export default function EventsPage() {
   return (
-    <Layout title="Evenimente" description="Seminarele și evenimentele geo-spatial.org în România și Republica Moldova">
+    <Layout
+      title="Evenimente"
+      description="Seminarele și evenimentele geo-spatial.org în România și Republica Moldova"
+    >
       <main className={styles.eventsPage}>
         <div className="container">
           {/* Header pagină */}
           <header className={styles.pageHeader}>
             <h1 className={styles.pageTitle}>Evenimente</h1>
-            <p className={styles.pageSubtitle}>Seminarele geo-spatial.org și alte evenimente organizate sau susținute de comunitate</p>
+            <p className={styles.pageSubtitle}>
+              Seminarele geo-spatial.org și alte evenimente organizate sau
+              susținute de comunitate
+            </p>
           </header>
 
           {/* Evenimente viitoare */}
@@ -731,12 +801,22 @@ export default function EventsPage() {
           />
 
           {/* Evenimente trecute */}
-          <EventsSection title="Evenimente trecute" icon="📚" description="Arhiva evenimentelor anterioare" events={EVENTS.past} isUpcoming={false} />
+          <EventsSection
+            title="Evenimente trecute"
+            icon="📚"
+            description="Arhiva evenimentelor anterioare"
+            events={EVENTS.past}
+            isUpcoming={false}
+          />
 
           {/* Link către blog */}
           <section className={styles.blogLink}>
             <p>
-              Pentru anunțuri detaliate și rapoarte de la evenimente, consultă <Link to="/noutati/tags/evenimente">secțiunea Evenimente din blog</Link>.
+              Pentru anunțuri detaliate și rapoarte de la evenimente, consultă{" "}
+              <Link to="/noutati/tags/evenimente">
+                secțiunea Evenimente din blog
+              </Link>
+              .
             </p>
           </section>
 
@@ -744,8 +824,10 @@ export default function EventsPage() {
           <section className={styles.seminarsInfo}>
             <h3>Despre seminarele geo-spatial.org</h3>
             <p>
-              Din 2008 organizăm seminare hands-on pentru comunitatea geospațială. Citește <Link to="/initiative/seminare">povestea completă</Link> a celor aproape 20 de ani de
-              evenimente.
+              Din 2008 organizăm seminare hands-on pentru comunitatea
+              geospațială. Citește{" "}
+              <Link to="/initiative/seminare">povestea completă</Link> a celor
+              aproape 20 de ani de evenimente.
             </p>
           </section>
         </div>
