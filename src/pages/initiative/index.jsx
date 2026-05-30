@@ -36,6 +36,15 @@ const PROJECTS = {
             tags: ["educație", "comunitate", "evenimente"]
         },
         {
+            name: "Ro-VIBE",
+            slug: "initiative/rovibe",
+            description: "Concurs interjudețean multidisciplinar pentru liceeni – explorarea virtuală interactivă a României. geo-spatial.org a dezvoltat platforma digitală a concursului.",
+            image: "/img/proiecte/rovibe-placeholder.png",
+            externalUrl: "https://services.geo-spatial.org/rovibe",
+            role: "contributor",
+            tags: ["educație", "patrimoniu", "hartă interactivă"]
+        },
+        {
             name: "Date contact primării",
             slug: "initiative/date-contact-localitati",
             description: "Bază de date deschisă cu datele de contact ale primăriilor din România. Compilată de voluntari, actualizare planificată pentru 2026.",
