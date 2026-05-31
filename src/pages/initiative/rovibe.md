@@ -23,6 +23,43 @@ Prin intermediul platformei digitale, elevii documentează obiective de patrimon
 
 Evenimentul de închidere al proiectului a avut loc pe **24 mai 2026** la **Institutul Cultural Român (ICR)**, reunind elevi, studenți, profesori, specialiști, părinți și parteneri instituționali într-un cadru dedicat dialogului interdisciplinar și valorificării patrimoniului cultural prin mijloace digitale.
 
+## Galerie foto – Finala Ro-VIBE 2026 la ICR
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala8.jpg')} alt="Prezentare în sala ICR" />
+  <figcaption><em>Prezentare în sala ICR.</em></figcaption>
+</figure>
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala7.jpg')} alt="Prezentare în sala ICR" />
+  <figcaption><em>Prezentare în sala ICR.</em></figcaption>
+</figure>
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala4.jpg')} alt="Workshopul final 'Periegheză urbană'" />
+  <figcaption><em>Workshopul final 'Periegheză urbană'.</em></figcaption>
+</figure>
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala2.jpg')} alt="Workshopul final 'Periegheză urbană'" />
+  <figcaption><em>Workshopul final 'Periegheză urbană'.</em></figcaption>
+</figure>
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala3.jpg')} alt="Workshopul final 'Periegheză urbană'" />
+  <figcaption><em>Workshopul final 'Periegheză urbană'.</em></figcaption>
+</figure>
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala5.jpg')} alt="Medaliile Ro-VIBE" />
+  <figcaption><em>Trofeul Ro-VIBE.</em></figcaption>
+</figure>
+
+<figure style={{ textAlign: "center" }}>
+  <img src={useBaseUrl('/img/projects/rovibe-finala6.jpg')} alt="Medaliile Ro-VIBE" />
+  <figcaption><em>Medaliile Ro-VIBE.</em></figcaption>
+</figure>
+
 ## Contribuția geo-spatial.org
 
 Asociația geo-spatial.org a dezvoltat integral **platforma digitală** a concursului, găzduită la [services.geo-spatial.org/rovibe](https://services.geo-spatial.org/rovibe). Platforma include:
