@@ -26,7 +26,11 @@ module.exports = function pluginRecentPosts(context, options) {
 
                     // Verificăm dacă e director și nu e fișier de configurare
                     if (fs.statSync(folderPath).isDirectory()) {
-                        const indexPath = path.join(folderPath, 'index.md');
+                        // Verificăm ambele extensii: .md și .mdx
+                        let indexPath = path.join(folderPath, 'index.md');
+                        if (!fs.existsSync(indexPath)) {
+                            indexPath = path.join(folderPath, 'index.mdx');
+                        }
 
                         if (fs.existsSync(indexPath)) {
                             const fileContent = fs.readFileSync(indexPath, 'utf-8');

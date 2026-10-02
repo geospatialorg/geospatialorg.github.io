@@ -9,6 +9,15 @@ import styles from './initiative.module.css';
 const PROJECTS = {
     active: [
         {
+            name: "Unde locuiesc românii?",
+            slug: "initiative/unde-locuiesc-romanii",
+            description: "Atlas interactiv al populației României pe grilă de 1 km — interogări multi-criteriu (relief, climă, hazard, acces la servicii), integral în browser.",
+            image: "/img/proiecte/unde-locuiesc-romanii-placeholder.png",
+            externalUrl: "https://unde.geo-spatial.org",
+            role: "initiator",
+            tags: ["date deschise", "demografie", "atlas interactiv"]
+        },
+        {
             name: "eHarta",
             slug: "initiative/eharta",
             description: "Proiect colaborativ de digitizare și georeferențiere a hărților istorice. Premiat la Open Data Challenge 2011 de Comisia Europeană.",

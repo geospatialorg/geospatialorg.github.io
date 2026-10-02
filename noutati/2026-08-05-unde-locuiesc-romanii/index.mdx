@@ -1,0 +1,41 @@
+---
+slug: unde-locuiesc-romanii
+title: "Unde locuiesc românii? — atlas interactiv al populației pe grilă de 1 km"
+authors: [geo-spatial.org]
+tags: [noutati]
+---
+
+geo-spatial.org lansează **[Unde locuiesc românii?](https://unde.geo-spatial.org)** — un atlas interactiv al populației României pe grila statistică de 1 km, care permite interogări multi-criteriu direct în browser, fără server de calcul.
+
+{/* truncate */}
+
+## Ce este „Unde locuiesc românii?"
+
+Proiectul pornește de la o întrebare simplă: *câți români locuiesc într-un anumit tip de loc și cum arată viața acolo?* Răspunsul vine sub forma unor hărți de densitate pe o grilă de **240.290 de celule** (fiecare de 1 km²), colorate pe o rampă logaritmică de la 1 la 10.000 de locuitori.
+
+Platforma integrează date din **Recensământul RPL 2021**, forme de relief, intravilan (ANCPI/CNGCFT), altitudine și pantă (FABDEM), distanțe (frontieră, litoral), climă zilnică de la MeteoRomania, precum și acces la rețeaua de gaze naturale.
+
+## Funcționalități
+
+- **Presete de întrebări** — întrebări predefinite cu variante comutabile rapid (ex. „La oraș" ↔ „La sat"), organizate pe categorii;
+- **Constructor de filtre** — combinare liberă de parametri cu operatori logici;
+- **Harta densității** — fiecare celulă potrivită este colorată pe o rampă secvențială de roșuri pe scară logaritmică;
+- **Căutare pe hartă** — 3.186 UAT-uri + 13.656 localități, cu potrivire fără diacritice și dezambiguizare;
+- **Avertizări meteo în timp real** — integrare nowcasting și atenționări de la MeteoRomania, cu populație afectată calculată pe grila de 1 km;
+- **Prognoze meteo și calitate aer** — temperatură extremă (ECMWF) și indice de calitate a aerului (CAMS Europe — PM2.5, PM10, NO₂, O₃, SO₂).
+
+## Cum funcționează
+
+Toată logica de interogare rulează în browser prin **DuckDB-WASM** — un motor SQL complet care operează pe fișiere Parquet fără a necesita un server de procesare. Harta este desenată cu **MapLibre GL JS**, iar graficele climatice cu **uPlot**. Interfața este construită cu **Vite + React + TypeScript**.
+
+Pipeline-ul ETL care produce datele este scris în Python și rulează în container Docker, iar serverul de date folosește Caddy cu CORS și range requests.
+
+## Open source
+
+Codul sursă este disponibil pe GitHub: **[geospatialorg/unde-locuiesc-romanii](https://github.com/geospatialorg/unde-locuiesc-romanii)**.
+
+## Resurse
+
+- 🌐 [unde.geo-spatial.org](https://unde.geo-spatial.org) — platforma interactivă;
+- 💻 [GitHub](https://github.com/geospatialorg/unde-locuiesc-romanii) — codul sursă;
+- 📋 [Pagina proiectului](/initiative/unde-locuiesc-romanii) — detalii complete pe geo-spatial.org.

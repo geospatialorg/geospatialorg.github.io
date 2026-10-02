@@ -1,6 +1,6 @@
 ---
 title: Seminarele geo-spatial.org
-description: Povestea celor aproape 20 de ani de seminare geo-spatial.org - de la o cârciuma din Cluj la ediția 45
+description: Povestea celor aproape 20 de ani de seminare geo-spatial.org - de la o cârciuma din Cluj la ediția 47
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -8,8 +8,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 # Seminarele geo-spatial.org
 
 :::info Ediția curentă
-**Ediția 45** - Chișinău, 6-7 martie 2026  
-[Detalii și înscrieri →](https://geo-spatial.org/proiecte/seminarii/chisinau2026/)
+**Ediția 47** - București, 23 octombrie 2026  
+[Detalii și înscrieri →](https://geo-spatial.org/proiecte/seminarii/bucuresti2026/)
 :::
 
 ## Cum a început totul
@@ -25,7 +25,7 @@ Ideea geo-spatial.org a apărut în 2002. Era o perioadă în care internetul nu
 
 ## Primii ani
 
-Și, da, azi, când anunțăm ediția 45, pare simplu. Atunci, când nu știam nimic, la primele două ediții, fiecare dintre noi ținea câte 2-3 prezentări și 2-3 seminare practice în doar 2 zile. Eram la limita rezistenței fizice. Peste noapte nu dormeam, consolidam prin cârciumile clujene, în discurs informal și direct, relațiile cu oamenii cunoscuți formal peste zi. Dar efortul a fost cu folos iar masa critică de participanți/prezentatori s-a coagulat rapid.
+Și, da, azi, când anunțăm ediția 47, pare simplu. Atunci, când nu știam nimic, la primele două ediții, fiecare dintre noi ținea câte 2-3 prezentări și 2-3 seminare practice în doar 2 zile. Eram la limita rezistenței fizice. Peste noapte nu dormeam, consolidam prin cârciumile clujene, în discurs informal și direct, relațiile cu oamenii cunoscuți formal peste zi. Dar efortul a fost cu folos iar masa critică de participanți/prezentatori s-a coagulat rapid.
 
 <figure style={{ textAlign: "center" }}>
   <img src={useBaseUrl('/img/proiecte/seminar-geo-spatial-org-prima-editie.jpg')} alt="Prima ediție." />
@@ -100,7 +100,7 @@ Contăm mult pe instinctul de conservare al comunității, pe bun simț și pe b
 
 | | |
 |---|---|
-| 🎯 **45** | ediții organizate |
+| 🎯 **47** | ediții organizate |
 | 📅 **2006** | anul primului seminar |
 | 🏙️ **5** | orașe: Cluj-Napoca, Timișoara, București, Chișinău, Iași |
 | 👥 **Mii** | de participanți de-a lungul anilor |
