@@ -24,3 +24,12 @@ geo-spatial.org:
   url: https://www.linkedin.com/groups/4221861/
   image_url: https://geo-spatial.org/autori/logo-glob-blue.png
   page: true
+
+scontantinescu:
+  name: Ștefan Constantinescu
+  title: Conferențiar Universitar | Facultatea de Geografie - Universitatea din București
+  url: https://www.researchgate.net/profile/Stefan-Constantinescu
+  image_url: https://geo-spatial.org/autori/stefan.constantinescu.jpg
+  page: true
+  socials:
+    researchgate: https://www.researchgate.net/profile/Stefan-Constantinescu

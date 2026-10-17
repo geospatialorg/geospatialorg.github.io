@@ -74,6 +74,15 @@ const PROJECTS = {
             tags: ["dashboard", "date deschise", "sănătate"]
         },
         {
+            name: "FOSS4G Europe 2026 Timișoara",
+            slug: "initiative/foss4g-europe-2026",
+            description: "Conferința europeană FOSS4G Europe 2026, organizată la Timișoara. geo-spatial.org a fost co-organizator (LOC), toate finanțele evenimentului trecând prin asociație.",
+            image: "/img/proiecte/foss4g-europe2026-placeholder.jpg",
+            externalUrl: "https://2026.europe.foss4g.org/",
+            role: "initiator",
+            tags: ["conferință", "open source", "FOSS4G Europe"]
+        },
+        {
             name: "FOSS4G 2019 București",
             slug: "initiative/foss4g-2019",
             description: "Conferința internațională FOSS4G 2019, organizată la București. Cel mai mare eveniment global dedicat software-ului geospațial open source.",

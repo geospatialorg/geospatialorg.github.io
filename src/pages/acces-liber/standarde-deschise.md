@@ -52,6 +52,7 @@ Pe lângă standardele oficiale OGC, există și standarde dezvoltate de comunit
 *   **[GeoJSON](https://geojson.org/)**: Un format de schimb de date bazat pe JSON, extrem de popular datorită simplității și ușurinței de integrare în aplicații web și mobile.
 *   **[TopoJSON](https://github.com/topojson/topojson)**: O extensie a GeoJSON care reduce dimensiunea fișierelor prin codificarea topologiei.
 *   **[GeoParquet](https://geoparquet.org)**: Format columnar eficient pentru stocarea datelor spațiale mari.
+*   **[STAC (SpatioTemporal Asset Catalog)](https://stacspec.org/)**: Specificație comunitară pentru catalogarea și descoperirea datelor geospațiale spatio-temporale (imagini satelitare, nori de puncte, etc.), facilitând căutarea și accesul la resurse prin API-uri standardizate.
 *   **[FlatGeobuf](https://flatgeobuf.org)**: Format binar performant pentru date vectoriale.
 *   **[GPX (GPS Exchange Format)](https://www.topografix.com/gpx.asp)**: Format XML pentru date GPS, utilizat de majoritatea dispozitivelor de navigație.
 *   **[OSM XML](https://wiki.openstreetmap.org/wiki/OSM_XML)**: Formatul XML utilizat de OpenStreetMap pentru stocarea datelor geografice.
