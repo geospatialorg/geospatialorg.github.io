@@ -24,3 +24,13 @@ geo-spatial.org:
   url: https://www.linkedin.com/groups/4221861/
   image_url: https://services.geo-spatial.org/autori/logo-glob-blue.png
   page: true
+
+bmorosanu:
+  name: Bogdan Moroșanu
+  title: Freelancer
+  url: https://www.linkedin.com/in/morosanubogdan/
+  image_url: https://services.geo-spatial.org/autori/bogdan_morosanu.jpg
+  page: true
+  socials:
+    github: bogdanmorosanu
+    linkedin: morosanubogdan

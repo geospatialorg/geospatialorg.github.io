@@ -1,7 +1,7 @@
 ---
 slug: pytransdatro
 title: "PyTransDatRO — transformări de coordonate deschise și moderne"
-authors: [geo-spatial.org]
+authors: [bmorosanu]
 tags: [noutati]
 image: /img/proiecte/pytransdatro.png
 ---
