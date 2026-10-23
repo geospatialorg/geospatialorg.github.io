@@ -29,6 +29,18 @@ const config = {
     locales: ["en"],
   },
 
+  clientModules: [
+    require.resolve('./src/clientModules/gtagSafe.js'),
+  ],
+
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: 'window.dataLayer = window.dataLayer || []; if (typeof window.gtag !== "function") { window.gtag = function() { window.dataLayer.push(arguments); }; }',
+    },
+  ],
+
   presets: [
     [
       "classic",
