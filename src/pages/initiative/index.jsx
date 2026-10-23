@@ -9,6 +9,15 @@ import styles from './initiative.module.css';
 const PROJECTS = {
     active: [
         {
+            name: "PyTransDatRO",
+            slug: "initiative/pytransdatro",
+            description: "Alternativă modernă, gratuită și cu sursă deschisă (Licență MIT) a aplicațiilor oficiale ANCPI TransDatRO și RomGEO pentru transformarea coordonatelor (Stereo 70 ↔ ETRS89).",
+            image: "/img/proiecte/pytransdatro-placeholder.png",
+            externalUrl: "https://pytransdat.geo-spatial.org",
+            role: "initiator",
+            tags: ["geodezie", "transformare coordonate", "open source", "Stereo 70"]
+        },
+        {
             name: "Unde locuiesc românii?",
             slug: "initiative/unde-locuiesc-romanii",
             description: "Atlas interactiv al populației României pe grilă de 1 km — interogări multi-criteriu (relief, climă, hazard, acces la servicii), integral în browser.",
