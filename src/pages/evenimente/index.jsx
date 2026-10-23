@@ -9,20 +9,31 @@ import styles from "./evenimente.module.css";
 const EVENTS = {
   upcoming: [
     {
+      name: "Seminare Timișoara 2026",
+      slug: null,
+      date: "20 noiembrie 2026",
+      location: "Timișoara, România",
+      description: "Ediția 48 a seminarelor geo-spatial.org.",
+      image: "/img/evenimente/timisoara2026.jpg",
+      externalUrl: "https://geo-spatial.org/proiecte/seminarii/timisoara2026/",
+      type: "seminar",
+      edition: 48,
+      tags: ["seminar", "Timișoara", "2026"],
+    },
+  ],
+  past: [
+    {
       name: "Seminare București 2026",
       slug: null,
       date: "23 octombrie 2026",
       location: "București, România",
-      description:
-        "Ediția 47 a seminarelor geo-spatial.org.",
+      description: "Ediția 47 a seminarelor geo-spatial.org.",
       image: "/img/evenimente/bucuresti2026.jpg",
       externalUrl: "https://geo-spatial.org/proiecte/seminarii/bucuresti2026/",
       type: "seminar",
       edition: 47,
       tags: ["seminar", "București", "2026"],
     },
-  ],
-  past: [
     {
       name: "FOSS4G Europe 2026",
       slug: "foss4g-europe-2026",
