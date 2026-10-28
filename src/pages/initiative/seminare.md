@@ -8,7 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 # Seminarele geo-spatial.org
 
 :::info Ediția curentă
-**Ediția 48** - Timișoara, 20 noiembrie 2026  
+**Ediția 48** - Timișoara, 4 decembrie 2026  
 [Detalii și înscrieri →](https://geo-spatial.org/proiecte/seminarii/timisoara2026/)
 :::
 

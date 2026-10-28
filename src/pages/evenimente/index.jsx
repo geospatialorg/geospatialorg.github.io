@@ -11,7 +11,7 @@ const EVENTS = {
     {
       name: "Seminare Timișoara 2026",
       slug: null,
-      date: "20 noiembrie 2026",
+      date: "4 decembrie 2026",
       location: "Timișoara, România",
       description: "Ediția 48 a seminarelor geo-spatial.org.",
       image: "/img/evenimente/timisoara2026.jpg",

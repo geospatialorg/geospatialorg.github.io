@@ -26,4 +26,5 @@ Aplicația oferă transformări bidirecționale de coordonate între **Stereo 70
 ### Resurse
 
 - 🌐 [pytransdat.geo-spatial.org](https://pytransdat.geo-spatial.org) — Aplicația web și API-ul;
+- ⚙️ [Documentație serviciu utilitar](/servicii/pytransdatro) — Ghid tehnic și exemple de integrare;
 - 📋 [Pagina proiectului pe geo-spatial.org](/initiative/pytransdatro) — Detalii complete despre inițiativă.

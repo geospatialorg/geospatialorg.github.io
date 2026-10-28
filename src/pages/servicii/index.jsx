@@ -88,15 +88,26 @@ const SERVICES = {
     ],
     utilities: [
         {
-            name: "Transformare Coordonate",
-            fullName: "Serviciu de transformare sisteme de coordonate",
-            slug: "servicii/transformare-coordonate",
-            description: "Transformă coordonate între diferite sisteme de referință (EPSG:4326, EPSG:3844, Stereo70 etc.). Suportă transformări batch și API REST.",
-            icon: "🔄",
+            name: "PyTransDatRO",
+            fullName: "Transformări moderne de coordonate (Stereo 70 ↔ ETRS89)",
+            slug: "servicii/pytransdatro",
+            description: "Platformă modernă și deschisă pentru transformări de înaltă precizie (Stereo 70 ↔ ETRS89). Include studio web interactiv, conversie fișiere (CSV/TXT) și API REST de mare viteză.",
+            icon: "⚡",
             status: "stable",
             popular: true,
-            endpoint: "https://services.geo-spatial.org/transform",
-            tags: ["coordonate", "EPSG", "proiecții"]
+            endpoint: "https://pytransdat.geo-spatial.org",
+            tags: ["Stereo 70", "ETRS89", "REST API", "geodezie"]
+        },
+        {
+            name: "TransdatOnline",
+            fullName: "Serviciu clasic de transformare sisteme de coordonate",
+            slug: "servicii/transformare-coordonate",
+            description: "Serviciu istoric pentru transformarea coordonatelor între sistemele românești (Stereo 70, Stereo 30) și internaționale (WGS84, ETRS89), activ din 2011.",
+            icon: "🔄",
+            status: "stable",
+            popular: false,
+            endpoint: "https://www.geo-spatial.org/transdatonline/",
+            tags: ["coordonate", "Stereo 70", "Stereo 30", "istoric"]
         }
     ]
 };

@@ -46,4 +46,5 @@ Aplicația oferă transformări bidirecționale de înaltă precizie între proi
 
 - 🌐 [pytransdat.geo-spatial.org](https://pytransdat.geo-spatial.org) — platforma online;
 - 📚 [Documentație API (Swagger)](https://pytransdat.geo-spatial.org/docs) — specificația REST API;
+- ⚙️ [Documentație serviciu pe geo-spatial.org](/servicii/pytransdatro) — specificații și mod de utilizare;
 - 🔄 [TransdatOnline](/servicii/transformare-coordonate) — istoricul serviciului de transformare coordonate pe geo-spatial.org.

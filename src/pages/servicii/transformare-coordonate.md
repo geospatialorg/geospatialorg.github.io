@@ -73,7 +73,7 @@ Informațiile sunt colorate:
 
 ## Viitorul serviciului: PyTransDatRO
 
-În 2026, comunitatea geo-spatial.org a lansat **[PyTransDatRO](https://pytransdat.geo-spatial.org)** — un proiect independent, gratuit și cu sursă deschisă (Licență MIT), dezvoltat ca o alternativă modernă și o replică a aplicațiilor oficiale ANCPI, TransDatRO și succesorul său RomGEO. PyTransDatRO include un Studio Web modern cu hartă interactivă, suport pentru transformări de fișiere CSV/TXT, un API REST de mare viteză și compatibilitate completă cu endpoint-urile clasice TransDatOnline. Detalii complete în [pagina proiectului](/initiative/pytransdatro).
+În 2026, comunitatea geo-spatial.org a lansat **[PyTransDatRO](https://pytransdat.geo-spatial.org)** — un proiect independent, gratuit și cu sursă deschisă (Licență MIT), dezvoltat ca o alternativă modernă și o replică a aplicațiilor oficiale ANCPI, TransDatRO și succesorul său RomGEO. PyTransDatRO include un Studio Web modern cu hartă interactivă, suport pentru transformări de fișiere CSV/TXT, un API REST de mare viteză și compatibilitate completă cu endpoint-urile clasice TransDatOnline. Detalii complete în [documentația serviciului](/servicii/pytransdatro) și în [pagina inițiativei](/initiative/pytransdatro).
 
 ---
 
