@@ -1,0 +1,63 @@
+/* Culorile vin din tema Docusaurus (Infima), deci harta urmează și modul întunecat. */
+.figura {
+  margin: 1.5rem 0;
+  --he-ink: var(--ifm-font-color-base);
+  --he-quiet: var(--ifm-color-emphasis-700);
+  --he-grey: var(--ifm-color-emphasis-500);
+  --he-axis: var(--ifm-color-emphasis-600);
+  --he-accent: #d4572a;
+}
+[data-theme='dark'] .figura {
+  --he-accent: #f08a5d;
+}
+
+.cadru {
+  position: relative;
+  max-width: 760px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--ifm-font-family-base);
+  font-size: 12px;
+}
+
+.titlu { font-size: 15px; font-weight: 600; fill: var(--he-ink); }
+.nota { font-size: 11.5px; fill: var(--he-quiet); }
+.eticheta { font-size: 11.5px; fill: var(--he-ink); pointer-events: none; }
+
+.vector { stroke: var(--he-axis); stroke-width: 1.25; }
+.vectorMare { stroke: var(--he-accent); stroke-width: 1.25; }
+.ghidaj { stroke: var(--he-axis); stroke-width: 1; }
+.scara { stroke: var(--he-axis); stroke-width: 1.5; }
+.nord { fill: var(--he-axis); }
+.nordText { font-size: 12px; font-weight: 600; fill: var(--he-quiet); }
+
+.reper { fill: var(--he-grey); cursor: pointer; outline: none; }
+.reperMare { fill: var(--he-accent); }
+.reperActiv,
+.reper:focus-visible {
+  stroke: var(--he-ink);
+  stroke-width: 2;
+}
+
+.eticheta_html {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  max-width: 240px;
+  border-radius: 6px;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  box-shadow: var(--ifm-global-shadow-lw);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  pointer-events: none;
+  white-space: normal;
+}
+.eticheta_html span { color: var(--he-quiet); }
