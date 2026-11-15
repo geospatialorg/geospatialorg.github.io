@@ -1,6 +1,6 @@
 ---
 slug: planul-maiorului-papasoglu-1871
-title: "Planul Maiorului Papasoglu (1871) — georeferențiere și reconstituire 3D"
+title: "Planul Maiorului Papasoglu (1871) - georeferențiere și reconstituire 3D"
 authors: [geo-spatial.org]
 tags: [noutati]
 image: /img/descarcare/planuri/papasoglu-1871.jpg
